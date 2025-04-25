@@ -14,7 +14,6 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
 import { useRouter, useSearchParams } from "next/navigation";
 import { signIn } from "next-auth/react";
 import { useState } from "react";
@@ -24,7 +23,7 @@ import Link from "next/link";
 export default function LoginForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const callbackUrl = searchParams.get("callbackUrl") || "/dashboard";
+  const callbackUrl = searchParams.get("callbackUrl") || "/";
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
@@ -41,14 +40,15 @@ export default function LoginForm() {
     setIsLoading(true);
     setError(null);
 
-    console.log('Attempting login with:', data); // Debug log
 
     try {
       const result = await signIn("credentials", {
         email: data.email,
         password: data.password,
         redirect: false,
+        callbackUrl,
       });
+
 
       console.log('SignIn result:', result); // Debug log
 
@@ -56,6 +56,8 @@ export default function LoginForm() {
         // More specific error handling
         if (result.error === "CredentialsSignin") {
           setError("Invalid email or password");
+
+
         } else {
           setError(result.error);
         }

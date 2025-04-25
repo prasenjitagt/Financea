@@ -2,24 +2,23 @@
 // app/api/clients/stats/route.ts
 
 import { NextRequest, NextResponse } from "next/server";
-import jwt from "jsonwebtoken";
 import { Client } from "@/lib/models/Clients.model";
 import connectDB from "@/lib/database/db_connection";
+import { getServerSession } from "next-auth";
+import { FinanceaAuthOptions } from "../../auth/[...nextauth]/options";
 
-const JWT_SECRET = process.env.JWT_SECRET as string;
 
 export async function GET(req: NextRequest) {
   try {
     await connectDB();
 
-    const authHeader = req.headers.get("authorization");
-    if (!authHeader || !authHeader.startsWith("Bearer ")) {
+    const session = await getServerSession(FinanceaAuthOptions);
+
+    if (!session) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    const token = authHeader.split(" ")[1];
-    const decoded: any = jwt.verify(token, JWT_SECRET);
-    const userId = decoded.userId;
+    const userId = session.user._id;
 
     // Find all clients by this user
     const clients = await Client.find({ user: userId });
@@ -46,7 +45,7 @@ export async function GET(req: NextRequest) {
       value,
     })).sort((a, b) => new Date(a.name).getTime() - new Date(b.name).getTime());
 
-    return NextResponse.json({ totalClients, totalPayment ,chartData });
+    return NextResponse.json({ totalClients, totalPayment, chartData });
 
   } catch (err) {
     return NextResponse.json({ error: "Internal Server Error: " + err }, { status: 500 });

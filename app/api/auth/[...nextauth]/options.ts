@@ -20,58 +20,65 @@ export const FinanceaAuthOptions: NextAuthOptions = {
                     const parsedCredentials = loginSchema.safeParse(credentials);
                     if (!parsedCredentials.success) {
                         console.error('Validation error:', parsedCredentials.error);
-                        return null;
+                        throw new Error("Zod Schema Validation error at AuthOptions");
                     }
 
                     await connectDB();
                     const { email, password } = parsedCredentials.data;
 
-
                     const user = await User.findOne({ email }).select('+password');
-                    if (!user) return null;
+                    if (!user) throw new Error("No such user");
 
                     if (!user.password) {
                         console.error('No password set for user');
-                        return null;
+                        throw new Error("No password set for user");
                     }
 
                     const isPasswordCorrect = await bcrypt.compare(password, user.password);
-                    if (!isPasswordCorrect) return null;
+
+                    if (!isPasswordCorrect) throw new Error("Invalid email or password");
 
                     return {
                         id: user._id.toString(),
                         email: user.email,
-                        username: user.username,
-                        // Add any additional user fields needed
+                        username: user.username, // Only return username and other required fields
                     };
                 } catch (error) {
                     console.error('Authentication error:', error);
                     return null;
                 }
-            },
+            }
+
         }),
     ],
     callbacks: {
         async jwt({ token, user }) {
             if (user) {
+                token.name = user.username;
+                token.picture = "noimage"
                 token._id = user.id;
                 token.username = user.username;
                 token.email = user.email;
+                // console.log("JWT token created:", token);  // Log for debugging
             }
             return token;
         },
         async session({ session, token }) {
             if (token) {
+                session.user.image = "no image";
+                session.user.name = token.username;
                 session.user._id = token._id;
                 session.user.username = token.username;
                 session.user.email = token.email;
+                // console.log("Session data:", session);  // Log for debugging
             }
             return session;
         },
     },
+
     pages: {
         signIn: "/login",
-        error: "/login?error=auth", // Custom error page
+        newUser: "/",
     },
     secret: process.env.NEXTAUTH_SECRET,
     session: {

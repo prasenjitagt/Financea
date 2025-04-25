@@ -16,18 +16,14 @@ const NewCustomer = () => {
   useEffect(() => {
     const token = localStorage.getItem("token");
 
-    axios.get("/api/clients/stats", {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    })
-    .then((res) => {
-      setData(res.data.chartData);
-      setTotal(res.data.totalClients);
-    })
-    .catch((err) => {
-      console.error("Error fetching client stats", err);
-    });
+    axios.get("/api/clients/stats")
+      .then((res) => {
+        setData(res.data.chartData);
+        setTotal(res.data.totalClients);
+      })
+      .catch((err) => {
+        console.error("Error fetching client stats", err);
+      });
   }, []);
 
   return (

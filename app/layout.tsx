@@ -4,7 +4,6 @@ import { Provider } from "react-redux";
 import { store } from "@/lib/redux/store";
 import "./globals.css";
 import ClientLayout from "./client-layout";
-import AuthGuard from "@/components/AuthGuard";
 import { useEffect } from "react";
 import Head from "next/head";
 import AuthProvider from "@/lib/auth/authProvider";
@@ -14,7 +13,7 @@ export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   useEffect(() => {
-    document.title = "Instant Paid"
+    document.title = "Financea"
   }, []);
 
   return (
@@ -30,7 +29,7 @@ export default function RootLayout({
         <AuthProvider >
           <body>
             <ClientLayout>
-              <AuthGuard>{children}</AuthGuard>
+              {children}
             </ClientLayout>
           </body>
         </AuthProvider>

@@ -7,12 +7,12 @@ import Link from "next/link";
 import { Eye, EyeOff } from "lucide-react";
 import Image from "next/image";
 import "../globals.css";
-import { useDispatch } from "react-redux";
-import { login } from "@/lib/redux/Features/authSlice";
-import Swal from "sweetalert2"
+import Swal from "sweetalert2";
+import { signIn } from "next-auth/react";
+import axios from "axios";
+import { useRouter } from "next/navigation";
 
 export default function SignupPage() {
-  const dispatch = useDispatch();
 
   const [showPassword, setShowPassword] = useState(false);
   const [fullName, setFullName] = useState("");
@@ -22,12 +22,16 @@ export default function SignupPage() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
+  const router = useRouter();
+
   const togglePasswordVisibility = () => setShowPassword(!showPassword);
 
   const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setEmail(e.target.value);
     setEmailError("");
   };
+
+
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -40,30 +44,51 @@ export default function SignupPage() {
     setError("");
 
     try {
-      const res = await fetch("/api/auth/signup", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ username: fullName, email: email, password: password }),
+      // Make the signup request with Axios
+      const response = await axios.post("/api/auth/signup", {
+        username: fullName,
+        email: email,
+        password: password,
       });
 
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.error || "Signup failed");
 
-      // ✅ Token is stored only in Redux, NOT in cookies
-      dispatch(login(data.token));
+      if (response.data.user) {
+        console.log(response.data.user);
 
-      // ✅ Redirect after successful signup
-      Swal.fire({
-        title: "LogIn Successfully!",
-        icon: "success",
-      })
-      window.location.href = "/";
+
+        // // Sign in the user using NextAuth after successful signup
+        // const signInResult = await signIn("credentials", {
+        //   email: email,
+        //   password: password,
+        //   redirect: false, // Do not redirect automatically
+        // });
+
+        // if (signInResult?.error) {
+        //   throw new Error("Login failed");
+        // }
+
+
+        // Redirect to dashboard or other page
+        Swal.fire({
+          title: "Signed Up Successfully!",
+          icon: "success",
+        });
+
+        router.push("/login");
+
+      }
+      else {
+        throw new Error("Signup failed");
+      }
+
+
     } catch (err: any) {
       setError(err.message);
     } finally {
       setLoading(false);
     }
   };
+
 
   return (
     <div className="flex justify-center items-center md:mt-[3rem] font-['Archivo']">
