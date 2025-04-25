@@ -23,7 +23,7 @@ export const FinanceaAuthOptions: NextAuthOptions = {
                         throw new Error("Zod Schema Validation error at AuthOptions");
                     }
 
-                    await connectDB();
+                    await connectDB("api/clients/stats/route.ts");
                     const { email, password } = parsedCredentials.data;
 
                     const user = await User.findOne({ email }).select('+password');

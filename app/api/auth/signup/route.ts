@@ -16,7 +16,7 @@ export async function POST(req: NextRequest) {
     }
 
 
-    connectDB();
+    connectDB("api/auth/signup/route.ts");
 
     // Check if user already exists
     const existingUser = await User.findOne({ email: parsedData.data.email });

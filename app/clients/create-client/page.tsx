@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
@@ -11,6 +10,7 @@ import { useState } from "react"
 import { Globe, Mail, MapPin, Phone, User, Loader2 } from "lucide-react"
 import Swal from "sweetalert2";
 import Link from "next/link";
+import axios from "axios";
 
 export default function NewClientForm() {
   const dispatch = useDispatch()
@@ -23,56 +23,40 @@ export default function NewClientForm() {
   }
 
   const handleSubmit = async () => {
-    setLoading(true)
+    setLoading(true);
     try {
-      const token = localStorage.getItem("token")
+      const res = await axios.post("/api/clients", client);
+      const data = res.data;
 
-      const res = await fetch("/api/clients", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify(client),
-      })
-
-      const data = await res.json()
-      if (!res.ok) {
-        if (data.issues) {
-          const errors = Object.entries(data.issues)
-            .map(([field, msg]) => `${field}: ${msg}`)
-            .join("\n")
-          Swal.fire({
-            title: "Validation Errors",
-            text: errors,
-            icon: "error",
-          })
-        } else {
-          Swal.fire({
-            title: "Error",
-            text: data.message || "Something went wrong.",
-            icon: "error",
-          })
-        }
-        return
-      }
-
-      dispatch(resetClient())
+      dispatch(resetClient());
       Swal.fire({
         title: "Client Created Successfully!",
         icon: "success",
-      })
-    } catch (err) {
-      console.error(err)
-      Swal.fire({
-        title: "Error",
-        text: "An error occurred while creating the client.",
-        icon: "error",
-      })
+      });
+    } catch (err: any) {
+      const data = err.response?.data;
+
+      if (data?.issues) {
+        const errors = Object.entries(data.issues)
+          .map(([field, msg]) => `${field}: ${msg}`)
+          .join("\n");
+
+        Swal.fire({
+          title: "Validation Errors",
+          text: errors,
+          icon: "error",
+        });
+      } else {
+        Swal.fire({
+          title: "Error",
+          text: data?.message || "An error occurred while creating the client.",
+          icon: "error",
+        });
+      }
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  }
+  };
 
   return (
     <div className="flex justify-center items-center bg-gray-100 p-2 sm:p-4">

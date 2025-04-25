@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 // app/api/clients/stats/route.ts
 
 import { NextRequest, NextResponse } from "next/server";
@@ -10,7 +9,7 @@ import { FinanceaAuthOptions } from "../../auth/[...nextauth]/options";
 
 export async function GET(req: NextRequest) {
   try {
-    await connectDB();
+    await connectDB("api/clients/stats/route.ts");
 
     const session = await getServerSession(FinanceaAuthOptions);
 

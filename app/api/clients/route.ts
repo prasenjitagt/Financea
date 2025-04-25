@@ -4,21 +4,20 @@ import connectDB from "@/lib/database/db_connection";
 import { Client } from "@/lib/models/Clients.model";
 import { clientSchema } from "@/lib/helpers/validations";
 import jwt from "jsonwebtoken";
+import { getServerSession } from "next-auth";
+import { FinanceaAuthOptions } from "../auth/[...nextauth]/options";
 
 export async function POST(req: Request) {
-  const JWT_SECRET = process.env.JWT_SECRET as string;
-  await connectDB();
-
-  const authHeader = req.headers.get("authorization");
-  if (!authHeader || !authHeader.startsWith("Bearer ")) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  }
-
-  const token = authHeader.split(" ")[1];
-
   try {
-    const decoded: any = jwt.verify(token, JWT_SECRET);
-    const userId = decoded.userId;
+
+    await connectDB("api/clients/route.ts");
+    //get UserID from session
+    const session = await getServerSession(FinanceaAuthOptions);
+    if (!session) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+    const userId = session.user._id;
+
 
     const body = await req.json();
 
@@ -55,19 +54,17 @@ export async function POST(req: Request) {
 
 // GET method to fetch all clients for a user
 export async function GET(req: Request) {
-  const JWT_SECRET = process.env.JWT_SECRET as string;
-  await connectDB();
-
-  const authHeader = req.headers.get("authorization");
-  if (!authHeader || !authHeader.startsWith("Bearer ")) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  }
-
-  const token = authHeader.split(" ")[1];
-
   try {
-    const decoded: any = jwt.verify(token, JWT_SECRET);
-    const userId = decoded.userId;
+    await connectDB("api/clients/route.ts");
+
+    //get UserID from session
+    const session = await getServerSession(FinanceaAuthOptions);
+    if (!session) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+    const userId = session.user._id;
+
+
 
     // Fetch all clients belonging to the logged-in user
     const clients = await Client.find({ user: userId }).sort({ createdAt: -1 });
@@ -76,7 +73,7 @@ export async function GET(req: Request) {
   } catch (error) {
     console.error("Error in fetching clients:", error);
     return NextResponse.json(
-      { error: "Server error or invalid token" },
+      { error: "Server Error" },
       { status: 500 }
     );
   }
@@ -84,19 +81,16 @@ export async function GET(req: Request) {
 
 //Delete Handler : 
 export async function DELETE(req: Request) {
-  const JWT_SECRET = process.env.JWT_SECRET as string;
-  await connectDB();
-
-  const authHeader = req.headers.get("authorization");
-  if (!authHeader || !authHeader.startsWith("Bearer ")) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  }
-
-  const token = authHeader.split(" ")[1];
-
   try {
-    const decoded: any = jwt.verify(token, JWT_SECRET);
-    const userId = decoded.userId;
+    await connectDB("api/clients/route.ts");
+
+    //get UserID from session
+    const session = await getServerSession(FinanceaAuthOptions);
+    if (!session) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+    const userId = session.user._id;
+
 
     const { clientIds } = await req.json();
 

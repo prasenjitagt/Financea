@@ -2,6 +2,8 @@
 
 import { useState, useEffect } from "react";
 import RecentExpensesLoading from "../loading_ui/RecentExpensesLoading";
+import axios from "axios";
+import { get_expenses_route } from "@/lib/helpers/api-endpoints";
 
 const RecentExpenses = () => {
   const [expenses, setExpenses] = useState<{ category: string; amount: string; date: string; icon: string }[]>([]);
@@ -9,33 +11,19 @@ const RecentExpenses = () => {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
+
     const fetchExpenses = async () => {
       try {
-        const token = localStorage.getItem("token");
-
-        if (!token) throw new Error("Token not found");
-
-        const response = await fetch("/api/expenses", {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
-
-
-
-        if (!response.ok) {
-          throw new Error("Failed to fetch expenses");
-        }
-
-
-        const data = await response.json();
-        setExpenses(data.expenses);
+        const response = await axios.get(get_expenses_route);
+        setExpenses(response.data.expenses);
       } catch (error) {
-        setError((error as Error).message);
+        const message = (error as any)?.response?.data?.message || (error as Error).message;
+        setError(message);
       } finally {
         setLoading(false);
       }
     };
+
 
     fetchExpenses();
   }, []);

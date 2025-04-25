@@ -9,7 +9,7 @@ export async function GET(
   { params }: { params: { id: string } } // Type for params is already set correctly here
 ) {
   const JWT_SECRET = process.env.JWT_SECRET as string;
-  await connectDB();
+  await connectDB("api/clients/[id]/route.ts");
 
   const authHeader = req.headers.get("authorization");
   if (!authHeader || !authHeader.startsWith("Bearer ")) {

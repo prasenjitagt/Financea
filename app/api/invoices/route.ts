@@ -9,7 +9,7 @@ const JWT_SECRET = process.env.JWT_SECRET as string;
 
 export async function POST(req: Request) {
   try {
-    await connectDB();
+    await connectDB("api/invoices/route.ts");
 
     const token = req.headers.get("authorization")?.split(" ")[1];
     if (!token) return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
@@ -53,7 +53,7 @@ export async function POST(req: Request) {
 //Get Request : 
 export async function GET(req: Request) {
   try {
-    await connectDB();
+    await connectDB("api/invoices/route.ts");
 
     const token = req.headers.get("authorization")?.split(" ")[1];
     if (!token) return NextResponse.json({ message: "Unauthorized" }, { status: 401 });

@@ -10,12 +10,15 @@ import {
   resetExpense,
 } from "@/lib/redux/Features/expenseSlice";
 import Image from "next/image";
+import axios from "axios";
+import { get_expenses_route } from "@/lib/helpers/api-endpoints";
 
 const Page = () => {
   const dispatch = useDispatch();
-  const expense = useSelector((state: any) => state.expense); 
+  const expense = useSelector((state: any) => state.expense);
 
   const [isSubmitting, setIsSubmitting] = useState(false);
+
 
   const handleSubmit = async () => {
     const { amount, currency, category, description, date } = expense;
@@ -26,37 +29,25 @@ const Page = () => {
     }
 
     setIsSubmitting(true);
-    const token = localStorage.getItem("token");
 
     try {
-      const res = await fetch("/api/expenses", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify(expense),
-      });
+      const res = await axios.post(get_expenses_route, expense);
 
-      const data = await res.json();
-
-      if (res.ok) {
-        Swal.fire("Created!", "Your expense has been added.", "success");
-        dispatch(resetExpense());
-      } else {
-        Swal.fire("Error", data.message || "Something went wrong!", "error");
-      }
+      Swal.fire("Created!", "Your expense has been added.", "success");
+      dispatch(resetExpense());
     } catch (error) {
-      console.log(error);
-      Swal.fire("Error", "Network error!", "error");
+      const message =
+        (error as any)?.response?.data?.message || "Something went wrong!";
+      Swal.fire("Error", message, "error");
     } finally {
       setIsSubmitting(false);
     }
   };
 
+
   return (
     <div className="relative w-full min-h-screen flex items-start justify-center px-4 pt-4 pb-8">
-      
+
       {/* 👇 background layer added ONLY for blur effect */}
       <div className="absolute inset-0 -z-10 bg-gradient-to-br from-blue-500 via-purple-500 to-pink-500" />
 

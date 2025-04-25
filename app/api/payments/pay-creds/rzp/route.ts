@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { NextRequest, NextResponse } from "next/server";
 import connectDB from "@/lib/database/db_connection";
 import RzpModel from "@/lib/models/Razorpay.model";
@@ -7,7 +6,7 @@ import { verifyUser } from "@/lib/helpers/verifyAuthUser";
 
 export async function POST(req: NextRequest) {
     try {
-        await connectDB();
+        await connectDB("api/payments/pay-creds/rzp/route.ts");
 
         let userId: string;
         try {
@@ -44,7 +43,7 @@ export async function POST(req: NextRequest) {
 
 export async function GET(req: NextRequest) {
     try {
-        await connectDB();
+        await connectDB("api/payments/pay-creds/rzp/route.ts");
 
         let userId: string;
         try {

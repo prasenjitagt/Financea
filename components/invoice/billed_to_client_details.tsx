@@ -55,7 +55,7 @@ export default function BilledToClientDetails({ selectedClientDetails }: PropTyp
                 </div>
 
 
-                <blockquote className="mt-6 border-l-2 pl-6 italic text-[#363C45]">
+                <blockquote className="mt-6  text-[#363C45]">
                     {`${address},${state},${country}-${postal}`}
                 </blockquote>
 

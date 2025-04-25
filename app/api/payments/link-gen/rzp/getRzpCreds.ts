@@ -16,7 +16,7 @@ interface RzpCredsReturnType {
 }
 
 export async function getRzpCreds(userId: string): Promise<RzpCredsReturnType> {
-    await connectDB();
+    await connectDB("api/payments/link-gen/rzp/getRzpCreds.ts");
 
     const rzpCreds = await RzpModel.findOne({ userId }) as RazorpayCreds;
 

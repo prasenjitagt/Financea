@@ -1,12 +1,12 @@
 import mongoose from "mongoose";
 
-const connectDB = async () => {
+const connectDB = async (locationInformation: string) => {
   const MONGO_URI = process.env.MONGODB_URI as string;
 
   try {
     // If already connected, don't attempt to connect again
     if (mongoose.connection.readyState >= 1) {
-      console.log("MongoDB is already connected");
+      console.log(`MongoDB is already connected , No Need to call Again in ${locationInformation}`);
       return;
     }
 

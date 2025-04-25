@@ -1,3 +1,4 @@
+import connectDB from "@/lib/database/db_connection";
 import User from "@/lib/models/User.model";
 import { NextRequest, NextResponse } from "next/server";
 
@@ -8,7 +9,7 @@ export async function POST(request: NextRequest) {
 
 
     try {
-        // connectDB();
+        connectDB("api/db/route.ts");
         const { email } = await request.json();
         console.log(email);
 

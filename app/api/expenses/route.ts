@@ -6,21 +6,20 @@ import jwt from "jsonwebtoken";
 import connectDB from "@/lib/database/db_connection";
 import Expense from "@/lib/models/Expenses.model";
 import { expenseSchema } from "@/lib/helpers/validations";
+import { getServerSession } from "next-auth";
+import { FinanceaAuthOptions } from "../auth/[...nextauth]/options";
 
 const JWT_SECRET = process.env.JWT_SECRET as string;
 
 // 👇 POST handler for creating expenses
 export async function POST(req: NextRequest) {
-  await connectDB();
-
   try {
-    const authHeader = req.headers.get("authorization");
-    if (!authHeader || !authHeader.startsWith("Bearer ")) {
+    //get UserID from session
+    const session = await getServerSession(FinanceaAuthOptions);
+    if (!session) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
-
-    const token = authHeader.split(" ")[1];
-    const decoded = jwt.verify(token, JWT_SECRET) as { userId: string };
+    const userId = session.user._id;
 
     const body = await req.json();
     const parsed = expenseSchema.safeParse(body);
@@ -31,7 +30,7 @@ export async function POST(req: NextRequest) {
 
     const newExpense = new Expense({
       ...parsed.data,
-      user: decoded.userId,
+      user: userId,
     });
 
     const savedExpense = await newExpense.save();
@@ -42,19 +41,18 @@ export async function POST(req: NextRequest) {
 }
 
 // 👇 GET handler for fetching expenses and stats
-export async function GET(req: NextRequest) {
-  await connectDB();
-
+export async function GET() {
   try {
-    const authHeader = req.headers.get("authorization");
-    if (!authHeader || !authHeader.startsWith("Bearer ")) {
+
+    //get UserID from session
+    const session = await getServerSession(FinanceaAuthOptions);
+    if (!session) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
+    const userId = session.user._id;
 
-    const token = authHeader.split(" ")[1];
-    const decoded = jwt.verify(token, JWT_SECRET) as { userId: string };
 
-    const expenses = await Expense.find({ user: decoded.userId }).sort({ createdAt: -1 });
+    const expenses = await Expense.find({ user: userId }).sort({ createdAt: -1 });
 
     const formatted = expenses.map((exp) => ({
       _id: exp._id,
@@ -116,7 +114,7 @@ export async function GET(req: NextRequest) {
 
 // 👇 DELETE handler for deleting expenses
 export async function DELETE(req: NextRequest) {
-  await connectDB();
+  await connectDB("api/expenses/route.ts");
 
   const authHeader = req.headers.get("authorization");
   if (!authHeader || !authHeader.startsWith("Bearer ")) {

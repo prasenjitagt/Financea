@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
 import { useState, useEffect } from "react";
@@ -17,7 +16,7 @@ interface Client {
   mobile: string;
   companyName: string;
   serviceCharge: number;
-  createdAt: string; 
+  createdAt: string;
 }
 
 const ClientPage = () => {
@@ -28,22 +27,17 @@ const ClientPage = () => {
   const [selectedClients, setSelectedClients] = useState<string[]>([]);
   const [filteredClients, setFilteredClients] = useState<Client[]>([]);
   const [selectedDays, setSelectedDays] = useState<number | null>(null);
-  
+
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 5;
-  
+
   const [metrics, setMetrics] = useState({ totalClients: 0, totalPayment: 0 });
 
   //Fetching Clients
   useEffect(() => {
     const fetchClients = async () => {
       try {
-        const token = localStorage.getItem("token");
-        const res = await axios.get<Client[]>("/api/clients", {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
+        const res = await axios.get<Client[]>("/api/clients");
         setClients(res.data);
         setFilteredClients(res.data);
       } catch (err) {
@@ -53,11 +47,7 @@ const ClientPage = () => {
 
     const fetchStats = async () => {
       try {
-        const res = await axios.get<{ totalClients: number; totalPayment: number }>("/api/clients/stats", {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-          },
-        });
+        const res = await axios.get<{ totalClients: number; totalPayment: number }>("/api/clients/stats");
         setMetrics(res.data);
       } catch (error) {
         console.error("Failed to fetch stats", error);
@@ -72,17 +62,17 @@ const ClientPage = () => {
     setSelectedDays(days);
     const today = new Date();
     const lastNDays = new Date(today.setDate(today.getDate() - days));
-    
+
     const recentClients = clients.filter(client => {
       const clientDate = new Date(client.createdAt);
       return clientDate >= lastNDays;
     });
-  
+
     setFilteredClients(recentClients);
     setCurrentPage(1);
   };
-  
-//Search Client : 
+
+  //Search Client : 
   const searchClients = () => {
     const query = searchQuery.toLowerCase();
     return filteredClients.filter((client) => {
@@ -144,11 +134,7 @@ const ClientPage = () => {
     if (!confirmResult.isConfirmed) return;
 
     try {
-      const token = localStorage.getItem("token");
       const res = await axios.delete<Client[]>("/api/clients", {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
         data: { clientIds: selectedClients },
       } as any);
 
@@ -157,12 +143,8 @@ const ClientPage = () => {
       setFilteredClients(filteredClients.filter((client) => !selectedClients.includes(client._id)));
       setSelectedClients([]);
 
-      const updatedStats = await axios.get<{ totalClients: number; totalPayment: number }>("/api/clients/stats", {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-      });
-  
+      const updatedStats = await axios.get<{ totalClients: number; totalPayment: number }>("/api/clients/stats");
+
       // Update the metrics with the new stats
       setMetrics(updatedStats.data);
 
@@ -177,9 +159,9 @@ const ClientPage = () => {
       Swal.fire({
         title: "Error!",
         text: err?.response?.data?.error,
-        icon: "error", 
+        icon: "error",
       });
-      
+
     }
   };
 
@@ -187,7 +169,7 @@ const ClientPage = () => {
   const handleExport = () => {
     const workbook = new ExcelJS.Workbook();
     const worksheet = workbook.addWorksheet("Clients");
-  
+
     worksheet.columns = [
       { header: "Client Name", key: "clientName" },
       { header: "Email", key: "email" },
@@ -198,11 +180,11 @@ const ClientPage = () => {
       { header: "Issue Date", key: "createdAt" },
       { header: "Due Date", key: "dueDate" },
     ];
-  
+
     const filteredData = selectedClients.length > 0
       ? clients.filter((client) => selectedClients.includes(client._id))
       : searchClients();
-  
+
     filteredData.forEach((client) => {
       worksheet.addRow({
         clientName: client.clientName,
@@ -215,13 +197,13 @@ const ClientPage = () => {
         dueDate: new Date(client.createdAt).toLocaleDateString(),
       });
     });
-  
+
     workbook.xlsx.writeBuffer().then((buffer) => {
       const blob = new Blob([buffer], { type: "application/octet-stream" });
       saveAs(blob, "clients.xlsx");
     });
   };
-  
+
 
   //render Pagination : 
   const renderPagination = () => (
@@ -264,7 +246,7 @@ const ClientPage = () => {
           <p className="text-xl text-gray-500 pb-2">Total Payment</p>
           <h3 className="md:text-3xl text-xl font-bold">${metrics.totalPayment}</h3>
         </div>
-        
+
       </div>
       {/* Search + Buttons */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-4">
@@ -286,7 +268,7 @@ const ClientPage = () => {
             onChange={(e) => filterLastNDays(Number(e.target.value))}
             value={selectedDays ?? ""}
             className="border px-4 py-2 rounded-md text-sm cursor-pointer hover:bg-gray-100"
-            >
+          >
             <option value={365}>Filter by days</option>
             <option value={15}>Last 15 days</option>
             <option value={30}>Last 30 days</option>
@@ -321,8 +303,8 @@ const ClientPage = () => {
           </thead>
           <tbody>
             {paginatedClients().map((client) => (
-              <tr key={client._id}   onClick={() => router.push(`/clients/profile?id=${client._id}`)}
-              className="border-t cursor-pointer hover:bg-gray-100">
+              <tr key={client._id} onClick={() => router.push(`/clients/profile?id=${client._id}`)}
+                className="border-t cursor-pointer hover:bg-gray-100">
                 <td className="p-3">
                   <input type="checkbox" checked={selectedClients.includes(client._id)} onChange={() => toggleSelectClient(client._id)} className="accent-purple-600 cursor-pointer" />
                 </td>
