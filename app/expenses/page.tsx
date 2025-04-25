@@ -9,7 +9,7 @@ import { FaDownload } from "react-icons/fa";
 import Swal from "sweetalert2";
 import { saveAs } from "file-saver";
 import ExcelJS from "exceljs";
-import { get_expenses_route } from "@/lib/helpers/api-endpoints";
+import { expenses_route } from "@/lib/helpers/api-endpoints";
 
 interface ExpenseType {
   _id: string;
@@ -39,7 +39,7 @@ const Expense = () => {
   useEffect(() => {
     const fetchExpenses = async () => {
       try {
-        const res = await axios.get<any>(get_expenses_route);
+        const res = await axios.get<any>(expenses_route);
 
         console.log(res);
         setExpenses(res.data.expenses);

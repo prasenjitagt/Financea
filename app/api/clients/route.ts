@@ -3,7 +3,6 @@ import { NextResponse } from "next/server";
 import connectDB from "@/lib/database/db_connection";
 import { Client } from "@/lib/models/Clients.model";
 import { clientSchema } from "@/lib/helpers/validations";
-import jwt from "jsonwebtoken";
 import { getServerSession } from "next-auth";
 import { FinanceaAuthOptions } from "../auth/[...nextauth]/options";
 
@@ -34,7 +33,7 @@ export async function POST(req: Request) {
 
     const newClient = new Client({
       ...validation.data,
-      user: userId,
+      user: userId
     });
 
     await newClient.save();

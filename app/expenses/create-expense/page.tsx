@@ -11,7 +11,7 @@ import {
 } from "@/lib/redux/Features/expenseSlice";
 import Image from "next/image";
 import axios from "axios";
-import { get_expenses_route } from "@/lib/helpers/api-endpoints";
+import { expenses_route } from "@/lib/helpers/api-endpoints";
 
 const Page = () => {
   const dispatch = useDispatch();
@@ -31,7 +31,7 @@ const Page = () => {
     setIsSubmitting(true);
 
     try {
-      const res = await axios.post(get_expenses_route, expense);
+      const res = await axios.post(expenses_route, expense);
 
       Swal.fire("Created!", "Your expense has been added.", "success");
       dispatch(resetExpense());

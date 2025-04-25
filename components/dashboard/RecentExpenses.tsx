@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import RecentExpensesLoading from "../loading_ui/RecentExpensesLoading";
 import axios from "axios";
-import { get_expenses_route } from "@/lib/helpers/api-endpoints";
+import { expenses_route } from "@/lib/helpers/api-endpoints";
 
 const RecentExpenses = () => {
   const [expenses, setExpenses] = useState<{ category: string; amount: string; date: string; icon: string }[]>([]);
@@ -14,7 +14,7 @@ const RecentExpenses = () => {
 
     const fetchExpenses = async () => {
       try {
-        const response = await axios.get(get_expenses_route);
+        const response = await axios.get(expenses_route);
         setExpenses(response.data.expenses);
       } catch (error) {
         const message = (error as any)?.response?.data?.message || (error as Error).message;

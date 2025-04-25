@@ -11,6 +11,7 @@ import { Globe, Mail, MapPin, Phone, User, Loader2 } from "lucide-react"
 import Swal from "sweetalert2";
 import Link from "next/link";
 import axios from "axios";
+import { clients_route } from "@/lib/helpers/api-endpoints"
 
 export default function NewClientForm() {
   const dispatch = useDispatch()
@@ -25,8 +26,7 @@ export default function NewClientForm() {
   const handleSubmit = async () => {
     setLoading(true);
     try {
-      const res = await axios.post("/api/clients", client);
-      const data = res.data;
+      await axios.post(clients_route, client);
 
       dispatch(resetClient());
       Swal.fire({

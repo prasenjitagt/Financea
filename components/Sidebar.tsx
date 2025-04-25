@@ -1,15 +1,15 @@
 // Sidebar.tsx
 "use client";
 
+import Image, { StaticImageData } from "next/image";
+import DashboardIcon from "@/assets/icons/dashboard_sidebar_icon.svg";
+import InvoicesIcon from "@/assets/icons/invoices_sidebar_icon.svg";
+import PaymentsIcon from "@/assets/icons/payemnts_sidebar_icon.svg";
+import ExpensesIcon from "@/assets/icons/expenses_sidebar_icon.svg";
+import ClientsIcon from "@/assets/icons/clients_sidebar_icon.svg";
+import ReportsIcon from "@/assets/icons/reports_sidebar_icon.svg";
+import SettingsIcon from "@/assets/icons/settings_sidebar_icon.svg";
 import { usePathname, useRouter } from "next/navigation";
-import {
-  FaFileInvoiceDollar,
-  FaMoneyCheckAlt,
-  FaChartBar,
-  FaFileAlt,
-  FaCog,
-  FaUsers,
-} from "react-icons/fa";
 
 interface SidebarProps {
   onLinkClick?: () => void;
@@ -19,14 +19,19 @@ const Sidebar: React.FC<SidebarProps> = ({ onLinkClick }) => {
   const pathname = usePathname();
   const router = useRouter();
 
-  const menuItems = [
-    { name: "Dashboard", icon: <FaChartBar />, path: "/" },
-    { name: "Invoices", icon: <FaFileInvoiceDollar />, path: "/invoices" },
-    { name: "Payments", icon: <FaMoneyCheckAlt />, path: "/payments" },
-    { name: "Expenses", icon: <FaFileAlt />, path: "/expenses" },
-    { name: "Clients", icon: <FaUsers />, path: "/clients" },
-    { name: "Reports", icon: <FaFileAlt />, path: "/reports" },
-    { name: "Settings", icon: <FaCog />, path: "/settings" },
+  interface menuItemsTypes {
+    name: string,
+    icon: StaticImageData,
+    path: string
+  }
+  const menuItems: menuItemsTypes[] = [
+    { name: "Dashboard", icon: DashboardIcon, path: "/" },
+    { name: "Invoices", icon: InvoicesIcon, path: "/invoices" },
+    { name: "Payments", icon: PaymentsIcon, path: "/payments" },
+    { name: "Expenses", icon: ExpensesIcon, path: "/expenses" },
+    { name: "Clients", icon: ClientsIcon, path: "/clients" },
+    { name: "Reports", icon: ReportsIcon, path: "/reports" },
+    { name: "Settings", icon: SettingsIcon, path: "/settings" },
   ];
 
   const handleLinkClick = (clickedPath: string) => {
@@ -44,7 +49,7 @@ const Sidebar: React.FC<SidebarProps> = ({ onLinkClick }) => {
   return (
     <div className=" h-full w-[250px] bg-white shadow-md py-5  font-['Archivo',sans-serif] flex flex-col justify-between relative">
       <div>
-        <h2 className=" text-xl font-bold text-gray-800 ml-5 mb-8">Instant Paid</h2>
+        <h2 className=" text-xl font-bold text-gray-800 ml-5 mb-8">Financea</h2>
         <nav className=" flex flex-col ">
           {menuItems.map((item, index) => (
             <div
@@ -55,7 +60,7 @@ const Sidebar: React.FC<SidebarProps> = ({ onLinkClick }) => {
             >
 
               <div className="flex items-center space-x-4">
-                <span className="text-xl">{item.icon}</span>
+                <Image src={item.icon} alt={`${item.name} idcon`} width={20} />
                 <span className="text-base font-medium">{item.name}</span>
               </div>
 
