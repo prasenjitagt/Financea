@@ -8,11 +8,11 @@ import { Eye, EyeOff } from "lucide-react";
 import Image from "next/image";
 import "../globals.css";
 import { useDispatch } from "react-redux";
-import { login } from "@/lib/redux/Features/authSlice"; 
+import { login } from "@/lib/redux/Features/authSlice";
 import Swal from "sweetalert2"
 
 export default function SignupPage() {
-  const dispatch = useDispatch(); 
+  const dispatch = useDispatch();
 
   const [showPassword, setShowPassword] = useState(false);
   const [fullName, setFullName] = useState("");
@@ -53,9 +53,9 @@ export default function SignupPage() {
       dispatch(login(data.token));
 
       // ✅ Redirect after successful signup
-       Swal.fire({
-          title: "LogIn Successfully!",
-          icon: "success",
+      Swal.fire({
+        title: "LogIn Successfully!",
+        icon: "success",
       })
       window.location.href = "/";
     } catch (err: any) {
@@ -114,9 +114,8 @@ export default function SignupPage() {
               id="email"
               value={email}
               onChange={handleEmailChange}
-              className={`w-full p-2.5 border rounded-md focus:outline-none focus:ring-1 focus:ring-[#5C2FA8] ${
-                emailError ? "border-red-500" : "border-gray-300"
-              }`}
+              className={`w-full p-2.5 border rounded-md focus:outline-none focus:ring-1 focus:ring-[#5C2FA8] ${emailError ? "border-red-500" : "border-gray-300"
+                }`}
               placeholder="example@gmail.com"
               required
             />
