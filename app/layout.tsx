@@ -7,6 +7,7 @@ import ClientLayout from "./client-layout";
 import AuthGuard from "@/components/AuthGuard";
 import { useEffect } from "react";
 import Head from "next/head";
+import AuthProvider from "@/lib/auth/authProvider";
 
 
 export default function RootLayout({
@@ -26,11 +27,13 @@ export default function RootLayout({
           <link rel="icon" type="image/png" href="/favicon.png" />
           <link rel="shortcut icon" href="/favicon.ico" />
         </Head>
-        <body>
-          <ClientLayout>
-            <AuthGuard>{children}</AuthGuard>
-          </ClientLayout>
-        </body>
+        <AuthProvider >
+          <body>
+            <ClientLayout>
+              <AuthGuard>{children}</AuthGuard>
+            </ClientLayout>
+          </body>
+        </AuthProvider>
       </html>
     </Provider>
   );

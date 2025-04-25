@@ -1,30 +1,39 @@
+// middleware.ts
+import { withAuth } from "next-auth/middleware";
+import { NextRequest, NextResponse } from "next/server";
 
-import { NextResponse } from "next/server";
-import type { NextRequest } from "next/server";
+export default withAuth(
+    function middleware(req: NextRequest) {
+        const { pathname, origin } = req.nextUrl;
 
-export function middleware(req: NextRequest) {
+        // Redirect authenticated users away from auth pages
+        if (["/login", "/signup"].includes(pathname)) {
+            return NextResponse.redirect(origin);
+        }
 
-    // Public Routes
-    const publicRoutes = ["/login", "/signup"];
-
-    // Private Routes
-    const privateRoutes = ["/", "/expenses", "/invoices", "/payments", "/reports", "/settings"];
-
-    // // ✅ Agar user private route pe hai aur login nahi hai, toh login page pe redirect karo
-    // if (privateRoutes.includes(req.nextUrl.pathname) && !token) {
-    //   return NextResponse.redirect(new URL("/login", req.url));
-    // }
-
-    // // ✅ Agar user logged in hai aur login ya signup pe ja raha hai, toh home page pe redirect karo
-    // if (publicRoutes.includes(req.nextUrl.pathname) && token) {
-    //   return NextResponse.redirect(new URL("/", req.url));
-    // }
-
-    return NextResponse.next();
-}
+        return NextResponse.next();
+    },
+    {
+        callbacks: {
+            authorized: ({ token }) => {
+                // Simple check - is user authenticated?
+                return !!token;
+            },
+        },
+        pages: {
+            signIn: "/login", // Custom login page
+        },
+    }
+);
 
 export const config = {
-    matcher: ["/", "/expenses", "/invoices", "/payments", "/reports", "/settings", "/login", "/signup"],
+    matcher: [
+        "/",
+        "/expenses/:path*",
+        "/invoices/:path*",
+        "/payments/:path*",
+        "/reports/:path*",
+        "/settings/:path*",
+
+    ],
 };
-
-

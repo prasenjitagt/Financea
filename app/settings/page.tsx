@@ -5,21 +5,15 @@ import { Button } from "@/components/ui/button";
 import { LuLogOut } from "react-icons/lu";
 import { ImSpinner2 } from "react-icons/im";
 import { useState } from "react";
-import { useDispatch } from "react-redux";
-import { logout } from "@/lib/redux/Features/authSlice";
+import { signOut } from "next-auth/react";
 
 const Settings = () => {
   const router = useRouter();
-  const dispatch = useDispatch();
   const [isLoggingOut, setIsLoggingOut] = useState(false);
   const handleLogout = () => {
     setIsLoggingOut(true); // Show spinner
+    signOut({ callbackUrl: "/login" })
 
-    // Optional UX delay for spinner animation
-    setTimeout(() => {
-      dispatch(logout());
-      router.push("/login");
-    }, 1500);
   };
   return (
     <div className="relative flex flex-col items-center justify-center w-full  bg-gray-100">

@@ -10,7 +10,13 @@ export const signupSchema = z.object({
 //Login Schema Validation : 
 export const loginSchema = z.object({
     email: z.string().email("Invalid email format"),
-    password: z.string().min(6, "Password must be at least 6 characters"),
+    password: z
+        .string()
+        .min(8, "Password must be at least 8 characters")
+        .regex(/[a-z]/, "Password must include at least one lowercase letter")
+        .regex(/[A-Z]/, "Password must include at least one uppercase letter")
+        .regex(/[0-9]/, "Password must include at least one number")
+        .regex(/[^A-Za-z0-9]/, "Password must include at least one special character"),
 });
 
 //client Schema Validation : 
@@ -81,3 +87,4 @@ export const invoiceSchema = z.object({
 });
 
 export type InvoiceInput = z.infer<typeof invoiceSchema>;
+export type LoginSchemaType = z.infer<typeof loginSchema>;
