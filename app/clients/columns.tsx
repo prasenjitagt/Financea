@@ -86,6 +86,27 @@ export const columns: ColumnDef<ClientType>[] = [
         )
     },
 
+    //status
+    {
+        accessorKey: "isClientActive",
+        header: "Status",
+        cell: ({ row }) => {
+            const isActive = row.getValue("isClientActive");
+
+            return (
+                <span
+                    className={`px-2 py-1 text-xs rounded-full font-medium
+                ${isActive
+                            ? "bg-green-100 text-green-700"
+                            : "bg-red-100 text-red-700"}`}
+                >
+                    {isActive ? "Active" : "Inactive"}
+                </span>
+            );
+        },
+    },
+
+
     //contact
     {
         id: "contact",
@@ -210,14 +231,19 @@ export const columns: ColumnDef<ClientType>[] = [
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align="end">
                         <DropdownMenuLabel>Actions</DropdownMenuLabel>
+                        <DropdownMenuSeparator />
                         <DropdownMenuItem
+                            className="cursor-pointer"
                             onClick={() => navigator.clipboard.writeText(client._id)}
                         >
                             Copy Client ID
                         </DropdownMenuItem>
-                        <DropdownMenuSeparator />
-                        <DropdownMenuItem>View customer</DropdownMenuItem>
-                        <DropdownMenuItem>View payment details</DropdownMenuItem>
+                        <DropdownMenuItem
+                            className="cursor-pointer"
+                            onClick={() => console.log("doiing some ting")}
+                        >
+                            View customer
+                        </DropdownMenuItem>
                     </DropdownMenuContent>
                 </DropdownMenu>
             )
