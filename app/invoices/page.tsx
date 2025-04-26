@@ -1,31 +1,61 @@
-import { ClientType, columns } from "@/app/clients/columns";
+import { InvoiceType, columns } from "./columns";
 import { DataTable } from "@/app/clients/data-table";
 import { getServerSession } from "next-auth";
 import { FinanceaAuthOptions } from "../api/auth/[...nextauth]/options";
-import { Client } from "@/lib/models/Clients.model";
-import ClientsPageTotalClientsCards from "@/components/clients/clients_page_total_clients_card";
-import ClientsPageTotalPaymentsCards from "@/components/clients/clients_page_total_payments_card";
+import HeaderInfoCard from "@/components/profile/header-info-card";
+import HeaderStats from "@/components/profile/header-stats";
+import { Card, CardContent } from "@/components/ui/card";
+import InvoiceModel from "@/lib/models/Invoice.model";
 
-function sanitizeClient(client: any): ClientType {
+
+
+
+export function sanitizeInvoice(raw: any): InvoiceType {
   return {
-    _id: client._id.toString(),
-    clientName: client.clientName,
-    companyName: client.companyName,
-    email: client.email,
-    mobile: client.mobile,
-    address: client.address,
-    postal: client.postal,
-    state: client.state,
-    country: client.country,
-    serviceCharge: client.serviceCharge,
-    website: client.website,
-    isClientActive: client.isClientActive,
-    userId: client.userId.toString(),
-    createdAt: client.createdAt,
+    _id: raw._id.toString(),
+    user: raw.user.toString(),
+    client: raw.client.toString(),
+    invoiceNumber: raw.invoiceNumber,
+    issueDate: raw.issueDate instanceof Date ? raw.issueDate.toISOString() : raw.issueDate,
+    dueDate: raw.dueDate ? (raw.dueDate instanceof Date ? raw.dueDate.toISOString() : raw.dueDate) : undefined,
+    clientEmail: raw.clientEmail,
+    clientName: raw.clientName,
+    clientMobile: Number(raw.clientMobile),
+    isRecurring: Boolean(raw.isRecurring),
+    recurringFrequency: raw.recurringFrequency ?? undefined,
+    recurringIssueDate: raw.recurringIssueDate
+      ? (raw.recurringIssueDate instanceof Date ? raw.recurringIssueDate.toISOString() : raw.recurringIssueDate)
+      : undefined,
+    recurringDueDate: raw.recurringDueDate
+      ? (raw.recurringDueDate instanceof Date ? raw.recurringDueDate.toISOString() : raw.recurringDueDate)
+      : undefined,
+    items: raw.items.map((item: any) => ({
+      ishourly: Boolean(item.ishourly),
+      name: item.name,
+      quantity: Number(item.quantity),
+      rate: Number(item.rate),
+      _id: item._id.toString(),
+    })),
+    discountPercent: Number(raw.discountPercent),
+    taxPercent: Number(raw.taxPercent),
+    note: raw.note ?? undefined,
+    terms: raw.terms ?? undefined,
+    subTotal: Number(raw.subTotal),
+    discountAmount: Number(raw.discountAmount),
+    taxAmount: Number(raw.taxAmount),
+    totalAmount: Number(raw.totalAmount),
+    createdAt: raw.createdAt instanceof Date ? raw.createdAt.toISOString() : raw.createdAt,
+    updatedAt: raw.updatedAt instanceof Date ? raw.updatedAt.toISOString() : raw.updatedAt,
+    __v: raw.__v ?? undefined,
+    isPaid: raw.isPaid,
+    paymentId: raw.paymentId
+
   };
 }
 
-async function getData(): Promise<ClientType[]> {
+
+
+async function getData(): Promise<InvoiceType[]> {
   try {
     const session = await getServerSession(FinanceaAuthOptions);
     if (!session) {
@@ -34,14 +64,17 @@ async function getData(): Promise<ClientType[]> {
     }
 
     const userId = session.user._id;
-    const clients = await Client.find({ userId }).sort({ createdAt: -1 }).lean();
+    const invoices = await InvoiceModel.find({ user: userId }).sort({ createdAt: -1 }).lean();
 
-    if (!clients) {
+    if (!invoices) {
       console.log("No Clients Found");
       return [];
     }
 
-    return clients.map(sanitizeClient);
+    return invoices.map(sanitizeInvoice);
+
+
+    return [];
   } catch (error) {
     console.error("Error in fetching clients:", error);
     return [];
@@ -51,35 +84,70 @@ async function getData(): Promise<ClientType[]> {
 
 
 
+
 export default async function ClientsDesktopView() {
-  const clientsData = await getData();
+  const invoiceData = await getData();
 
-  const totalClients = clientsData.length;
+  const totalClients = invoiceData.length;
 
-  const totalPayments = clientsData.reduce((sum, client) => sum + client.serviceCharge, 0);
+  const totalPayments = invoiceData.reduce((sum, invoice) => sum + invoice.totalAmount!, 0);
 
   return (
     <div className="h-full flex flex-col bg-white p-5 rounded-lg container mx-auto">
       {/* Top Cards Section */}
       <section className="flex space-x-[12px] mb-[38px]">
-        <ClientsPageTotalClientsCards
-          title="Total Clients"
-          description="Last 30 Days"
-          totalClients={totalClients}
-        />
-        <ClientsPageTotalPaymentsCards
-          title="Total Payments"
-          description="Outstanding Balance"
-          clients={clientsData}
-          totalPayments={totalPayments}
-        />
+
+        <Card className="flex justify-center w-[273px] h-[106px] bg-[#FCFDFF]">
+          <CardContent className="flex justify-between">
+
+            <HeaderInfoCard mainText={"Total Invoices"} count={`40`} />
+
+            <HeaderStats
+              percentageChange={23}
+              isIncreased={true}
+              bottomText={"from last month"}
+            />
+
+          </CardContent>
+        </Card>
+
+        <Card className="flex justify-center w-[273px] h-[106px] bg-[#FCFDFF]">
+          <CardContent className="flex justify-between">
+
+            <HeaderInfoCard mainText={"Total Payment"} count={`$1200`} />
+
+            <HeaderStats
+              percentageChange={23}
+              isIncreased={true}
+              bottomText={"from last month"}
+            />
+
+          </CardContent>
+        </Card>
+
+        <Card className="flex justify-center w-[273px] h-[106px] bg-[#FCFDFF]">
+          <CardContent className="flex justify-between">
+
+            <HeaderInfoCard mainText={"Outstanding Invoices"} count={`2`} />
+
+          </CardContent>
+        </Card>
+
+        <Card className="flex justify-center w-[273px] h-[106px] bg-[#FCFDFF]">
+          <CardContent className="flex justify-between">
+
+            <HeaderInfoCard mainText={"Outstanding Payment"} count={`$1200`} />
+
+
+          </CardContent>
+        </Card>
       </section>
 
       {/* Desktop and Tablet View Table Section */}
       <section className="hidden md:block w-full flex-1 overflow-scroll">
         <DataTable
           columns={columns}
-          data={clientsData}
+          data={invoiceData}
         />
       </section>
     </div>

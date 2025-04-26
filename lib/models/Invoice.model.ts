@@ -1,6 +1,6 @@
 // models/invoiceModel.ts
 
-import mongoose, { Schema, model, models, Document } from "mongoose";
+import { Schema, model, models, Document } from "mongoose";
 import { Types } from "mongoose";
 import { createInvoiceFormType } from "@/lib/zod/create_invoice_zod_schema"; // import your zod type!
 
@@ -112,6 +112,7 @@ const invoiceSchema = new Schema<InvoiceDocument>(
     isPaid: {
       type: Boolean,
       required: true,
+      default: false,
     },
     paymentId: {
       type: String,

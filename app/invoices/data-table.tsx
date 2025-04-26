@@ -31,7 +31,7 @@ import {
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
-import { ClientType } from "./columns";
+import { InvoiceType } from "./columns";
 
 interface DataTableProps<TData, TValue> {
     columns: ColumnDef<TData, TValue>[]
@@ -56,13 +56,13 @@ export function DataTable<TData, TValue>({
     //exporting excel sheet
     async function handleExport() {
         try {
-            let dataToBeExported: ClientType[];
+            let dataToBeExported: InvoiceType[];
 
             if (Object.keys(rowSelection).length === 0) {
-                dataToBeExported = data as ClientType[];
+                dataToBeExported = data as InvoiceType[];
 
             } else {
-                dataToBeExported = data.filter((_, index) => rowSelection[index]) as ClientType[];
+                dataToBeExported = data.filter((_, index) => rowSelection[index]) as InvoiceType[];
             }
 
             const workbook = new ExcelJS.Workbook();
@@ -80,21 +80,21 @@ export function DataTable<TData, TValue>({
                 { header: "Created At", key: "createdAt" },
             ];
 
-            dataToBeExported.forEach(client => {
-                const currency = client.country === "India" ? "INR" : "USD"; // Check country and set currency
+            // dataToBeExported.forEach(client => {
+            //     const currency = client.country === "India" ? "INR" : "USD"; // Check country and set currency
 
-                worksheet.addRow({
-                    clientName: client.clientName,
-                    status: client.isClientActive ? "Active" : "Inactive",
-                    mobile: client.mobile,
-                    email: client.email,
-                    website: client.website,
-                    country: client.country,
-                    serviceCharge: client.serviceCharge,
-                    currency: currency, // Use the determined currency
-                    createdAt: new Date(client.createdAt).toLocaleDateString(),
-                });
-            });
+            //     worksheet.addRow({
+            //         clientName: client.clientName,
+            //         status: client.isClientActive ? "Active" : "Inactive",
+            //         mobile: client.mobile,
+            //         email: client.email,
+            //         website: client.website,
+            //         country: client.country,
+            //         serviceCharge: client.serviceCharge,
+            //         currency: currency, // Use the determined currency
+            //         createdAt: new Date(client.createdAt).toLocaleDateString(),
+            //     });
+            // });
 
 
             const buffer = await workbook.xlsx.writeBuffer();

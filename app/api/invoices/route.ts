@@ -1,26 +1,22 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { NextResponse } from "next/server";
 import connectDB from "@/lib/database/db_connection";
-import Invoice from "@/lib/models/Invoice.model";
+import InvoiceModel from "@/lib/models/Invoice.model";
 import { invoiceSchema } from "@/lib/helpers/validations";
 import jwt from "jsonwebtoken";
+import { getServerSession } from "next-auth";
+import { FinanceaAuthOptions } from "../auth/[...nextauth]/options";
 
 const JWT_SECRET = process.env.JWT_SECRET as string;
 
 export async function POST(req: Request) {
   try {
     await connectDB("api/invoices/route.ts");
-
-    const token = req.headers.get("authorization")?.split(" ")[1];
-    if (!token) return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
-
-    let userId: string;
-    try {
-      const decoded = jwt.verify(token, JWT_SECRET) as { userId: string };
-      userId = decoded.userId;
-    } catch (err: any) {
-      return NextResponse.json({ message: err }, { status: 403 });
+    const session = await getServerSession(FinanceaAuthOptions);
+    if (!session) {
+      console.log("Unauthorized");
+      throw new Error("Unauthorized");
     }
+    const userId = session.user._id;
 
 
     const body = await req.json();
@@ -28,7 +24,7 @@ export async function POST(req: Request) {
 
     const validatedBody = invoiceSchema.parse(body.data);
 
-    const newInvoice = await Invoice.create({
+    const newInvoice = await InvoiceModel.create({
       user: userId,
       client: validatedBody.clientId,
       invoiceNumber: validatedBody.invoiceNumber,
@@ -51,23 +47,19 @@ export async function POST(req: Request) {
 }
 
 //Get Request : 
-export async function GET(req: Request) {
+export async function GET() {
   try {
     await connectDB("api/invoices/route.ts");
-
-    const token = req.headers.get("authorization")?.split(" ")[1];
-    if (!token) return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
-
-    let userId: string;
-    try {
-      const decoded = jwt.verify(token, JWT_SECRET) as { userId: string };
-      userId = decoded.userId;
-    } catch (err: any) {
-      return NextResponse.json({ message: err }, { status: 403 });
+    const session = await getServerSession(FinanceaAuthOptions);
+    if (!session) {
+      console.log("Unauthorized");
+      throw new Error("Unauthorized");
     }
+    const userId = session.user._id;
+
 
     // Fetch invoices for the authenticated user
-    const invoices = await Invoice.find({ user: userId });
+    const invoices = await InvoiceModel.find({ user: userId });
 
     if (!invoices) {
       return NextResponse.json({ message: "No invoices found" }, { status: 404 });

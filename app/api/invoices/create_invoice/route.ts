@@ -45,10 +45,12 @@ export async function POST(req: NextRequest) {
 
         const { clientId, discountPercent, invoiceNumber, isRecurring, issueDate, items, taxPercent, discountAmount, dueDate, note, recurringDueDate, recurringFrequency, recurringIssueDate, subTotal, taxAmount, terms, totalAmount, clientName, clientEmail, clientMobile } = parsedInvoiceData.data;
 
+        console.log("totalAmount:", totalAmount);
+
         const amountInPaise = totalAmount! * 100;
 
         const razorpayResponseData: RazorpayPaymentLinkResponseType = await createRazorpayPaymentLink({
-            amount: amountInPaise,
+            amount: Math.trunc(amountInPaise),
             currency: "INR",
             customerName: clientName,
             customerEmail: clientEmail,
@@ -59,6 +61,8 @@ export async function POST(req: NextRequest) {
 
         if (razorpayResponseData) {
             console.log("Payment Link Created Successfully!");
+            // console.log(razorpayResponseData.id);
+
         }
 
         // Prepare final payload for MongoDB
@@ -85,21 +89,26 @@ export async function POST(req: NextRequest) {
                 rate: item.rate,
             })),
 
-            discountPercent: discountPercent,
-            taxPercent: taxPercent,
             note: note || "No Note",
             terms: terms || "No Terms",
+
+            discountPercent: discountPercent,
+            taxPercent: taxPercent,
+
+            isPaid: false,
+            paymentId: razorpayResponseData.id,
+
             subTotal: subTotal,
             discountAmount: discountAmount,
             taxAmount: taxAmount,
             totalAmount: totalAmount,
-            isPaid: false,
-            paymentId: razorpayResponseData.id,
+
         };
 
         // Finally create in MongoDB
         const newInvoice = await InvoiceModel.create(createInvoicePayload);
 
+        // console.log(newInvoice);
 
 
         return NextResponse.json({ message: "Invoice Created Successfully", invoice: newInvoice }, { status: 200 });
