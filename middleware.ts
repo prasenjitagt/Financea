@@ -1,45 +1,41 @@
-import { getServerSession } from "next-auth";
-import { withAuth } from "next-auth/middleware";
-import { NextResponse } from "next/server";
+import { getToken } from "next-auth/jwt";
+import { NextRequest, NextResponse } from "next/server";
 
-export default withAuth(
-    function middleware(req) {
-        const { pathname, origin } = req.nextUrl;
+export async function middleware(request: NextRequest) {
+    const { pathname } = request.nextUrl;
+    const token = await getToken({ req: request });
 
-        const token = req.nextauth.token;
+    // Define public and auth routes
+    const publicRoutes = ["/login", "/signup"];
+    const isPublicRoute = publicRoutes.some(route => pathname.startsWith(route));
 
-
-
-
-        // If user is authenticated, redirect them away from login/signup
-        if (["/login", "/signup"].includes(pathname)) {
-            return NextResponse.redirect(origin); // Redirect to the homepage or the original page
-        }
-
-        // If the user isn't authenticated, allow access to the login/signup pages
-        return NextResponse.next();
-    },
-    {
-        callbacks: {
-            authorized: ({ token }) => {
-                return !!token; // Return true if the token is valid
-            },
-        },
-        pages: {
-            signIn: "/login", // Redirect to `/login` if unauthorized
-        },
+    // 1. Redirect logged-in users from auth pages to homepage
+    if (token && isPublicRoute) {
+        return NextResponse.redirect(new URL("/", request.url));
     }
-);
+
+    // 2. Allow public routes to be accessed without token
+    if (isPublicRoute) {
+        return NextResponse.next();
+    }
+
+    // 3. Protect all other routes
+    if (!token) {
+        return NextResponse.redirect(new URL("/login", request.url));
+    }
+
+    return NextResponse.next();
+}
 
 export const config = {
     matcher: [
         "/",
+        "/login",
+        "/signup",
         "/settings/:path*",
         "/invoices/:path*",
         "/expenses/:path*",
         "/clients/:path*",
         "/reports/:path*",
-        "/login/:path*",
-        "/signup/:path*",
     ],
 };

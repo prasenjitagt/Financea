@@ -6,7 +6,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { Eye, EyeOff } from "lucide-react";
 import Image from "next/image";
-import "../globals.css";
+import "@/app/globals.css";
 import Swal from "sweetalert2";
 import { signIn } from "next-auth/react";
 import axios from "axios";

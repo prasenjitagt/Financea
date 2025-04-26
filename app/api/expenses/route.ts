@@ -42,6 +42,7 @@ export async function POST(req: NextRequest) {
 
 // 👇 GET handler for fetching expenses and stats
 export async function GET() {
+  await connectDB("/api/expenses/rote.ts");
   try {
 
     //get UserID from session
