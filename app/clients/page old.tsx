@@ -9,7 +9,6 @@ import { saveAs } from "file-saver";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 import { clients_route, clients_stats_route } from "@/lib/helpers/api-endpoints";
-import ClientsDesktopView from "@/components/clients/clients_desktop_view";
 
 interface Client {
   _id: string;
@@ -298,7 +297,46 @@ const ClientPage = () => {
 
       {/* Desktop Table */}
       <div className="hidden md:block border rounded-lg min-h-[450px]">
-        <ClientsDesktopView />
+        <table className="w-full text-sm text-left">
+          <thead className="bg-white border-b text-gray-600 font-medium">
+            <tr>
+              <th className="p-3">
+                <input type="checkbox" checked={paginatedClients().length > 0 && selectedClients.length === paginatedClients().length} onChange={toggleSelectAll} className="accent-purple-600" />
+              </th>
+              <th className="p-3">Charge</th>
+              <th className="p-3">Status</th>
+              <th className="p-3">Customer Info</th>
+              <th className="p-3">Company Name</th>
+              <th className="p-3">Issue Date</th>
+              <th className="p-3">Due Date</th>
+            </tr>
+          </thead>
+          <tbody>
+            {paginatedClients().map((client) => (
+              <tr key={client._id}
+                className="border-t cursor-pointer hover:bg-gray-100">
+                <td className="p-3">
+                  <input type="checkbox" checked={selectedClients.includes(client._id)} onChange={() => toggleSelectClient(client._id)} className="accent-purple-600 cursor-pointer" />
+                </td>
+                <td className="p-3 font-bold text-black">${client.serviceCharge}</td>
+                <td className="p-3">
+                  <span className="bg-green-100 text-green-800 px-2 py-1 text-xs rounded-full">Paid</span>
+                </td>
+                <td className="p-3">
+                  <div
+                    className="font-medium text-gray-800 underline underline-offset-4"
+                    onClick={() => router.push(`/clients/profile?id=${client._id}`)}
+                  >{client.clientName}</div>
+                  <div className="text-xs text-gray-500">{client.email}</div>
+                  <div className="text-xs text-gray-500">{client.mobile}</div>
+                </td>
+                <td className="p-3 text-gray-700">{client.companyName}</td>
+                <td className="p-3">{new Date(client.createdAt).toLocaleString()}</td>
+                <td className="p-3">{new Date(client.createdAt).toLocaleDateString()}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
       </div>
 
       {/* Mobile View */}

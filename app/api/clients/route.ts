@@ -33,7 +33,7 @@ export async function POST(req: Request) {
 
     const newClient = new Client({
       ...validation.data,
-      user: userId
+      userId
     });
 
     await newClient.save();
@@ -43,7 +43,7 @@ export async function POST(req: Request) {
       { status: 201 }
     );
   } catch (error) {
-    console.error("Error in saving client:", error);
+    console.log("Error in saving client:", error);
     return NextResponse.json(
       { error: "Server error or invalid token" },
       { status: 500 }
@@ -66,7 +66,12 @@ export async function GET(req: Request) {
 
 
     // Fetch all clients belonging to the logged-in user
-    const clients = await Client.find({ user: userId }).sort({ createdAt: -1 });
+    const clients = await Client.find({ userId }).sort({ createdAt: -1 });
+
+    if (!clients) {
+      return NextResponse.json(clients, { status: 200 });
+
+    }
 
     return NextResponse.json(clients, { status: 200 });
   } catch (error) {
@@ -102,7 +107,7 @@ export async function DELETE(req: Request) {
 
     const deleteResult = await Client.deleteMany({
       _id: { $in: clientIds },
-      user: userId,
+      userId,
     });
 
     return NextResponse.json(

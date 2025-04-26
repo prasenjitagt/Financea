@@ -16,6 +16,7 @@ export const FinanceaAuthOptions: NextAuthOptions = {
                 password: { label: "Password", type: "password", placeholder: "Password" },
             },
             authorize: async (credentials) => {
+                await connectDB("api/clients/stats/route.ts");
                 try {
                     const parsedCredentials = loginSchema.safeParse(credentials);
                     if (!parsedCredentials.success) {
@@ -23,8 +24,9 @@ export const FinanceaAuthOptions: NextAuthOptions = {
                         throw new Error("Zod Schema Validation error at AuthOptions");
                     }
 
-                    await connectDB("api/clients/stats/route.ts");
                     const { email, password } = parsedCredentials.data;
+
+
 
                     const user = await User.findOne({ email }).select('+password');
                     if (!user) throw new Error("No such user");

@@ -13,7 +13,7 @@ export interface IClient extends Document {
   serviceCharge: number;
   website: string;
   isClientActive: boolean;
-  user: mongoose.Types.ObjectId;
+  userId: mongoose.Types.ObjectId;
 }
 
 const ClientSchema: Schema<IClient> = new Schema(
@@ -74,7 +74,7 @@ const ClientSchema: Schema<IClient> = new Schema(
       type: Boolean,
       default: true,
     },
-    user: {
+    userId: {
       type: Schema.Types.ObjectId,
       ref: "User",
       required: true,
