@@ -1,72 +1,129 @@
 // models/invoiceModel.ts
-import mongoose from "mongoose";
 
-const invoiceSchema = new mongoose.Schema({
-  user: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "User",
-    required: true
-  },
-  client: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "Client",
-    required: true
-  },
-  invoiceNumber: {
-    type: String,
-    required: true
-  },
-  issueDate: {
-    type: Date,
-    required: true
-  },
-  dueDate: {
-    type: Date,
-    required: true
-  },
-  items: [
-    {
-      name: String,
-      perHour: {
-        type: Number, 
-      },
-      qty: Number,
-      rate: Number,
-      total: Number,
+import mongoose, { Schema, model, models, Document } from "mongoose";
+import { Types } from "mongoose";
+import { createInvoiceFormType } from "@/lib/zod/create_invoice_zod_schema"; // import your zod type!
+
+// 1. Create a TypeScript type combining zod + _id
+export interface InvoiceType extends createInvoiceFormType {
+  user: Types.ObjectId;
+  client: Types.ObjectId;
+  isPaid: boolean;
+  paymentId: string;
+}
+
+// 2. Mongoose Document type
+export interface InvoiceDocument extends InvoiceType, Document { }
+
+const invoiceSchema = new Schema<InvoiceDocument>(
+  {
+
+    user: {
+      type: Schema.Types.ObjectId,
+      ref: "User",
+      required: true,
     },
-  ],
-  description: {
-    type: String,
-    required: true, 
-    default: '',
+    client: {
+      type: Schema.Types.ObjectId,
+      ref: "Client",
+      required: true,
+    },
+    invoiceNumber: {
+      type: String,
+      required: true,
+    },
+    issueDate: {
+      type: Date,
+      required: true,
+    },
+    dueDate: {
+      type: Date,
+      required: true,
+    },
+    clientEmail: {
+      type: String,
+      required: true,
+    },
+    clientName: {
+      type: String,
+      required: true,
+    },
+    clientMobile: {
+      type: Number,
+      required: true,
+    },
+    isRecurring: {
+      type: Boolean,
+      required: true,
+    },
+    recurringFrequency: {
+      type: String,
+      enum: ["Weekly", "Monthly", "Quarterly", "Yearly"],
+      required: false,
+    },
+    recurringIssueDate: {
+      type: Date,
+      required: false,
+    },
+    recurringDueDate: {
+      type: Date,
+      required: false,
+    },
+    items: [
+      {
+        ishourly: { type: Boolean, required: true },
+        name: { type: String, required: true },
+        quantity: { type: Number, required: true },
+        rate: { type: Number, required: true },
+      },
+    ],
+    discountPercent: {
+      type: Number,
+      required: true,
+    },
+    taxPercent: {
+      type: Number,
+      required: true,
+    },
+    note: {
+      type: String,
+      required: true,
+    },
+    terms: {
+      type: String,
+      required: true,
+    },
+    subTotal: {
+      type: Number,
+      required: true,
+    },
+    discountAmount: {
+      type: Number,
+      required: true,
+    },
+    taxAmount: {
+      type: Number,
+      required: true,
+    },
+    totalAmount: {
+      type: Number,
+      required: true,
+    },
+    isPaid: {
+      type: Boolean,
+      required: true,
+    },
+    paymentId: {
+      type: String,
+      required: true,
+    }
   },
-  termsAndConditions: {
-    type: String,
-    required: true,
-    default: 'Please pay within 15 days from the date of invoice. Overdue interest of 14% will be charged on delayed payments.'
+  {
+    timestamps: true,
+  }
+);
 
-  },
-  discount: {
-    type: Number,
-    required:true
-  },
-  tax: {
-    type: Number,
-    required: true
-  },
-  isRecurring: {
-    type: Boolean,
-    default: false
-  },
-  recurringPeriod: {
-    type: String,
-    enum: ["Monthly", "Yearly"],
-    default: "Monthly"
-  },
-}, {
-  timestamps: true
-});
+const InvoiceModel =
+  models.Invoice || model<InvoiceDocument>("Invoice", invoiceSchema);
 
-const Invoice = mongoose.models.Invoice || mongoose.model("Invoice", invoiceSchema);
-
-export default Invoice;
+export default InvoiceModel;

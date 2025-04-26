@@ -30,14 +30,9 @@ export default function RazorpayDialog({
     useEffect(() => {
         const fetchCredentials = async () => {
             try {
-                const token = localStorage.getItem("token");
-                if (!token) return;
 
-                const response = await axios.get(rpz_creds_route, {
-                    headers: {
-                        Authorization: `Bearer ${token}`,
-                    },
-                });
+
+                const response = await axios.get(rpz_creds_route);
 
                 const data = response.data as { keyId?: string };
 
@@ -75,21 +70,9 @@ export default function RazorpayDialog({
         }
 
         try {
-            const token = localStorage.getItem("token");
-            if (!token) {
-                alert("No token found. Please log in first.");
-                return;
-            }
 
-            const response = await axios.post(
-                rpz_creds_route,
-                { keyId, keySecret },
-                {
-                    headers: {
-                        Authorization: `Bearer ${token}`,
-                    },
-                }
-            );
+
+            const response = await axios.post(rpz_creds_route, { keyId, keySecret });
 
             if (response.status === 201) {
                 Swal.fire({

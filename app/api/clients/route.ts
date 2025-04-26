@@ -84,44 +84,36 @@ export async function GET() {
   }
 }
 
-//Delete Handler : 
+// DELETE Handler
 export async function DELETE(req: Request) {
   try {
     await connectDB("api/clients/route.ts");
 
-    //get UserID from session
     const session = await getServerSession(FinanceaAuthOptions);
     if (!session) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
-    const userId = session.user._id;
 
+    const { searchParams } = new URL(req.url);
+    const clientId = searchParams.get("clientId");
 
-    const { clientIds } = await req.json();
-
-    if (!Array.isArray(clientIds) || clientIds.length === 0) {
-      return NextResponse.json(
-        { error: "No client IDs provided" },
-        { status: 400 }
-      );
+    if (!clientId) {
+      return NextResponse.json({ error: "Client ID is required" }, { status: 400 });
     }
 
-    const deleteResult = await Client.deleteMany({
-      _id: { $in: clientIds },
-      userId,
-    });
+    const deleteResult = await Client.findByIdAndDelete(clientId);
+
+    if (!deleteResult) {
+      return NextResponse.json({ error: "Client not found" }, { status: 404 });
+    }
 
     return NextResponse.json(
-      {
-        message: `${deleteResult.deletedCount} client(s) deleted successfully`,
-      },
+      { message: "Client deleted successfully" },
       { status: 200 }
     );
+
   } catch (error) {
-    console.error("Error in deleting clients:", error);
-    return NextResponse.json(
-      { error: "Server error or invalid token" },
-      { status: 500 }
-    );
+    console.error("Error deleting Client:", error);
+    return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
   }
 }

@@ -76,7 +76,7 @@ export default async function ClientsDesktopView() {
       </section>
 
       {/* Desktop and Tablet View Table Section */}
-      <section className="hidden md:block w-full flex-1">
+      <section className="hidden md:block w-full flex-1 overflow-scroll">
         <DataTable
           columns={columns}
           data={clientsData}

@@ -135,8 +135,8 @@ export default function NewClientForm() {
               }}
               className="border rounded-md p-4 w-full text-gray-500"
             >
-              <option value="USA">🇺🇸 USA</option>
               <option value="India">🇮🇳 India</option>
+              <option value="USA">🇺🇸 USA</option>
               <option value="UK">🇬🇧 UK</option>
             </select>
           </div>

@@ -1,4 +1,42 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
+export interface RazorpayPaymentLinkResponseType {
+    accept_partial: boolean;
+    amount: number;
+    amount_paid: number;
+    cancelled_at: number;
+    created_at: number;
+    currency: string;
+    customer: {
+        contact: string;
+        email: string;
+        name: string;
+    };
+    description: string;
+    expire_by: number;
+    expired_at: number;
+    first_min_partial_amount: number;
+    id: string;
+    notes: {
+        source: string;
+        [key: string]: any;
+    };
+    notify: {
+        email: boolean;
+        sms: boolean;
+        whatsapp: boolean;
+    };
+    payments: any | null;
+    reference_id: string;
+    reminder_enable: boolean;
+    reminders: any[];
+    short_url: string;
+    status: "created" | "paid" | "cancelled" | "expired";  // Possible status values
+    updated_at: number;
+    upi_link: boolean;
+    user_id: string;
+    whatsapp_link: boolean;
+}
+
+
 
 export type InvoiceItem = {
     name: string;

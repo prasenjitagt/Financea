@@ -148,27 +148,45 @@ const CreateInvoiceForm = () => {
 
 
     async function onSubmit(formValues: createInvoiceFormType) {
-        // Check if formValues are undefined or missing
-        if (!formValues) {
-            console.error("Items are missing or not an array!");
+        try {
+            if (!formValues || !formValues.items || formValues.items.length === 0) {
+                console.error("Items are missing or not an array!");
 
+                Swal.fire({
+                    title: "Error!",
+                    text: "Items are missing or Unexpected Error!",
+                    icon: "error",
+                    confirmButtonText: "OK",
+                });
 
+                return; // important to stop further execution
+            }
+
+            const result = await axios.post("/api/invoices/create_invoice", formValues);
+
+            if (result.status === 200) {
+                console.log(result.data);
+
+                Swal.fire({
+                    title: "Success!",
+                    text: "Invoice Created Successfully",
+                    icon: "success",
+                    confirmButtonText: "OK",
+                });
+
+                form.reset();
+            }
+
+        } catch (error: any) {
+            console.error("Error submitting invoice:", error);
 
             Swal.fire({
                 title: "Error!",
-                text: "Items are missing or not an array!",
+                text: error.response?.data?.message || "Failed to create invoice",
                 icon: "error",
                 confirmButtonText: "OK",
             });
         }
-
-
-
-        const result = await axios.post(create_new_invoice_route, formValues)
-
-
-        // Continue with form submission logic
-        console.log(result.data);
     }
 
     return (
@@ -649,7 +667,7 @@ const CreateInvoiceForm = () => {
                     </div>
 
                     {/* Total */}
-                    <div className=" w-[236px] flex flex-col justify-between">
+                    <div className="flex flex-col justify-between">
                         {/* Sub total */}
                         <div className="flex justify-between items-center">
                             <p className="text-[14px] text-[#747474]">Sub Total</p>

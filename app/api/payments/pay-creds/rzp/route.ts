@@ -2,18 +2,22 @@ import { NextRequest, NextResponse } from "next/server";
 import connectDB from "@/lib/database/db_connection";
 import RzpModel from "@/lib/models/Razorpay.model";
 import { encrypt } from "@/lib/helpers/rpzCredsEncryption";
-import { verifyUser } from "@/lib/helpers/verifyAuthUser";
+import { getServerSession } from "next-auth";
+import { FinanceaAuthOptions } from "@/app/api/auth/[...nextauth]/options";
 
 export async function POST(req: NextRequest) {
     try {
         await connectDB("api/payments/pay-creds/rzp/route.ts");
 
-        let userId: string;
-        try {
-            userId = verifyUser(req);
-        } catch (err: any) {
-            return NextResponse.json({ message: err.message }, { status: 403 });
+        //get UserID from session
+        const session = await getServerSession(FinanceaAuthOptions);
+
+        if (!session) {
+            console.log("Unauthorized");
+
+            return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
         }
+        const userId = session.user._id;
 
         const body = await req.json();
         const { keyId, keySecret } = body;
@@ -30,10 +34,12 @@ export async function POST(req: NextRequest) {
             { upsert: true, new: true }
         );
 
-        console.log(result);
+        if (result) {
+            console.log("Razorpay Payment Credentials saved successfully!");
+        }
 
 
-        return NextResponse.json({ message: "Credentials saved successfully." }, { status: 201 });
+        return NextResponse.json({ message: "Credentials saved successfully!" }, { status: 201 });
     } catch (error: any) {
         console.error("Error Saving Razorpay Creds:", error.message);
         return NextResponse.json({ error: "Error Saving Razorpay Creds" }, { status: 500 });
@@ -41,16 +47,17 @@ export async function POST(req: NextRequest) {
 }
 
 
-export async function GET(req: NextRequest) {
+export async function GET() {
     try {
         await connectDB("api/payments/pay-creds/rzp/route.ts");
 
-        let userId: string;
-        try {
-            userId = verifyUser(req);
-        } catch (err: any) {
-            return NextResponse.json({ message: err.message }, { status: 403 });
+        //get UserID from session
+        const session = await getServerSession(FinanceaAuthOptions);
+
+        if (!session) {
+            return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
         }
+        const userId = session.user._id;
 
         const creds = await RzpModel.findOne({ userId });
 

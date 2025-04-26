@@ -1,13 +1,12 @@
 //api/payments/link-gen/rzp/route.ts
 
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-
 
 import { NextRequest, NextResponse } from "next/server";
 import axios from "axios";
 import { getRzpCreds } from "./getRzpCreds";
-import { verifyUser } from "@/lib/helpers/verifyAuthUser";
+import connectDB from "@/lib/database/db_connection";
+import { getServerSession } from "next-auth";
+import { FinanceaAuthOptions } from "@/app/api/auth/[...nextauth]/options";
 
 export interface PaymentPayloadType {
     amount: number;
@@ -27,17 +26,17 @@ if (!RAZORPAY_KEY_ID || !RAZORPAY_KEY_SECRET) {
 export async function POST(req: NextRequest) {
     try {
 
-        let userId: string;
-        try {
-            userId = verifyUser(req);
-        } catch (err: any) {
-            return NextResponse.json({ message: err.message }, { status: 403 });
+        await connectDB("api/payments/link-gen/rzp/route.ts");
+        //get UserID from session
+        const session = await getServerSession(FinanceaAuthOptions);
+
+        if (!session) {
+            return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
         }
+        const userId = session.user._id;
 
         //razorpay Credentials
         const rzpCreds = await getRzpCreds(userId);
-
-
 
         const body: PaymentPayloadType = await req.json();
 
@@ -85,6 +84,9 @@ export async function POST(req: NextRequest) {
                 },
             }
         );
+
+        console.log(razorpayRes.status);
+
 
         return NextResponse.json(razorpayRes.data, { status: 200 });
 
