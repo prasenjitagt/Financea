@@ -69,7 +69,7 @@ export function DataTable<TData, TValue>({
 
 
     return (
-        <div>
+        <div className=" flex flex-col h-full">
 
 
             <div className="flex items-center justify-between py-4 space-x-4">
@@ -158,7 +158,9 @@ export function DataTable<TData, TValue>({
                     </TableBody>
                 </Table>
             </div>
-            <div className="flex items-center justify-end space-x-2 py-4">
+
+            {/* Pagination Buttons */}
+            <div className="mt-auto flex items-center justify-center space-x-2 py-4">
                 <Button
                     variant="outline"
                     size="sm"

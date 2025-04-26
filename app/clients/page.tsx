@@ -7,6 +7,8 @@ import { Client } from "@/lib/models/Clients.model";
 const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000";
 
 import { Types } from "mongoose";
+import ClientsPageTotalClientsCards from "@/components/clients/clients_page_total_clients_card";
+import ClientsPageTotalPaymentsCards from "@/components/clients/clients_page_total_payments_card";
 
 function sanitizeClient(client: any): ClientType {
   return {
@@ -57,11 +59,37 @@ async function getData(): Promise<ClientType[]> {
 
 
 export default async function ClientsDesktopView() {
-  const data = await getData()
+  const clientsData = await getData();
+
+  // Total Clients Count
+  const totalClients = clientsData.length;
+
+  //total Payment : 
+  const totalPayments = clientsData.reduce((sum, client) => sum + client.serviceCharge, 0);
 
   return (
-    <div className="container mx-auto py-10 ">
-      <DataTable columns={columns} data={data} />
+    <div className="h-full flex flex-col bg-white p-5 rounded-lg container mx-auto">
+
+      {/* Top Cards Section */}
+      <section className="flex space-x-[12px] mb-[38px]">
+        <ClientsPageTotalClientsCards
+          title="Total Clients"
+          description="Last 30 Days"
+          totalClients={totalClients}
+        />
+        <ClientsPageTotalPaymentsCards
+          title="Total Payments"
+          description="Outstanding Balance"
+          clients={clientsData}
+          totalPayments={totalPayments}
+        />
+
+      </section>
+
+      {/* Desktop and Tablet View Table Section */}
+      <section className="hidden md:block w-full flex-1">
+        <DataTable columns={columns} data={clientsData} />
+      </section>
     </div>
   )
 }
