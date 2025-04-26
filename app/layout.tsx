@@ -7,7 +7,7 @@ import ClientLayout from "./client-layout";
 import { useEffect } from "react";
 import Head from "next/head";
 import AuthProvider from "@/lib/auth/authProvider";
-
+import { Toaster } from "@/components/ui/sonner";
 
 export default function RootLayout({
   children,
@@ -31,6 +31,7 @@ export default function RootLayout({
             <ClientLayout>
               {children}
             </ClientLayout>
+            <Toaster />
           </body>
         </AuthProvider>
       </html>

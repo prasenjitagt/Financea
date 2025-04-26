@@ -52,7 +52,7 @@ export async function POST(req: Request) {
 }
 
 // GET method to fetch all clients for a user
-export async function GET(req: Request) {
+export async function GET() {
   try {
     await connectDB("api/clients/route.ts");
 
@@ -69,6 +69,7 @@ export async function GET(req: Request) {
     const clients = await Client.find({ userId }).sort({ createdAt: -1 });
 
     if (!clients) {
+      console.log("No Clinets Found");
       return NextResponse.json(clients, { status: 200 });
 
     }
