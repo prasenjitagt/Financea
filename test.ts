@@ -1,99 +1,46 @@
-// // app/api/auth/[...nextauth]/options.ts
-// import connectDB from "@/lib/database/db_connection";
-// import { loginSchema } from "@/lib/helpers/validations";
-// import User from "@/lib/models/User.model";
-// import bcrypt from "bcryptjs";
-// import { NextAuthOptions } from "next-auth";
-// import Credentials from "next-auth/providers/credentials";
+async function handleExport() {
+    // const workbook = new ExcelJS.Workbook();
+    // const worksheet = workbook.addWorksheet("Clients");
 
-// export const FinanceaAuthOptions: NextAuthOptions = {
-//     providers: [
-//         Credentials({
-//             id: "credentials",
-//             name: "Credentials",
-//             credentials: {
-//                 email: { label: "Email", type: "text", placeholder: "Email" },
-//                 password: { label: "Password", type: "password", placeholder: "Password" },
-//             },
-//             authorize: async (credentials) => {
-//                 try {
-//                     const parsedCredentials = loginSchema.safeParse(credentials);
-//                     if (!parsedCredentials.success) {
-//                         console.error('Validation error:', parsedCredentials.error);
-//                         throw new Error("Zod Schema Validation error at AuthOptions");
-//                     }
+    // console.log(rowSelection);
 
-//                     await connectDB();
-//                     const { email, password } = parsedCredentials.data;
+    // worksheet.columns = [
+    //   { header: "Client Name", key: "clientName" },
+    //   { header: "Status", key: "status" },
+    //   { header: "Mobile", key: "mobile" },
+    //   { header: "Email", key: "email" },
+    //   { header: "Website", key: "website" },
+    //   { header: "Country", key: "country" },
+    //   { header: "Service Charge", key: "serviceCharge" },
+    //   { header: "Currency", key: "currency" },
+    //   { header: "Created At", key: "createdAt" },
+    // ];
 
+    // const filteredClients = selectedClientIds.length > 0
+    //   ? clients.filter(client => selectedClientIds.includes(client._id))
+    //   : clients;
 
-//                     const user = await User.findOne({ email }).select('+password');
-//                     if (!user) throw new Error("No such user");
-//                     ;
+    // filteredClients.forEach(client => {
+    //   const currency = client.country === "India" ? "INR" : "USD"; // Check country and set currency
 
-//                     if (!user.password) {
-//                         console.error('No password set for user');
-//                         throw new Error("No password set for user");
-//                     }
+    //   worksheet.addRow({
+    //     clientName: client.clientName,
+    //     status: client.isClientActive ? "Active" : "Inactive",
+    //     mobile: client.mobile,
+    //     email: client.email,
+    //     website: client.website,
+    //     country: client.country,
+    //     serviceCharge: client.serviceCharge,
+    //     currency: currency, // Use the determined currency
+    //     createdAt: new Date(client.createdAt).toLocaleDateString(),
+    //   });
+    // });
 
-//                     const isPasswordCorrect = await bcrypt.compare(password, user.password);
-
-//                     if (!isPasswordCorrect) throw new Error("Invalid email or password");
-
-//                     return {
-//                         id: user._id.toString(),
-//                         email: user.email,
-//                         username: user.username,
-//                         // Add any additional user fields needed
-//                     };
-//                 } catch (error) {
-//                     console.error('Authentication error:', error);
-//                     return null;
-//                 }
-//             },
-//         }),
-//     ],
-//     callbacks: {
-//         async jwt({ token, user }) {
-//             if (user) {
-//                 token._id = user.id;
-//                 token.username = user.username;
-//                 token.email = user.email;
-//             }
-//             return token;
-//         },
-//         async session({ session, token }) {
-//             if (token) {
-//                 session.user._id = token._id;
-//                 session.user.username = token.username;
-//                 session.user.email = token.email;
-//             }
-//             return session;
-//         },
-//     },
-//     pages: {
-//         signIn: "/login",
-//         newUser: "/"
-//     },
-//     secret: process.env.NEXTAUTH_SECRET,
-//     session: {
-//         strategy: "jwt",
-//         maxAge: 30 * 24 * 60 * 60, // 30 days
-//         updateAge: 24 * 60 * 60, // Update daily
-//     },
-//     debug: process.env.NODE_ENV === 'development', // Enable debug in dev
-// };
+    // const buffer = await workbook.xlsx.writeBuffer();
+    // const blob = new Blob([buffer], { type: "application/octet-stream" });
+    // saveAs(blob, "clients.xlsx");
 
 
-// // /app/api/auth/[...nextauth]/route.ts
 
 
-// import NextAuth from "next-auth";
-// import { FinanceaAuthOptions } from "./options";
-
-
-// const handler = NextAuth(FinanceaAuthOptions);
-
-// export { handler as GET, handler as POST };
-
-
+}

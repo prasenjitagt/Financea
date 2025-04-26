@@ -1,6 +1,7 @@
 "use client"
-
-import { useState } from "react"
+import { saveAs } from "file-saver";
+import ExcelJS from "exceljs";
+import { useState } from "react";
 import {
     ColumnDef,
     SortingState,
@@ -22,7 +23,7 @@ import {
     TableHeader,
     TableRow,
 } from "@/components/ui/table";
-
+import { FaDownload } from "react-icons/fa";
 import {
     DropdownMenu,
     DropdownMenuCheckboxItem,
@@ -30,11 +31,15 @@ import {
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
+import { ClientType } from "./columns";
 
 interface DataTableProps<TData, TValue> {
     columns: ColumnDef<TData, TValue>[]
     data: TData[]
+
 }
+
+
 
 export function DataTable<TData, TValue>({
     columns,
@@ -45,7 +50,63 @@ export function DataTable<TData, TValue>({
     const [sorting, setSorting] = useState<SortingState>([]);
     const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
     const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
-    const [rowSelection, setRowSelection] = useState({});
+    const [rowSelection, setRowSelection] = useState<{ [key: number]: boolean }>({});
+
+
+    //exporting excel sheet
+    async function handleExport() {
+        try {
+            let dataToBeExported: ClientType[];
+
+            if (Object.keys(rowSelection).length === 0) {
+                dataToBeExported = data as ClientType[];
+
+            } else {
+                dataToBeExported = data.filter((_, index) => rowSelection[index]) as ClientType[];
+            }
+
+            const workbook = new ExcelJS.Workbook();
+            const worksheet = workbook.addWorksheet("Clients");
+
+            worksheet.columns = [
+                { header: "Client Name", key: "clientName" },
+                { header: "Status", key: "status" },
+                { header: "Mobile", key: "mobile" },
+                { header: "Email", key: "email" },
+                { header: "Website", key: "website" },
+                { header: "Country", key: "country" },
+                { header: "Service Charge", key: "serviceCharge" },
+                { header: "Currency", key: "currency" },
+                { header: "Created At", key: "createdAt" },
+            ];
+
+            dataToBeExported.forEach(client => {
+                const currency = client.country === "India" ? "INR" : "USD"; // Check country and set currency
+
+                worksheet.addRow({
+                    clientName: client.clientName,
+                    status: client.isClientActive ? "Active" : "Inactive",
+                    mobile: client.mobile,
+                    email: client.email,
+                    website: client.website,
+                    country: client.country,
+                    serviceCharge: client.serviceCharge,
+                    currency: currency, // Use the determined currency
+                    createdAt: new Date(client.createdAt).toLocaleDateString(),
+                });
+            });
+
+
+            const buffer = await workbook.xlsx.writeBuffer();
+            const blob = new Blob([buffer], { type: "application/octet-stream" });
+            saveAs(blob, "clients.xlsx");
+
+        } catch (error) {
+            console.log("Error Exporting ExcelSheet:", error);
+
+        }
+
+    }
 
     const table = useReactTable({
         data,
@@ -89,28 +150,37 @@ export function DataTable<TData, TValue>({
                     {table.getFilteredRowModel().rows.length} row(s) selected
                 </div>
 
-                {/* Right: Visibility Dropdown */}
-                <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
-                        <Button variant="outline">
-                            Visibility
-                        </Button>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent align="end">
-                        {table.getAllColumns()
-                            .filter((column) => column.getCanHide())
-                            .map((column) => (
-                                <DropdownMenuCheckboxItem
-                                    key={column.id}
-                                    className="capitalize"
-                                    checked={column.getIsVisible()}
-                                    onCheckedChange={(value) => column.toggleVisibility(!!value)}
-                                >
-                                    {column.id}
-                                </DropdownMenuCheckboxItem>
-                            ))}
-                    </DropdownMenuContent>
-                </DropdownMenu>
+                {/* Right: Visibility Dropdown and Export Button */}
+                <section className="flex items-center space-x-2">
+                    <Button
+                        onClick={handleExport}
+                    >
+                        <FaDownload className="mr-2" /> Export
+                    </Button>
+                    <DropdownMenu>
+                        <DropdownMenuTrigger asChild>
+                            <Button variant="outline">
+                                Visibility
+                            </Button>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent align="end">
+                            {table.getAllColumns()
+                                .filter((column) => column.getCanHide())
+                                .map((column) => (
+                                    <DropdownMenuCheckboxItem
+                                        key={column.id}
+                                        className="capitalize"
+                                        checked={column.getIsVisible()}
+                                        onCheckedChange={(value) => column.toggleVisibility(!!value)}
+                                    >
+                                        {column.id}
+                                    </DropdownMenuCheckboxItem>
+                                ))}
+                        </DropdownMenuContent>
+
+                    </DropdownMenu>
+                </section>
+
             </div>
 
 

@@ -1,12 +1,8 @@
 import { ClientType, columns } from "@/app/clients/columns";
-import { DataTable } from "@/app/clients/data-table"
-import connectDB from "@/lib/database/db_connection";
+import { DataTable } from "@/app/clients/data-table";
 import { getServerSession } from "next-auth";
 import { FinanceaAuthOptions } from "../api/auth/[...nextauth]/options";
 import { Client } from "@/lib/models/Clients.model";
-const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000";
-
-import { Types } from "mongoose";
 import ClientsPageTotalClientsCards from "@/components/clients/clients_page_total_clients_card";
 import ClientsPageTotalPaymentsCards from "@/components/clients/clients_page_total_payments_card";
 
@@ -30,7 +26,6 @@ function sanitizeClient(client: any): ClientType {
 }
 
 async function getData(): Promise<ClientType[]> {
-  await connectDB("app/clients/page.tsx");
   try {
     const session = await getServerSession(FinanceaAuthOptions);
     if (!session) {
@@ -46,8 +41,6 @@ async function getData(): Promise<ClientType[]> {
       return [];
     }
 
-
-    // Sanitize before returning
     return clients.map(sanitizeClient);
   } catch (error) {
     console.error("Error in fetching clients:", error);
@@ -61,15 +54,12 @@ async function getData(): Promise<ClientType[]> {
 export default async function ClientsDesktopView() {
   const clientsData = await getData();
 
-  // Total Clients Count
   const totalClients = clientsData.length;
 
-  //total Payment : 
   const totalPayments = clientsData.reduce((sum, client) => sum + client.serviceCharge, 0);
 
   return (
     <div className="h-full flex flex-col bg-white p-5 rounded-lg container mx-auto">
-
       {/* Top Cards Section */}
       <section className="flex space-x-[12px] mb-[38px]">
         <ClientsPageTotalClientsCards
@@ -83,13 +73,15 @@ export default async function ClientsDesktopView() {
           clients={clientsData}
           totalPayments={totalPayments}
         />
-
       </section>
 
       {/* Desktop and Tablet View Table Section */}
       <section className="hidden md:block w-full flex-1">
-        <DataTable columns={columns} data={clientsData} />
+        <DataTable
+          columns={columns}
+          data={clientsData}
+        />
       </section>
     </div>
-  )
+  );
 }

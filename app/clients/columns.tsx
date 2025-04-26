@@ -234,7 +234,11 @@ export const columns: ColumnDef<ClientType>[] = [
                         <DropdownMenuSeparator />
                         <DropdownMenuItem
                             className="cursor-pointer"
-                            onClick={() => navigator.clipboard.writeText(client._id)}
+                            onClick={() => {
+                                showToast("Client ID Copied");
+
+                                navigator.clipboard.writeText(client._id);
+                            }}
                         >
                             Copy Client ID
                         </DropdownMenuItem>
