@@ -20,7 +20,7 @@ import { showToast } from "@/lib/helpers/clients_table/copied_to_clipboard_toast
 import { useRouter } from "next/navigation";
 import Swal from "sweetalert2";
 import axios from "axios";
-import { clients_route } from "@/lib/helpers/api-endpoints";
+import { invoices_route } from "@/lib/helpers/api-endpoints";
 
 export interface InvoiceItem {
     ishourly: boolean;
@@ -239,81 +239,76 @@ export const columns: ColumnDef<InvoiceType>[] = [
         },
     },
 
-    //actions
-    // {
-    //     id: "actions",
-    //     header: "Actions",
-    //     cell: ({ row }) => {
-    //         const client = row.original;
-    //         const router = useRouter();
+    // actions
+    {
+        id: "actions",
+        header: "Actions",
+        cell: ({ row }) => {
+            const invoice = row.original;
+            const router = useRouter();
 
-    //         const handleDelete = async () => {
-    //             const confirmResult = await Swal.fire({
-    //                 title: "Are you sure?",
-    //                 text: "You want to delete the client?",
-    //                 icon: "warning",
-    //                 showCancelButton: true,
-    //                 confirmButtonColor: "#d33",
-    //                 confirmButtonText: "Yes, delete!",
-    //             });
+            const handleDeleteInvoice = async () => {
+                const confirmResult = await Swal.fire({
+                    title: "Are you sure?",
+                    text: "You want to delete the Invoice?",
+                    icon: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#d33",
+                    confirmButtonText: "Yes, delete!",
+                });
 
-    //             if (confirmResult.isConfirmed) {
-    //                 try {
-    //                     // Send the clientId in the URL as a query parameter
-    //                     const res = await axios.delete(`${clients_route}?clientId=${client._id}`);
+                if (confirmResult.isConfirmed) {
+                    try {
+                        // Send the invoiceId in the URL as a query parameter
+                        const res = await axios.delete(`${invoices_route}?invoiceId=${invoice._id}`);
 
-    //                     if (res.status === 200) {
-    //                         showToast("Client deleted successfully");
+                        if (res.status === 200) {
+                            showToast("Invoice deleted successfully");
 
-    //                         router.refresh();
-    //                     }
-    //                 } catch (error) {
-    //                     console.error("Error deleting client:", error);
-    //                     showToast("Error deleting client");
-    //                 }
-    //             }
-    //         };
+                            router.refresh();
+                        }
+                    } catch (error) {
+                        console.error("Error deleting Invoice:", error);
+                        showToast("Error deleting Invoice");
+                    }
+                }
+            };
 
-    //         return (
-    //             <DropdownMenu>
-    //                 <DropdownMenuTrigger asChild>
-    //                     <Button variant="ghost" className="h-8 w-8 p-0">
-    //                         <span className="sr-only">Open menu</span>
-    //                         <MoreHorizontal className="h-4 w-4" />
-    //                     </Button>
-    //                 </DropdownMenuTrigger>
-    //                 <DropdownMenuContent align="end">
-    //                     <DropdownMenuLabel>Actions</DropdownMenuLabel>
-    //                     <DropdownMenuSeparator />
-    //                     <DropdownMenuItem
-    //                         className="cursor-pointer"
-    //                         onClick={() => {
-    //                             showToast("Client ID Copied");
+            return (
+                <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                        <Button variant="ghost" className="h-8 w-8 p-0">
+                            <span className="sr-only">Open menu</span>
+                            <MoreHorizontal className="h-4 w-4" />
+                        </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent align="end">
+                        <DropdownMenuLabel>Actions</DropdownMenuLabel>
+                        <DropdownMenuSeparator />
+                        <DropdownMenuItem
+                            className="cursor-pointer"
+                            onClick={() => {
+                                showToast("Invoice ID Copied");
 
-    //                             navigator.clipboard.writeText(client._id);
-    //                         }}
-    //                     >
-    //                         Copy Client ID
-    //                     </DropdownMenuItem>
-    //                     <DropdownMenuItem
-    //                         className="cursor-pointer"
-    //                         onClick={() => router.push(`/clients/profile?id=${client._id}`)}
-    //                     >
-    //                         View Client
-    //                     </DropdownMenuItem>
-    //                     <DropdownMenuItem
-    //                         variant="destructive"
-    //                         className="cursor-pointer"
-    //                         onClick={handleDelete}
-    //                     >
-    //                         Delete Client
-    //                     </DropdownMenuItem>
+                                navigator.clipboard.writeText(invoice._id);
+                            }}
+                        >
+                            Copy Invoice ID
+                        </DropdownMenuItem>
 
-    //                 </DropdownMenuContent>
-    //             </DropdownMenu>
-    //         )
-    //     },
-    // },
+                        <DropdownMenuItem
+                            variant="destructive"
+                            className="cursor-pointer"
+                            onClick={handleDeleteInvoice}
+                        >
+                            Delete Invoice
+                        </DropdownMenuItem>
+
+                    </DropdownMenuContent>
+                </DropdownMenu>
+            )
+        },
+    },
 
 
 ]
