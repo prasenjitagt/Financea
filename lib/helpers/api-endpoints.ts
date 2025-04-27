@@ -7,4 +7,5 @@ export const check_invoice_number_route = "/api/invoices/check_invoice_number";
 export const expenses_route = "/api/expenses";
 export const clients_route = "/api/clients";
 export const invoices_route = "/api/invoices";
+export const payments_request_route = "/api/payment_requests";
 export const clients_stats_route = "/api/clients/stats";

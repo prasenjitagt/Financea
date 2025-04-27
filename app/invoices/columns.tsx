@@ -21,6 +21,7 @@ import { useRouter } from "next/navigation";
 import Swal from "sweetalert2";
 import axios from "axios";
 import { invoices_route } from "@/lib/helpers/api-endpoints";
+import { formatAmountToCurrency } from "@/lib/helpers/invoices/format_amount_to_currency";
 
 export interface InvoiceItem {
     ishourly: boolean;
@@ -98,12 +99,9 @@ export const columns: ColumnDef<InvoiceType>[] = [
 
             const currency = row.original.currency;
             const amount = parseFloat(row.getValue("totalAmount"));
-            const formatted = new Intl.NumberFormat("en-US", {
-                style: "currency",
-                currency: currency,
-            }).format(amount);
+            const formattedCurrencyString = formatAmountToCurrency(amount, currency);
 
-            return <div >{formatted}</div>;
+            return <div >{formattedCurrencyString}</div>;
         },
 
     },
