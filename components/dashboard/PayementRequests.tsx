@@ -4,11 +4,10 @@ import {
   TableBody,
   TableCaption,
   TableCell,
-  TableFooter,
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table"
+} from "@/components/ui/table";
 
 import { useState, useEffect } from "react";
 import PaymentRequestsLoading from "@/components/loading_ui/PaymentRequestsLoading";

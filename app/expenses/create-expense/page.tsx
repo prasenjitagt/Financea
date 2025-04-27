@@ -90,7 +90,6 @@ const Page = () => {
               >
                 <option>INR</option>
                 <option>USD</option>
-                <option>EUR</option>
               </select>
             </div>
           </div>
@@ -115,6 +114,7 @@ const Page = () => {
             <option>Travel</option>
             <option>Food</option>
             <option>Office</option>
+            <option>Other</option>
           </select>
 
           {/* Description */}

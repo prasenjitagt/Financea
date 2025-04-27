@@ -3,29 +3,43 @@
 import { LineChart, Line, ResponsiveContainer, XAxis, Tooltip } from "recharts";
 import { useEffect, useState } from "react";
 import axios from "axios";
+import { clients_stats_route } from "@/lib/helpers/api-endpoints";
 
 type ChartPoint = {
   name: string;
   value: number;
 };
 
+
+
+interface ApiResposeType {
+  totalClients: number,
+  totalServiceCharge: number,
+  chartData: ChartPoint[]
+}
+
+
 const NewCustomer = () => {
-  const [data, setData] = useState<ChartPoint[]>([]);
+  const [charData, setChartData] = useState<ChartPoint[]>([]);
   const [total, setTotal] = useState(0);
 
   useEffect(() => {
-    const token = localStorage.getItem("token");
+    const fetchChartData = async () => {
+      try {
+        const response = await axios.get<ApiResposeType>(clients_stats_route); // Replace with actual API URL
 
-    axios.get("/api/clients/stats")
-      .then((res) => {
-        setData(res.data.chartData);
-        setTotal(res.data.totalClients);
-      })
-      .catch((err) => {
-        console.error("Error fetching client stats", err);
-      });
+        setChartData(response.data.chartData);
+        setTotal(response.data.totalClients)
+
+
+      } catch (error) {
+        console.log("Error fetching client stats", error);
+        throw new Error("Error fetching client stats", error as ErrorOptions);
+      }
+    }
+
+    fetchChartData();
   }, []);
-
   return (
     <div className="bg-white rounded-lg shadow p-6 h-full">
       <div className="flex flex-row items-center justify-between pb-2">
@@ -38,7 +52,7 @@ const NewCustomer = () => {
         <div className="text-2xl font-bold">{total}</div>
         <div className="h-[80px] w-full pt-4">
           <ResponsiveContainer width="100%" height="100%">
-            <LineChart data={data}>
+            <LineChart data={charData}>
               <XAxis dataKey="name" hide />
               <Tooltip />
               <Line
@@ -51,10 +65,10 @@ const NewCustomer = () => {
             </LineChart>
           </ResponsiveContainer>
         </div>
-        {data.length > 0 && (
+        {charData.length > 0 && (
           <div className="flex items-center justify-between text-xs text-gray-500 pt-2">
-            <span>{data[0].name}</span>
-            <span>{data[data.length - 1].name}</span>
+            <span>{charData[0].name}</span>
+            <span>{charData[charData.length - 1].name}</span>
           </div>
         )}
       </div>

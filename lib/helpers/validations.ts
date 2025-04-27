@@ -54,7 +54,7 @@ export const expenseSchema = z.object({
     category: z
         .string()
         .min(1, "Category is required")
-        .refine((val) => ["Travel", "Food", "Office"].includes(val), {
+        .refine((val) => ["Travel", "Food", "Office", "Other"].includes(val), {
             message: "Category must be Travel, Food, or Office",
         }),
 

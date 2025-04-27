@@ -20,7 +20,14 @@ export async function GET(req: NextRequest) {
     const userId = session.user._id;
 
     // Find all clients by this user
-    const clients = await Client.find({ user: userId });
+    const clients = await Client.find({ userId: userId });
+
+
+    if (!clients) {
+      console.error("No clients Found")
+    }
+
+
 
     // Total count
     const totalClients = clients.length;
@@ -29,7 +36,7 @@ export async function GET(req: NextRequest) {
     const clientsPerWeek: Record<string, number> = {};
 
     //total Charge : 
-    const totalPayment = clients.reduce((sum, client) => sum + client.serviceCharge, 0);
+    const totalServiceCharge: number = clients.reduce((sum, client) => sum + client.serviceCharge, 0);
 
     clients.forEach((client) => {
       const createdAt = new Date(client.createdAt);
@@ -44,7 +51,7 @@ export async function GET(req: NextRequest) {
       value,
     })).sort((a, b) => new Date(a.name).getTime() - new Date(b.name).getTime());
 
-    return NextResponse.json({ totalClients, totalPayment, chartData });
+    return NextResponse.json({ totalClients, totalServiceCharge, chartData }, { status: 200 });
 
   } catch (err) {
     return NextResponse.json({ error: "Internal Server Error: " + err }, { status: 500 });

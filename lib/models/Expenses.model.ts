@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 
 const expenseSchema = new mongoose.Schema({
-  user: {
+  userId: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "User",
     required: true,
@@ -12,7 +12,8 @@ const expenseSchema = new mongoose.Schema({
   },
   currency: {
     type: String,
-    default: "INR",
+    enum: ["INR", "USD"],
+    required: true,
   },
   date: {
     type: Date,
@@ -30,4 +31,5 @@ const expenseSchema = new mongoose.Schema({
   }
 }, { timestamps: true });
 
-export default mongoose.models.Expense || mongoose.model("Expense", expenseSchema);
+const ExpenseModel = mongoose.models.Expense || mongoose.model("Expense", expenseSchema);
+export default ExpenseModel;
