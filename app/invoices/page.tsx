@@ -4,10 +4,12 @@ import { InvoiceType, columns } from "./columns";
 import { InvoiceDataTable } from "@/app/invoices/data-table";
 import { getServerSession } from "next-auth";
 import { FinanceaAuthOptions } from "../api/auth/[...nextauth]/options";
-import HeaderInfoCard from "@/components/profile/header-info-card";
+import HeaderInfoCardInvoices from "@/components/invoices/header-info-card-invoices";
 import HeaderStats from "@/components/profile/header-stats";
 import { Card, CardContent } from "@/components/ui/card";
 import InvoiceModel from "@/lib/models/Invoice.model";
+import HeaderInfoCard from "@/components/profile/header-info-card";
+import { getInvoiceStats } from "@/lib/helpers/invoices/getInvoiceStats";
 
 
 
@@ -83,6 +85,15 @@ async function getData(): Promise<InvoiceType[]> {
   }
 }
 
+function filterInvoicesForLast30Days(invoices: InvoiceType[]): InvoiceType[] {
+  const thirtyDaysAgo = new Date();
+  thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30); // Get the date 30 days ago
+
+  return invoices.filter(invoice => {
+    const createdAtDate = new Date(invoice.createdAt); // Convert ISO string to Date
+    return createdAtDate >= thirtyDaysAgo;
+  });
+}
 
 
 
@@ -90,9 +101,16 @@ async function getData(): Promise<InvoiceType[]> {
 export default async function ClientsDesktopView() {
   const invoiceData = await getData();
 
-  const totalClients = invoiceData.length;
+  const last30DaysInvoiceData = filterInvoicesForLast30Days(invoiceData);
 
-  const totalPayments = invoiceData.reduce((sum, invoice) => sum + invoice.totalAmount!, 0);
+  const { totalInvoices,
+    totalAmountINRClients,
+    totalAmountUSDClients,
+    totalOutstandingInvoices,
+    totalOutstandingAmountINRClients,
+    totalOutstandingAmountUSDClients,
+  } = getInvoiceStats(last30DaysInvoiceData);
+
 
   return (
     <div className="h-full flex flex-col bg-white p-5 rounded-lg container mx-auto">
@@ -102,13 +120,16 @@ export default async function ClientsDesktopView() {
         <Card className="flex justify-center w-[273px] h-[106px] bg-[#FCFDFF]">
           <CardContent className="flex justify-between">
 
-            <HeaderInfoCard mainText={"Total Invoices"} count={`40`} />
+            <HeaderInfoCard mainText={"Total Invoices"} count={`${totalInvoices}`} />
 
-            <HeaderStats
+            {/* <HeaderStats
               percentageChange={23}
               isIncreased={true}
               bottomText={"from last month"}
-            />
+            /> */}
+            <div className="flex items-center">
+              <p className="text-muted-foreground text-[14px]">Last 30 Days</p>
+            </div>
 
           </CardContent>
         </Card>
@@ -116,31 +137,47 @@ export default async function ClientsDesktopView() {
         <Card className="flex justify-center w-[273px] h-[106px] bg-[#FCFDFF]">
           <CardContent className="flex justify-between">
 
-            <HeaderInfoCard mainText={"Total Payment"} count={`$1200`} />
+            <HeaderInfoCardInvoices
+              mainText={"Total Amount"}
+              inrAmount={totalAmountINRClients}
+              usdAmount={totalAmountUSDClients}
+            />
 
-            <HeaderStats
+            {/* <HeaderStats
               percentageChange={23}
               isIncreased={true}
               bottomText={"from last month"}
+            /> */}
+            <div className="flex items-center">
+              <p className="text-muted-foreground text-[14px]">Last 30 Days</p>
+            </div>
+
+          </CardContent>
+        </Card>
+
+        <Card className="flex justify-center w-[273px] h-[106px] bg-[#FCFDFF]">
+          <CardContent className="flex justify-between">
+
+            <HeaderInfoCard mainText={"Outstanding Invs."} count={`${totalOutstandingInvoices}`} />
+            <div className="flex items-center">
+              <p className="text-muted-foreground text-[14px]">Last 30 Days</p>
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card className="flex justify-center w-[273px] h-[106px] bg-[#FCFDFF]">
+          <CardContent className="flex justify-between">
+
+
+            <HeaderInfoCardInvoices
+              mainText={"Outstanding"}
+              inrAmount={totalOutstandingAmountINRClients}
+              usdAmount={totalOutstandingAmountUSDClients}
             />
 
-          </CardContent>
-        </Card>
-
-        <Card className="flex justify-center w-[273px] h-[106px] bg-[#FCFDFF]">
-          <CardContent className="flex justify-between">
-
-            <HeaderInfoCard mainText={"Outstanding Invoices"} count={`2`} />
-
-          </CardContent>
-        </Card>
-
-        <Card className="flex justify-center w-[273px] h-[106px] bg-[#FCFDFF]">
-          <CardContent className="flex justify-between">
-
-            <HeaderInfoCard mainText={"Outstanding Payment"} count={`$1200`} />
-
-
+            <div className="flex items-center">
+              <p className="text-muted-foreground text-[14px]">Last 30 Days</p>
+            </div>
           </CardContent>
         </Card>
       </section>

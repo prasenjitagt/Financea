@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Archivo } from "next/font/google";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
-import CreateInvoiceForm from "@/components/invoice/create_invoice_form";
+import CreateInvoiceForm from "@/components/invoices/create_invoice_form";
 
 
 interface Client {

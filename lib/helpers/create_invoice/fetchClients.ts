@@ -1,6 +1,6 @@
 //lib/helpers/create_invoice/fetchClients.ts
 
-import { Client } from "@/components/invoice/create_invoice_form";
+import { Client } from "@/components/invoices/create_invoice_form";
 import { Dispatch, SetStateAction } from "react";
 import axios from "axios";
 import { clients_route } from "../api-endpoints";
