@@ -129,16 +129,16 @@ export const columns: ColumnDef<InvoiceType>[] = [
         accessorKey: "isPaid",
         header: "Status",
         cell: ({ row }) => {
-            const isActive = row.getValue("isPaid");
+            const isPaid = row.getValue("isPaid");
 
             return (
                 <span
                     className={`px-2 py-1 text-xs rounded-full font-medium
-                ${isActive
+                ${isPaid
                             ? "bg-green-100 text-green-700"
                             : "bg-red-100 text-red-700"}`}
                 >
-                    {isActive ? "Paid" : "Due"}
+                    {isPaid ? "Paid" : "Due"}
                 </span>
             );
         },
