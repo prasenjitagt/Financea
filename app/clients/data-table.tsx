@@ -33,6 +33,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
 import { ClientType } from "./columns";
+import NoResultsForTables from "@/components/no_results_for_tables";
 
 interface DataTableProps<TData, TValue> {
     columns: ColumnDef<TData, TValue>[]
@@ -222,8 +223,8 @@ export function ClientDataTable<TData, TValue>({
                             ))
                         ) : (
                             <TableRow>
-                                <TableCell colSpan={columns.length} className="h-24 text-center">
-                                    No results.
+                                <TableCell colSpan={columns.length} className="text-center">
+                                    <NoResultsForTables IconWidth={75} MainText="No Expenses Yet!" />
                                 </TableCell>
                             </TableRow>
                         )}

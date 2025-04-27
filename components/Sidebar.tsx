@@ -30,7 +30,7 @@ const Sidebar: React.FC<SidebarProps> = ({ onLinkClick }) => {
     { name: "Payments", icon: PaymentsIcon, path: "/payments" },
     { name: "Expenses", icon: ExpensesIcon, path: "/expenses" },
     { name: "Clients", icon: ClientsIcon, path: "/clients" },
-    { name: "Reports", icon: ReportsIcon, path: "/reports" },
+    // { name: "Reports", icon: ReportsIcon, path: "/reports" },
     { name: "Settings", icon: SettingsIcon, path: "/settings" },
   ];
 

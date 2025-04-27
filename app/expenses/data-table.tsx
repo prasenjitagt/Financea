@@ -1,3 +1,4 @@
+//clients/data-table.tsx
 "use client"
 import { saveAs } from "file-saver";
 import ExcelJS from "exceljs";
@@ -31,7 +32,7 @@ import {
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
-import { InvoiceType } from "./columns";
+import { ClientType } from "./columns";
 import NoResultsForTables from "@/components/no_results_for_tables";
 
 interface DataTableProps<TData, TValue> {
@@ -42,7 +43,7 @@ interface DataTableProps<TData, TValue> {
 
 
 
-export function InvoiceDataTable<TData, TValue>({
+export function ClientDataTable<TData, TValue>({
     columns,
     data,
 }: DataTableProps<TData, TValue>) {
@@ -55,53 +56,59 @@ export function InvoiceDataTable<TData, TValue>({
 
 
     //exporting excel sheet
-    async function handleInvoicesExport() {
+    async function handleClientsExport() {
         try {
-            let dataToBeExported: InvoiceType[];
+            let dataToBeExported: ClientType[];
 
             if (Object.keys(rowSelection).length === 0) {
-                dataToBeExported = data as InvoiceType[];
+                dataToBeExported = data as ClientType[];
+
             } else {
-                dataToBeExported = data.filter((_, index) => rowSelection[index]) as InvoiceType[];
+                dataToBeExported = data.filter((_, index) => rowSelection[index]) as ClientType[];
             }
 
-            console.log(dataToBeExported);
-
             const workbook = new ExcelJS.Workbook();
-            const worksheet = workbook.addWorksheet("Invoices");
+            const worksheet = workbook.addWorksheet("Clients");
 
             worksheet.columns = [
-                { header: "Amount", key: "amount" },
-                { header: "Client Name", key: "name" },
-                { header: "Client Email", key: "email" },
-                { header: "Invoice Number", key: "invoiceNumber" },
+                { header: "Client Name", key: "clientName" },
                 { header: "Status", key: "status" },
+                { header: "Mobile", key: "mobile" },
+                { header: "Email", key: "email" },
+                { header: "Website", key: "website" },
+                { header: "Country", key: "country" },
+                { header: "Service Charge", key: "serviceCharge" },
                 { header: "Currency", key: "currency" },
-                { header: "Issue Date", key: "issueDate" },
-                { header: "Due Date", key: "dueDate" },
+                { header: "Created At", key: "createdAt" },
             ];
 
-            dataToBeExported.forEach(invoice => {
+            dataToBeExported.forEach(client => {
+                const currency = client.country === "India" ? "INR" : "USD"; // Check country and set currency
+
                 worksheet.addRow({
-                    amount: invoice.totalAmount,
-                    name: invoice.clientName,
-                    email: invoice.clientEmail,
-                    invoiceNumber: invoice.invoiceNumber,
-                    status: invoice.isPaid ? "Paid" : "Due",
-                    currency: invoice.currency,
-                    issueDate: new Date(invoice.issueDate).toLocaleDateString(),
-                    dueDate: new Date(invoice.dueDate!).toLocaleDateString(),
+                    clientName: client.clientName,
+                    status: client.isClientActive ? "Active" : "Inactive",
+                    mobile: client.mobile,
+                    email: client.email,
+                    website: client.website,
+                    country: client.country,
+                    serviceCharge: client.serviceCharge,
+                    currency: currency, // Use the determined currency
+                    createdAt: new Date(client.createdAt).toLocaleDateString(),
                 });
             });
 
+
             const buffer = await workbook.xlsx.writeBuffer();
             const blob = new Blob([buffer], { type: "application/octet-stream" });
-            saveAs(blob, "invoices.xlsx");
+            saveAs(blob, "clients.xlsx");
+
         } catch (error) {
             console.log("Error Exporting ExcelSheet:", error);
-        }
-    }
 
+        }
+
+    }
 
     const table = useReactTable({
         data,
@@ -149,7 +156,7 @@ export function InvoiceDataTable<TData, TValue>({
                 {/* Right: Visibility Dropdown and Export Button */}
                 <section className="flex items-center space-x-2">
                     <Button
-                        onClick={handleInvoicesExport}
+                        onClick={handleClientsExport}
                     >
                         <FaDownload className="mr-2" /> Export
                     </Button>
@@ -216,8 +223,8 @@ export function InvoiceDataTable<TData, TValue>({
                             ))
                         ) : (
                             <TableRow>
-                                <TableCell colSpan={columns.length} className=" text-center">
-                                    <NoResultsForTables IconWidth={100} MainText="No Invoices Yet!" />
+                                <TableCell colSpan={columns.length} className="text-center">
+                                    <NoResultsForTables IconWidth={75} MainText="No Clients Yet!" />
                                 </TableCell>
                             </TableRow>
                         )}

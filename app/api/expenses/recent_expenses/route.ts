@@ -6,43 +6,11 @@ import connectDB from "@/lib/database/db_connection";
 import { getServerSession } from "next-auth";
 import { FinanceaAuthOptions } from "@/app/api/auth/[...nextauth]/options";
 import ExpenseModel from "@/lib/models/Expenses.model";
-import { Types } from "mongoose";
 import { formatAmountToCurrency } from "@/lib/helpers/invoices/format_amount_to_currency";
 import { stringToDate } from "@/lib/helpers/payment_requests/stringToDate";
-
-export interface IExpense {
-    _id: Types.ObjectId;
-    userId: Types.ObjectId;
-    amount: number;
-    currency: string;
-    date: Date;
-    category: string;
-    description: string;
-    createdAt: Date;
-    updatedAt: Date;
-    __v: number;
-}
-
-export interface ExpensesToBeReturnedType {
-    _id: string;
-    category: string;
-    categoryColor: string;
-    amount: string;
-    date: string;
-    description: string;
-}
-
-export interface ExpensesStatsType {
-    totalAmount: number,
-    topCategory: string,
-    totalExpenses: number,
-}
+import { ExpensesReturnPayloadType, ExpensesStatsType, ExpensesToBeReturnedType, IExpense } from "@/app/api/expenses/route";
 
 
-export interface ExpensesReturnPayloadType {
-    expenses: ExpensesToBeReturnedType[],
-    expensesStats: ExpensesStatsType
-}
 
 
 

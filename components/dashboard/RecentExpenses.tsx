@@ -1,19 +1,17 @@
 "use client";
 
-import {
-  Table,
-  TableBody,
-  TableCaption,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
+
 import { useState, useEffect } from "react";
 import RecentExpensesLoading from "../loading_ui/RecentExpensesLoading";
 import axios from "axios";
 import { recent_expenses_route } from "@/lib/helpers/api-endpoints";
 import { ExpensesReturnPayloadType, ExpensesToBeReturnedType } from "@/app/api/expenses/route";
+import RecentExpensesTable from "./recent_expenses_table";
+import Image from "next/image";
+import ReceiptIcon from "@/assets/icons/receipt_icon.svg";
+
+
+
 
 const RecentExpenses = () => {
   const [expenses, setExpenses] = useState<ExpensesToBeReturnedType[]>([]);
@@ -54,42 +52,19 @@ const RecentExpenses = () => {
         <h2 className="text-lg font-semibold text-black">Recent Expenses</h2>
       </div>
 
+      {
+        expenses.length === 0 ? (
 
-      <Table>
-        <TableCaption>A list of your Recent Expenses</TableCaption>
-        <TableHeader>
-          <TableRow>
-            <TableHead className="w-1/3" >Category</TableHead>
-            <TableHead className="w-1/3" >Amount</TableHead>
-            <TableHead className="w-1/3" >Date</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {expenses.map((exp) => {
+          <div className=" h-full flex flex-col items-center justify-center">
+            <Image src={ReceiptIcon} alt="Receipt Icon" width={100} />
+            <h2 className="text-[25px]">No Expenses Yet!</h2>
+            <p className="text-[17px] text-muted-foreground">Get started by adding some</p>
+          </div>
 
+        ) : (<RecentExpensesTable expenses={expenses} />)
+      }
 
 
-            return (
-              <TableRow key={exp._id} className="h-[50px]">
-                <TableCell className="flex items-center space-x-2 ">
-                  <span
-                    className="w-3 h-3 justify-center rounded-full text-sm"
-                    style={{ backgroundColor: exp.categoryColor }}
-                  />
-
-
-
-                  <div className="text-gray-800 text-sm">{exp.category}</div>
-                </TableCell>
-                <TableCell className="font-medium">{exp.amount}</TableCell>
-
-                <TableCell>{exp.date}</TableCell>
-              </TableRow>
-            )
-          })}
-        </TableBody>
-
-      </Table>
 
     </div>
   );
