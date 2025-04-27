@@ -43,7 +43,28 @@ export async function POST(req: NextRequest) {
 
         const rzpCreds = await getRzpCreds(userId);
 
-        const { clientId, discountPercent, invoiceNumber, isRecurring, issueDate, items, taxPercent, discountAmount, dueDate, note, recurringDueDate, recurringFrequency, recurringIssueDate, subTotal, taxAmount, terms, totalAmount, clientName, clientEmail, clientMobile } = parsedInvoiceData.data;
+        const { clientId,
+            discountPercent,
+            invoiceNumber,
+            isRecurring,
+            issueDate,
+            items,
+            taxPercent,
+            discountAmount,
+            dueDate,
+            note,
+            recurringDueDate,
+            recurringFrequency,
+            recurringIssueDate,
+            subTotal,
+            taxAmount,
+            terms,
+            totalAmount,
+            clientName,
+            clientEmail,
+            clientMobile,
+            currency
+        } = parsedInvoiceData.data;
 
         console.log("totalAmount:", totalAmount);
 
@@ -102,6 +123,7 @@ export async function POST(req: NextRequest) {
             discountAmount: discountAmount,
             taxAmount: taxAmount,
             totalAmount: totalAmount,
+            currency: currency
 
         };
 

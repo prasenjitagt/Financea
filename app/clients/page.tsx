@@ -1,5 +1,5 @@
 import { ClientType, columns } from "@/app/clients/columns";
-import { DataTable } from "@/app/clients/data-table";
+import { ClientDataTable } from "@/app/clients/data-table";
 import { getServerSession } from "next-auth";
 import { FinanceaAuthOptions } from "../api/auth/[...nextauth]/options";
 import { Client } from "@/lib/models/Clients.model";
@@ -77,7 +77,7 @@ export default async function ClientsDesktopView() {
 
       {/* Desktop and Tablet View Table Section */}
       <section className="hidden md:block w-full flex-1 overflow-scroll">
-        <DataTable
+        <ClientDataTable
           columns={columns}
           data={clientsData}
         />

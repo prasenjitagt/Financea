@@ -88,6 +88,8 @@ export const createInvoiceZodSchema = z.object({
     discountAmount: z.coerce.number().optional(),
     taxAmount: z.coerce.number().optional(),
     totalAmount: z.coerce.number().optional(),
+    currency: z
+        .enum(["INR", "USD"])
 });
 
 export type createInvoiceFormType = z.infer<typeof createInvoiceZodSchema>;

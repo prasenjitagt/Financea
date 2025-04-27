@@ -180,7 +180,7 @@ const InvoiceCreatorPage = () => {
     <div className={`${archivo.className} flex flex-col lg:flex-row h-screen p-6 bg-gray-100`}>
       <div className="w-full lg:w-2/3 bg-white p-6 rounded-lg shadow-md h-full max-h-[calc(100vh-3rem)] overflow-y-auto relative">
         <button
-          onClick={() => router.push("/invoices")}
+          onClick={() => router.back()}
           className="absolute top-4 left-4 text-gray-600 hover:text-red-500 transition"
         >
           ✖

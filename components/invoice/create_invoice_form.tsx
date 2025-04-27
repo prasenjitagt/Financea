@@ -7,7 +7,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { createInvoiceZodSchema, createInvoiceFormType } from "@/lib/zod/create_invoice_zod_schema";
 import { Button } from "../ui/button";
-import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "../ui/form";
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "../ui/form";
 import { Input } from "../ui/input";
 import { Calendar } from "@/components/ui/calendar";
 import { format } from "date-fns";
@@ -37,7 +37,7 @@ import { Separator } from "../ui/separator";
 import { uptoTwoDecimalPlaces } from "@/lib/helpers/create_invoice/uptoTwoDecimalPlaces";
 import { useWatch } from "react-hook-form";
 import Swal from "sweetalert2";
-import { create_new_invoice_route } from "@/lib/helpers/api-endpoints";
+import { check_invoice_number_route, create_new_invoice_route } from "@/lib/helpers/api-endpoints";
 
 
 //RecurringFrequency Should Match With Zod
@@ -46,6 +46,10 @@ export enum RecurringFrequency {
     Weekly = "Weekly",
     Quarterly = "Quarterly",
     Yearly = "Yearly",
+}
+export enum CurrencyEnum {
+    INR = "INR",
+    USD = "USD",
 }
 export interface Client {
     _id: string;
@@ -63,6 +67,9 @@ export interface Client {
     createdAt: string;
     updatedAt: string;
 }
+type DuplicateCheckResponse = {
+    exists: boolean;
+};
 
 
 
@@ -162,10 +169,25 @@ const CreateInvoiceForm = () => {
                 return; // important to stop further execution
             }
 
-            const result = await axios.post("/api/invoices/create_invoice", formValues);
+
+            const invoiceNumber = formValues.invoiceNumber;
+
+            const duplicateCheckResponse = await axios.get<DuplicateCheckResponse>(`${check_invoice_number_route}?invoiceNumber=${invoiceNumber}`);
+
+
+            if (duplicateCheckResponse.data.exists) {
+                Swal.fire({
+                    title: "Error!",
+                    text: "Invoice number already exists! Please choose a unique invoice number.",
+                    icon: "error",
+                    confirmButtonText: "OK",
+                });
+                return; // Stop execution if duplicate is found
+            }
+
+            const result = await axios.post(create_new_invoice_route, formValues);
 
             if (result.status === 200) {
-                console.log(result.data);
 
                 Swal.fire({
                     title: "Success!",
@@ -370,6 +392,37 @@ const CreateInvoiceForm = () => {
                 {/* Billed to client details */}
                 <section className="mt-[33px]">
                     <BilledToClientDetails selectedClientDetails={selectedClient} />
+                </section>
+
+                {/* Select Currency*/}
+                <section className="mt-[33px]">
+
+                    <FormField
+                        control={form.control}
+                        name="currency"
+                        render={({ field }) => (
+                            <FormItem>
+                                <FormLabel>Currency</FormLabel>
+
+                                <Select onValueChange={field.onChange} defaultValue={field.value}>
+                                    <FormControl>
+                                        <SelectTrigger className="w-[163px] cursor-pointer">
+                                            <SelectValue placeholder="Select Currency" />
+                                        </SelectTrigger>
+                                    </FormControl>
+                                    <SelectContent>
+                                        {Object.values(CurrencyEnum).map((currency) => (
+                                            <SelectItem key={currency} value={currency}>
+                                                {currency}
+                                            </SelectItem>
+                                        ))}
+                                    </SelectContent>
+                                </Select>
+                                <FormMessage />
+                            </FormItem>
+                        )}
+                    />
+
                 </section>
 
                 {/* Recurring Checkbox Section */}
@@ -737,8 +790,10 @@ const CreateInvoiceForm = () => {
                             Save as draft
                         </Button>
 
-                        <Button type="submit" className="bg-[#532B88]">
-                            Send now
+                        <Button type="submit"
+                            disabled={form.formState.isSubmitting} className="bg-[#532B88]"
+                        >
+                            {form.formState.isSubmitting ? "Sending..." : "Send now"}
                         </Button>
                     </div>
 

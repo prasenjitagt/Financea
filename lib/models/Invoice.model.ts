@@ -109,6 +109,11 @@ const invoiceSchema = new Schema<InvoiceDocument>(
       type: Number,
       required: true,
     },
+    currency: {
+      type: String,
+      enum: ["INR", "USD"],
+      required: true,
+    },
     isPaid: {
       type: Boolean,
       required: true,

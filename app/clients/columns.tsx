@@ -88,7 +88,7 @@ export const columns: ColumnDef<ClientType>[] = [
         )
     },
 
-    //status
+    //client status
     {
         accessorKey: "isClientActive",
         header: "Status",

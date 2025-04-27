@@ -41,7 +41,7 @@ interface DataTableProps<TData, TValue> {
 
 
 
-export function DataTable<TData, TValue>({
+export function InvoiceDataTable<TData, TValue>({
     columns,
     data,
 }: DataTableProps<TData, TValue>) {
@@ -54,59 +54,53 @@ export function DataTable<TData, TValue>({
 
 
     //exporting excel sheet
-    async function handleExport() {
+    async function handleInvoicesExport() {
         try {
             let dataToBeExported: InvoiceType[];
 
             if (Object.keys(rowSelection).length === 0) {
                 dataToBeExported = data as InvoiceType[];
-
             } else {
                 dataToBeExported = data.filter((_, index) => rowSelection[index]) as InvoiceType[];
             }
 
+            console.log(dataToBeExported);
+
             const workbook = new ExcelJS.Workbook();
-            const worksheet = workbook.addWorksheet("Clients");
+            const worksheet = workbook.addWorksheet("Invoices");
 
             worksheet.columns = [
-                { header: "Client Name", key: "clientName" },
+                { header: "Amount", key: "amount" },
+                { header: "Client Name", key: "name" },
+                { header: "Client Email", key: "email" },
+                { header: "Invoice Number", key: "invoiceNumber" },
                 { header: "Status", key: "status" },
-                { header: "Mobile", key: "mobile" },
-                { header: "Email", key: "email" },
-                { header: "Website", key: "website" },
-                { header: "Country", key: "country" },
-                { header: "Service Charge", key: "serviceCharge" },
                 { header: "Currency", key: "currency" },
-                { header: "Created At", key: "createdAt" },
+                { header: "Issue Date", key: "issueDate" },
+                { header: "Due Date", key: "dueDate" },
             ];
 
-            // dataToBeExported.forEach(client => {
-            //     const currency = client.country === "India" ? "INR" : "USD"; // Check country and set currency
-
-            //     worksheet.addRow({
-            //         clientName: client.clientName,
-            //         status: client.isClientActive ? "Active" : "Inactive",
-            //         mobile: client.mobile,
-            //         email: client.email,
-            //         website: client.website,
-            //         country: client.country,
-            //         serviceCharge: client.serviceCharge,
-            //         currency: currency, // Use the determined currency
-            //         createdAt: new Date(client.createdAt).toLocaleDateString(),
-            //     });
-            // });
-
+            dataToBeExported.forEach(invoice => {
+                worksheet.addRow({
+                    amount: invoice.totalAmount,
+                    name: invoice.clientName,
+                    email: invoice.clientEmail,
+                    invoiceNumber: invoice.invoiceNumber,
+                    status: invoice.isPaid ? "Paid" : "Due",
+                    currency: invoice.currency,
+                    issueDate: new Date(invoice.issueDate).toLocaleDateString(),
+                    dueDate: new Date(invoice.dueDate!).toLocaleDateString(),
+                });
+            });
 
             const buffer = await workbook.xlsx.writeBuffer();
             const blob = new Blob([buffer], { type: "application/octet-stream" });
-            saveAs(blob, "clients.xlsx");
-
+            saveAs(blob, "invoices.xlsx");
         } catch (error) {
             console.log("Error Exporting ExcelSheet:", error);
-
         }
-
     }
+
 
     const table = useReactTable({
         data,
@@ -154,7 +148,7 @@ export function DataTable<TData, TValue>({
                 {/* Right: Visibility Dropdown and Export Button */}
                 <section className="flex items-center space-x-2">
                     <Button
-                        onClick={handleExport}
+                        onClick={handleInvoicesExport}
                     >
                         <FaDownload className="mr-2" /> Export
                     </Button>

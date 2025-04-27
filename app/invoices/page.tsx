@@ -1,5 +1,7 @@
+//app/invoices/page.tsx
+
 import { InvoiceType, columns } from "./columns";
-import { DataTable } from "@/app/clients/data-table";
+import { InvoiceDataTable } from "@/app/invoices/data-table";
 import { getServerSession } from "next-auth";
 import { FinanceaAuthOptions } from "../api/auth/[...nextauth]/options";
 import HeaderInfoCard from "@/components/profile/header-info-card";
@@ -48,8 +50,8 @@ export function sanitizeInvoice(raw: any): InvoiceType {
     updatedAt: raw.updatedAt instanceof Date ? raw.updatedAt.toISOString() : raw.updatedAt,
     __v: raw.__v ?? undefined,
     isPaid: raw.isPaid,
-    paymentId: raw.paymentId
-
+    paymentId: raw.paymentId,
+    currency: raw.currency
   };
 }
 
@@ -145,7 +147,7 @@ export default async function ClientsDesktopView() {
 
       {/* Desktop and Tablet View Table Section */}
       <section className="hidden md:block w-full flex-1 overflow-scroll">
-        <DataTable
+        <InvoiceDataTable
           columns={columns}
           data={invoiceData}
         />

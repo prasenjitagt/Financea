@@ -1,3 +1,4 @@
+//clients/data-table.tsx
 "use client"
 import { saveAs } from "file-saver";
 import ExcelJS from "exceljs";
@@ -41,7 +42,7 @@ interface DataTableProps<TData, TValue> {
 
 
 
-export function DataTable<TData, TValue>({
+export function ClientDataTable<TData, TValue>({
     columns,
     data,
 }: DataTableProps<TData, TValue>) {
@@ -54,7 +55,7 @@ export function DataTable<TData, TValue>({
 
 
     //exporting excel sheet
-    async function handleExport() {
+    async function handleClientsExport() {
         try {
             let dataToBeExported: ClientType[];
 
@@ -154,7 +155,7 @@ export function DataTable<TData, TValue>({
                 {/* Right: Visibility Dropdown and Export Button */}
                 <section className="flex items-center space-x-2">
                     <Button
-                        onClick={handleExport}
+                        onClick={handleClientsExport}
                     >
                         <FaDownload className="mr-2" /> Export
                     </Button>

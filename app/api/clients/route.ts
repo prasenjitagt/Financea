@@ -1,10 +1,9 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
+import { FinanceaAuthOptions } from "@/app/api/auth/[...nextauth]/options";
+import { getServerSession } from "next-auth";
 import connectDB from "@/lib/database/db_connection";
 import { Client } from "@/lib/models/Clients.model";
 import { clientSchema } from "@/lib/helpers/validations";
-import { getServerSession } from "next-auth";
-import { FinanceaAuthOptions } from "../auth/[...nextauth]/options";
 
 export async function POST(req: Request) {
   try {
@@ -59,6 +58,8 @@ export async function GET() {
     //get UserID from session
     const session = await getServerSession(FinanceaAuthOptions);
     if (!session) {
+      console.log("Unauthorized");
+
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
     const userId = session.user._id;
@@ -85,7 +86,7 @@ export async function GET() {
 }
 
 // DELETE Handler
-export async function DELETE(req: Request) {
+export async function DELETE(req: NextRequest) {
   try {
     await connectDB("api/clients/route.ts");
 

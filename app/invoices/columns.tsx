@@ -56,6 +56,7 @@ export interface InvoiceType {
     createdAt: string;
     updatedAt: string;
     __v?: number;
+    currency: string,
     isPaid: boolean;
     paymentId: string;
 }
@@ -94,18 +95,12 @@ export const columns: ColumnDef<InvoiceType>[] = [
         accessorKey: "totalAmount",
         header: () => <p>Amount</p>,
         cell: ({ row }) => {
+
+            const currency = row.original.currency;
             const amount = parseFloat(row.getValue("totalAmount"));
-            const country = "INR";
-
-            const currencyMap: Record<string, string> = {
-                India: "INR",
-                USA: "USD",
-                UK: "GBP",
-            };
-
             const formatted = new Intl.NumberFormat("en-US", {
                 style: "currency",
-                currency: currencyMap[country] || "USD",
+                currency: currency,
             }).format(amount);
 
             return <div >{formatted}</div>;
@@ -183,7 +178,27 @@ export const columns: ColumnDef<InvoiceType>[] = [
     //invoiceNo.
     {
         accessorKey: "invoiceNumber",
-        header: "Invoice No."
+        header: "Invoice No.",
+        cell: ({ row }) => {
+            const invoiceNumber = row.original.invoiceNumber;
+
+            return (
+                <div className="flex space-x-2">
+                    <p>{`#${invoiceNumber}`}</p>
+
+                    <Image
+                        className="cursor-pointer"
+                        src={CopyIcon}
+                        alt="Copy-Icon"
+                        width={16}
+                        onClick={() => {
+                            showToast("Invoice Number Copied");
+                            navigator.clipboard.writeText(invoiceNumber);
+                        }}
+                    />
+                </div>
+            );
+        },
     },
 
 
