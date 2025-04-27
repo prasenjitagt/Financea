@@ -8,7 +8,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-
+import ReceiptIcon from "@/assets/icons/receipt_icon.svg";
 import { useState, useEffect } from "react";
 import PaymentRequestsLoading from "@/components/loading_ui/PaymentRequestsLoading";
 import { payments_request_route } from "@/lib/helpers/api-endpoints";
@@ -16,6 +16,8 @@ import axios from "axios";
 import { InvoiceType } from "@/app/invoices/columns";
 import { stringToDate } from "@/lib/helpers/payment_requests/stringToDate";
 import { formatAmountToCurrency } from "@/lib/helpers/invoices/format_amount_to_currency";
+import PaymentRequestsTable from "./payment_requests_table";
+import Image from "next/image";
 
 const statusColors: Record<string, string> = {
   Paid: "bg-green-100 text-green-600",
@@ -34,6 +36,7 @@ const PaymentRequests = () => {
         const response = await axios.get<InvoiceType[]>(payments_request_route); // Replace with actual API URL
 
         setInvoices(response.data);
+
 
 
       } catch (error) {
@@ -57,43 +60,19 @@ const PaymentRequests = () => {
         <h2 className="text-lg font-semibold text-black">Payment Requests</h2>
       </div>
 
+      {
+        invoices.length === 0 ? (
 
-      <Table>
-        <TableCaption>A list of your Recent Paymetns</TableCaption>
-        <TableHeader>
-          <TableRow>
-            <TableHead className="w-1/3" >Amount</TableHead>
-            <TableHead className="w-1/3" >Status</TableHead>
-            <TableHead className="w-1/3" >Date</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {invoices.map((invoice) => {
+          <div className=" h-full flex flex-col items-center justify-center">
+            <Image src={ReceiptIcon} alt="Receipt Icon" width={100} />
+            <h2 className="text-[25px]">No Payments Yet!</h2>
+            <p className="text-[17px] text-muted-foreground">Get started by adding some</p>
+          </div>
 
-            const formattedCurrencyString = formatAmountToCurrency(invoice.totalAmount, invoice.currency);
-            const formattedDate = stringToDate(invoice.issueDate);
-            const isPaymentPaid = invoice.isPaid;
-            const PaymentStatus = invoice.isPaid === true ? "Paid" : "Due";
+        ) : (<PaymentRequestsTable invoices={invoices} />)
+      }
 
-            return (
-              <TableRow key={invoice._id} className="h-[50px]">
-                <TableCell className="font-medium">{formattedCurrencyString}</TableCell>
-                <TableCell >
-                  <span
-                    className={`px-2 py-1 text-xs rounded-full font-medium
-                        ${isPaymentPaid ? "bg-green-100 text-green-700" : "bg-red-100 text-red-700"}`}
-                  >
-                    {PaymentStatus}
-                  </span>
-                </TableCell>
 
-                <TableCell>{formattedDate}</TableCell>
-              </TableRow>
-            )
-          })}
-        </TableBody>
-
-      </Table>
 
     </div>
   );

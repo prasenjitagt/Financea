@@ -56,16 +56,17 @@ export default function SignupPage() {
         console.log(response.data.user);
 
 
-        // // Sign in the user using NextAuth after successful signup
-        // const signInResult = await signIn("credentials", {
-        //   email: email,
-        //   password: password,
-        //   redirect: false, // Do not redirect automatically
-        // });
+        // Sign in the user using NextAuth after successful signup
+        const signInResult = await signIn("credentials", {
+          email: email,
+          password: password,
+          redirect: false,
+          callbackUrl: "/"// Do not redirect automatically
+        });
 
-        // if (signInResult?.error) {
-        //   throw new Error("Login failed");
-        // }
+        if (signInResult?.error) {
+          throw new Error("Login failed");
+        }
 
 
         // Redirect to dashboard or other page

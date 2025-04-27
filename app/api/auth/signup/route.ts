@@ -6,6 +6,8 @@ import connectDB from "@/lib/database/db_connection";
 
 export async function POST(req: NextRequest) {
   try {
+    await connectDB("/auth/signup/route.ts")
+
     const body = await req.json();
 
 
@@ -51,6 +53,8 @@ export async function POST(req: NextRequest) {
       }
     }, { status: 201 });
   } catch (error) {
+    console.error("Error Singinup:", error);
+
     return NextResponse.json({ error: "Internal Server issue" + error }, { status: 500 });
   }
 }

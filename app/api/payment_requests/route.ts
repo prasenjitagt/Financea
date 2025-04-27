@@ -27,9 +27,7 @@ export async function GET() {
             .sort({ createdAt: -1 }) // Sort by creation date in descending order
             .limit(8); // Limit the results to 6 invoices
 
-        if (!invoices || invoices.length === 0) {
-            return NextResponse.json({ message: "No invoices found" }, { status: 404 });
-        }
+
 
         return NextResponse.json(invoices, { status: 200 });
     } catch (error: any) {
