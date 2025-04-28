@@ -1,6 +1,5 @@
 "use client";
 
-import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { LuLogOut } from "react-icons/lu";
 import { ImSpinner2 } from "react-icons/im";
@@ -8,7 +7,6 @@ import { useState } from "react";
 import { signOut } from "next-auth/react";
 
 const Settings = () => {
-  const router = useRouter();
   const [isLoggingOut, setIsLoggingOut] = useState(false);
   const handleLogout = () => {
     setIsLoggingOut(true); // Show spinner

@@ -11,7 +11,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { useEffect, useState } from "react";
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 import { rpz_creds_route } from "@/lib/helpers/api-endpoints";
 import Swal from "sweetalert2";
 
@@ -44,8 +44,8 @@ export default function RazorpayDialog({
                 else if (response.status === 204) {
                     setCredentialsExist(false);
                 }
-            } catch (error: any) {
-                if (error.response?.status === 204) {
+            } catch (error: unknown) { // Changed from any to unknown
+                if (error instanceof AxiosError && error.response?.status === 204) {
                     setCredentialsExist(false);
                 } else {
                     console.error("Error checking Razorpay credentials", error);

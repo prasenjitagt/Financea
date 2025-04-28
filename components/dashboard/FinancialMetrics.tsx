@@ -1,7 +1,6 @@
 
 "use client";
 
-import { useState } from "react";
 import FinMetricCard from "./FinMetricCard";
 import { Archivo } from 'next/font/google';
 
@@ -12,7 +11,6 @@ const archivo = Archivo({
 
 
 const FinancialMetrics = () => {
-    const [view, setView] = useState("Monthly");
 
     return (
         <div className="bg-white px-[31px] py-[26px] rounded-[16px] border border-[#e8e8e8]   w-full h-[440px] flex flex-col">

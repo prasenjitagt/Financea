@@ -1,29 +1,31 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { NextResponse } from "next/server";
 import connectDB from "@/lib/database/db_connection";
 import { Client } from "@/lib/models/Clients.model";
-import jwt from "jsonwebtoken";
+import { getServerSession } from "next-auth";
+import { FinanceaAuthOptions } from "../../auth/[...nextauth]/options";
 
 export async function GET(
   req: Request,
   { params }: { params: { id: string } } // Type for params is already set correctly here
 ) {
-  const JWT_SECRET = process.env.JWT_SECRET as string;
-  await connectDB("api/clients/[id]/route.ts");
 
-  const authHeader = req.headers.get("authorization");
-  if (!authHeader || !authHeader.startsWith("Bearer ")) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  }
-
-  const token = authHeader.split(" ")[1];
 
   try {
-    const decoded: any = jwt.verify(token, JWT_SECRET);
-    const userId = decoded.userId;
-    const clientId = params.id; // Ensure that params is correctly destructured and typed
+    await connectDB("api/clients/[id]/route.ts");
 
-    const client = await Client.findOne({ _id: clientId, user: userId });
+    //get UserID from session
+    const session = await getServerSession(FinanceaAuthOptions);
+    if (!session) {
+      console.log("Unauthorized");
+      throw new Error("Unauthorized");
+    }
+    const userId = session.user._id;
+
+    const param = await params;
+
+    const clientId = await param.id; // Ensure that params is correctly destructured and typed
+
+    const client = await Client.findOne({ _id: clientId, userId: userId }).lean();
 
     if (!client) {
       return NextResponse.json(

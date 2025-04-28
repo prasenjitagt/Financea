@@ -1,59 +1,57 @@
 //app/invoices/page.tsx
 
-import { InvoiceType, columns } from "./columns";
+import { columns } from "./columns";
 import { InvoiceDataTable } from "@/app/invoices/data-table";
 import { getServerSession } from "next-auth";
 import { FinanceaAuthOptions } from "../api/auth/[...nextauth]/options";
 import HeaderInfoCardInvoices from "@/components/invoices/header-info-card-invoices";
-import HeaderStats from "@/components/profile/header-stats";
 import { Card, CardContent } from "@/components/ui/card";
 import InvoiceModel from "@/lib/models/Invoice.model";
 import HeaderInfoCard from "@/components/profile/header-info-card";
 import { getInvoiceStats } from "@/lib/helpers/invoices/getInvoiceStats";
+import { IndividualInvoiceFromDataBaseType, InvoiceType } from "@/lib/types";
 
 
-
-
-export function sanitizeInvoice(raw: any): InvoiceType {
+export function sanitizeInvoice(invoice: IndividualInvoiceFromDataBaseType): InvoiceType {
   return {
-    _id: raw._id.toString(),
-    user: raw.user.toString(),
-    client: raw.client.toString(),
-    invoiceNumber: raw.invoiceNumber,
-    issueDate: raw.issueDate instanceof Date ? raw.issueDate.toISOString() : raw.issueDate,
-    dueDate: raw.dueDate ? (raw.dueDate instanceof Date ? raw.dueDate.toISOString() : raw.dueDate) : undefined,
-    clientEmail: raw.clientEmail,
-    clientName: raw.clientName,
-    clientMobile: Number(raw.clientMobile),
-    isRecurring: Boolean(raw.isRecurring),
-    recurringFrequency: raw.recurringFrequency ?? undefined,
-    recurringIssueDate: raw.recurringIssueDate
-      ? (raw.recurringIssueDate instanceof Date ? raw.recurringIssueDate.toISOString() : raw.recurringIssueDate)
+    _id: invoice._id.toString(),
+    user: invoice.user.toString(),
+    client: invoice.client.toString(),
+    invoiceNumber: invoice.invoiceNumber,
+    issueDate: invoice.issueDate instanceof Date ? invoice.issueDate.toISOString() : invoice.issueDate,
+    dueDate: invoice.dueDate.toString(),
+    clientEmail: invoice.clientEmail,
+    clientName: invoice.clientName,
+    clientMobile: Number(invoice.clientMobile),
+    isRecurring: Boolean(invoice.isRecurring),
+    recurringFrequency: invoice.recurringFrequency ?? undefined,
+    recurringIssueDate: invoice.recurringIssueDate
+      ? (invoice.recurringIssueDate instanceof Date ? invoice.recurringIssueDate.toISOString() : invoice.recurringIssueDate)
       : undefined,
-    recurringDueDate: raw.recurringDueDate
-      ? (raw.recurringDueDate instanceof Date ? raw.recurringDueDate.toISOString() : raw.recurringDueDate)
+    recurringDueDate: invoice.recurringDueDate
+      ? (invoice.recurringDueDate instanceof Date ? invoice.recurringDueDate.toISOString() : invoice.recurringDueDate)
       : undefined,
-    items: raw.items.map((item: any) => ({
+    items: invoice.items.map((item: any) => ({
       ishourly: Boolean(item.ishourly),
       name: item.name,
       quantity: Number(item.quantity),
       rate: Number(item.rate),
       _id: item._id.toString(),
     })),
-    discountPercent: Number(raw.discountPercent),
-    taxPercent: Number(raw.taxPercent),
-    note: raw.note ?? undefined,
-    terms: raw.terms ?? undefined,
-    subTotal: Number(raw.subTotal),
-    discountAmount: Number(raw.discountAmount),
-    taxAmount: Number(raw.taxAmount),
-    totalAmount: Number(raw.totalAmount),
-    createdAt: raw.createdAt instanceof Date ? raw.createdAt.toISOString() : raw.createdAt,
-    updatedAt: raw.updatedAt instanceof Date ? raw.updatedAt.toISOString() : raw.updatedAt,
-    __v: raw.__v ?? undefined,
-    isPaid: raw.isPaid,
-    paymentId: raw.paymentId,
-    currency: raw.currency
+    discountPercent: Number(invoice.discountPercent),
+    taxPercent: Number(invoice.taxPercent),
+    note: invoice.note ?? undefined,
+    terms: invoice.terms ?? undefined,
+    subTotal: Number(invoice.subTotal),
+    discountAmount: Number(invoice.discountAmount),
+    taxAmount: Number(invoice.taxAmount),
+    totalAmount: Number(invoice.totalAmount),
+    createdAt: invoice.createdAt instanceof Date ? invoice.createdAt.toISOString() : invoice.createdAt,
+    updatedAt: invoice.updatedAt instanceof Date ? invoice.updatedAt.toISOString() : invoice.updatedAt,
+    __v: invoice.__v ?? undefined,
+    isPaid: invoice.isPaid,
+    paymentId: invoice.paymentId,
+    currency: invoice.currency
   };
 }
 
@@ -68,7 +66,12 @@ async function getData(): Promise<InvoiceType[]> {
     }
 
     const userId = session.user._id;
-    const invoices = await InvoiceModel.find({ user: userId }).sort({ createdAt: -1 }).lean();
+    const invoices = await InvoiceModel.find({ user: userId })
+      .sort({ createdAt: -1 })
+      .lean<IndividualInvoiceFromDataBaseType[]>();
+
+    // console.log("Get your invoice type:", invoices[0]);  //for debugging
+
 
     if (!invoices) {
       console.log("No Clients Found");

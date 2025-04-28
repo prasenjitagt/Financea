@@ -7,7 +7,6 @@ import InvoicesIcon from "@/assets/icons/invoices_sidebar_icon.svg";
 import PaymentsIcon from "@/assets/icons/payemnts_sidebar_icon.svg";
 import ExpensesIcon from "@/assets/icons/expenses_sidebar_icon.svg";
 import ClientsIcon from "@/assets/icons/clients_sidebar_icon.svg";
-import ReportsIcon from "@/assets/icons/reports_sidebar_icon.svg";
 import SettingsIcon from "@/assets/icons/settings_sidebar_icon.svg";
 import { usePathname, useRouter } from "next/navigation";
 

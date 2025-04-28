@@ -1,10 +1,10 @@
 //api/email/route.ts
 
-import { NextRequest, NextResponse } from "next/server";
+import { NextResponse } from "next/server";
 import { Resend } from "resend";
 
 
-export async function GET(req: NextRequest) {
+export async function GET() {
     const resend = new Resend(process.env.RESEND_API_KEY);
 
     try {
@@ -15,9 +15,13 @@ export async function GET(req: NextRequest) {
             html: "<h1>Financea email</h1>"
         });
 
-
         return NextResponse.json({ data }, { status: 200 })
     } catch (error) {
-        return NextResponse.json({ message: "error" }, { status: 501 })
+        console.log("Error Sending Email:", error);
+
+        return NextResponse.json({
+            message: "Error Sending Email",
+            error: error instanceof Error ? error.message : String(error)
+        }, { status: 500 }) // 500 is more appropriate for server errors
     }
 }

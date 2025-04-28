@@ -22,45 +22,9 @@ import Swal from "sweetalert2";
 import axios from "axios";
 import { invoices_route } from "@/lib/helpers/api-endpoints";
 import { formatAmountToCurrency } from "@/lib/helpers/invoices/format_amount_to_currency";
+import { InvoiceType } from "@/lib/types";
 
-export interface InvoiceItem {
-    ishourly: boolean;
-    name: string;
-    quantity: number;
-    rate: number;
-    _id: string; // converted from ObjectId to string
-}
 
-export interface InvoiceType {
-    _id: string; // converted from ObjectId to string
-    user: string; // ObjectId to string
-    client: string; // ObjectId to string
-    invoiceNumber: string;
-    issueDate: string; // will come as ISO string from server (Date)
-    dueDate?: string; // optional
-    clientEmail: string;
-    clientName: string;
-    clientMobile: number;
-    isRecurring: boolean;
-    recurringFrequency?: "Monthly" | "Weekly" | "Quarterly" | "Yearly"; // based on your zod
-    recurringIssueDate?: string;
-    recurringDueDate?: string;
-    items: InvoiceItem[];
-    discountPercent: number;
-    taxPercent: number;
-    note?: string;
-    terms?: string;
-    subTotal: number;
-    discountAmount: number;
-    taxAmount: number;
-    totalAmount: number;
-    createdAt: string;
-    updatedAt: string;
-    __v?: number;
-    currency: string,
-    isPaid: boolean;
-    paymentId: string;
-}
 
 
 
@@ -199,12 +163,6 @@ export const columns: ColumnDef<InvoiceType>[] = [
         },
     },
 
-
-
-
-
-
-
     //Issue Date
     {
         accessorKey: "issueDate",
@@ -243,70 +201,75 @@ export const columns: ColumnDef<InvoiceType>[] = [
         header: "Actions",
         cell: ({ row }) => {
             const invoice = row.original;
-            const router = useRouter();
-
-            const handleDeleteInvoice = async () => {
-                const confirmResult = await Swal.fire({
-                    title: "Are you sure?",
-                    text: "You want to delete the Invoice?",
-                    icon: "warning",
-                    showCancelButton: true,
-                    confirmButtonColor: "#d33",
-                    confirmButtonText: "Yes, delete!",
-                });
-
-                if (confirmResult.isConfirmed) {
-                    try {
-                        // Send the invoiceId in the URL as a query parameter
-                        const res = await axios.delete(`${invoices_route}?invoiceId=${invoice._id}`);
-
-                        if (res.status === 200) {
-                            showToast("Invoice deleted successfully");
-
-                            router.refresh();
-                        }
-                    } catch (error) {
-                        console.error("Error deleting Invoice:", error);
-                        showToast("Error deleting Invoice");
-                    }
-                }
-            };
-
-            return (
-                <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
-                        <Button variant="ghost" className="h-8 w-8 p-0">
-                            <span className="sr-only">Open menu</span>
-                            <MoreHorizontal className="h-4 w-4" />
-                        </Button>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent align="end">
-                        <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                        <DropdownMenuSeparator />
-                        <DropdownMenuItem
-                            className="cursor-pointer"
-                            onClick={() => {
-                                showToast("Invoice ID Copied");
-
-                                navigator.clipboard.writeText(invoice._id);
-                            }}
-                        >
-                            Copy Invoice ID
-                        </DropdownMenuItem>
-
-                        <DropdownMenuItem
-                            variant="destructive"
-                            className="cursor-pointer"
-                            onClick={handleDeleteInvoice}
-                        >
-                            Delete Invoice
-                        </DropdownMenuItem>
-
-                    </DropdownMenuContent>
-                </DropdownMenu>
-            )
+            return <InvoiceActions invoice={invoice} />
         },
     },
 
 
 ]
+
+
+function InvoiceActions({ invoice }: { invoice: InvoiceType }) {
+    const router = useRouter();
+
+    const handleDeleteInvoice = async () => {
+        const confirmResult = await Swal.fire({
+            title: "Are you sure?",
+            text: "You want to delete the Invoice?",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#d33",
+            confirmButtonText: "Yes, delete!",
+        });
+
+        if (confirmResult.isConfirmed) {
+            try {
+                // Send the invoiceId in the URL as a query parameter
+                const res = await axios.delete(`${invoices_route}?invoiceId=${invoice._id}`);
+
+                if (res.status === 200) {
+                    showToast("Invoice deleted successfully");
+
+                    router.refresh();
+                }
+            } catch (error) {
+                console.error("Error deleting Invoice:", error);
+                showToast("Error deleting Invoice");
+            }
+        }
+    };
+
+    return (
+        <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+                <Button variant="ghost" className="h-8 w-8 p-0">
+                    <span className="sr-only">Open menu</span>
+                    <MoreHorizontal className="h-4 w-4" />
+                </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+                <DropdownMenuLabel>Actions</DropdownMenuLabel>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem
+                    className="cursor-pointer"
+                    onClick={() => {
+                        showToast("Invoice ID Copied");
+
+                        navigator.clipboard.writeText(invoice._id);
+                    }}
+                >
+                    Copy Invoice ID
+                </DropdownMenuItem>
+
+                <DropdownMenuItem
+                    variant="destructive"
+                    className="cursor-pointer"
+                    onClick={handleDeleteInvoice}
+                >
+                    Delete Invoice
+                </DropdownMenuItem>
+
+            </DropdownMenuContent>
+        </DropdownMenu>
+    )
+}

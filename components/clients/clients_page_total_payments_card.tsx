@@ -1,5 +1,5 @@
 import { ClientType } from "@/app/clients/columns";
-import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
+import { Card, CardContent } from "../ui/card";
 
 interface ClientsPageCardPropType {
     title: string,
@@ -9,7 +9,7 @@ interface ClientsPageCardPropType {
 }
 
 
-export default function ClientsPageTotalPaymentsCards({ title, totalPayments, description, clients }: ClientsPageCardPropType) {
+export default function ClientsPageTotalPaymentsCards({ title, totalPayments, description }: ClientsPageCardPropType) {
     return (
         <Card className="w-[273px]">
             <CardContent >

@@ -3,7 +3,7 @@
 
 import { useState, useEffect } from "react";
 import RecentExpensesLoading from "../loading_ui/RecentExpensesLoading";
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 import { recent_expenses_route } from "@/lib/helpers/api-endpoints";
 import { ExpensesReturnPayloadType, ExpensesToBeReturnedType } from "@/app/api/expenses/route";
 import RecentExpensesTable from "./recent_expenses_table";
@@ -29,9 +29,13 @@ const RecentExpenses = () => {
 
 
 
-      } catch (error) {
-        const message = (error as any)?.response?.data?.message || (error as Error).message;
-        setError(message);
+      } catch (err) {
+        const error = err as AxiosError<{ message?: string }>;
+        setError(
+          error.response?.data?.message ||
+          error.message ||
+          "Failed to fetch expenses"
+        );
       } finally {
         setLoading(false);
       }

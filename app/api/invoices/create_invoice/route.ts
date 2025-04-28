@@ -2,10 +2,10 @@ import { createInvoiceFormType, createInvoiceZodSchema } from "@/lib/zod/create_
 import { NextRequest, NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import { FinanceaAuthOptions } from "@/app/api/auth/[...nextauth]/options";
-import { createRazorpayPaymentLink } from "@/lib/helpers/payments/createRazorpayPaymentLink";
+import { CreatePaymentLinkInput, createRazorpayPaymentLink } from "@/lib/helpers/payments/createRazorpayPaymentLink";
 import { getRzpCreds } from "../../payments/link-gen/rzp/getRzpCreds";
 import connectDB from "@/lib/database/db_connection";
-import InvoiceModel, { InvoiceDocument } from "@/lib/models/Invoice.model";
+import InvoiceModel from "@/lib/models/Invoice.model";
 import mongoose from "mongoose"; // required for ObjectId
 import { RazorpayPaymentLinkResponseType } from "@/lib/types";
 
@@ -66,19 +66,21 @@ export async function POST(req: NextRequest) {
             currency
         } = parsedInvoiceData.data;
 
-        console.log("totalAmount:", totalAmount);
+        const amountInPaise = Math.trunc(totalAmount! * 100);
 
-        const amountInPaise = totalAmount! * 100;
 
-        const razorpayResponseData: RazorpayPaymentLinkResponseType = await createRazorpayPaymentLink({
-            amount: Math.trunc(amountInPaise),
+
+        const razorpayPayload: CreatePaymentLinkInput = {
+            amount: amountInPaise,
             currency: "INR",
             customerName: clientName,
             customerEmail: clientEmail,
             customerContact: clientMobile,
             keyId: rzpCreds.keyId!,
             keySecret: rzpCreds.keySecret!,
-        });
+        }
+
+        const razorpayResponseData: RazorpayPaymentLinkResponseType = await createRazorpayPaymentLink(razorpayPayload);
 
         if (razorpayResponseData) {
             console.log("Payment Link Created Successfully!");
@@ -135,11 +137,13 @@ export async function POST(req: NextRequest) {
 
         return NextResponse.json({ message: "Invoice Created Successfully", invoice: newInvoice }, { status: 200 });
 
-    } catch (error: any) {
-        console.log("Error in creating invoice:", error.response?.data || error.message);
-        return NextResponse.json(
-            { message: "Internal Server Error at Creating Invoice", details: error.response?.data || error.message },
-            { status: 501 }
-        );
+    }
+    catch (error) {
+        console.log("Error Creating Invoice:", error);
+
+        return NextResponse.json({
+            message: "Failed to Create Invoice",
+            error: error instanceof Error ? error.message : String(error)
+        }, { status: 501 }) // 500 is more appropriate for server errors
     }
 }

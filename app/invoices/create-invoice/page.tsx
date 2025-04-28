@@ -2,20 +2,11 @@
 
 import { GoX } from "react-icons/go";
 import { useRouter } from "next/navigation";
-import { Button } from "@/components/ui/button";
 import { Archivo } from "next/font/google";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import CreateInvoiceForm from "@/components/invoices/create_invoice_form";
 
-
-interface Client {
-  _id: string;
-  clientName: string;
-  companyName: string;
-  email: string;
-  mobile: string;
-}
 
 const archivo = Archivo({
   weight: "500",

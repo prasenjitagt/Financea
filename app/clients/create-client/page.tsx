@@ -1,4 +1,5 @@
 "use client"
+import { ChangeEvent, ReactNode, useState } from "react"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
@@ -6,11 +7,10 @@ import { Label } from "@/components/ui/label"
 import { useDispatch, useSelector } from "react-redux"
 import { RootState } from "@/lib/redux/store"
 import { setClientField, resetClient } from "@/lib/redux/Features/clientSlice"
-import { useState } from "react"
 import { Globe, Mail, MapPin, Phone, User, Loader2 } from "lucide-react"
 import Swal from "sweetalert2";
 import Link from "next/link";
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 import { clients_route } from "@/lib/helpers/api-endpoints"
 
 export default function NewClientForm() {
@@ -33,23 +33,39 @@ export default function NewClientForm() {
         title: "Client Created Successfully!",
         icon: "success",
       });
-    } catch (err: any) {
-      const data = err.response?.data;
+    } catch (err: unknown) {
+      if (err instanceof AxiosError) {
+        // Define the expected error response shape
+        type ErrorResponse = {
+          issues?: Record<string, string>;
+          message?: string;
+        };
 
-      if (data?.issues) {
-        const errors = Object.entries(data.issues)
-          .map(([field, msg]) => `${field}: ${msg}`)
-          .join("\n");
+        const data = err.response?.data as ErrorResponse;
 
-        Swal.fire({
-          title: "Validation Errors",
-          text: errors,
-          icon: "error",
-        });
+        if (data?.issues) {
+          const errors = Object.entries(data.issues)
+            .map(([field, msg]) => `${field}: ${msg}`)
+            .join("\n");
+
+          Swal.fire({
+            title: "Validation Errors",
+            text: errors,
+            icon: "error",
+          });
+        } else {
+          Swal.fire({
+            title: "Error",
+            text: data?.message || "An error occurred while creating the client.",
+            icon: "error",
+          });
+        }
       } else {
+        // Handle non-Axios errors
+        console.error('Unexpected error:', err);
         Swal.fire({
           title: "Error",
-          text: data?.message || "An error occurred while creating the client.",
+          text: "An unexpected error occurred",
           icon: "error",
         });
       }
@@ -70,7 +86,7 @@ export default function NewClientForm() {
           </Link>
         </div>
         <CardContent className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          <FormField
+          <MyCustomFormField
             id="client-name"
             label="Client Name"
             icon={<User size={16} />}
@@ -78,7 +94,7 @@ export default function NewClientForm() {
             onChange={(e: { target: { value: string | number } }) => handleChange("clientName", e.target.value)}
           />
 
-          <FormField
+          <MyCustomFormField
             id="company-name"
             label="Company Name"
             icon={<User size={16} />}
@@ -86,7 +102,7 @@ export default function NewClientForm() {
             onChange={(e: { target: { value: string | number } }) => handleChange("companyName", e.target.value)}
           />
 
-          <FormField
+          <MyCustomFormField
             id="email"
             label="Email Address"
             icon={<Mail size={16} />}
@@ -94,7 +110,7 @@ export default function NewClientForm() {
             onChange={(e: { target: { value: string | number } }) => handleChange("email", e.target.value)}
           />
 
-          <FormField
+          <MyCustomFormField
             id="mobile"
             label="Mobile Number"
             icon={<Phone size={16} />}
@@ -102,7 +118,7 @@ export default function NewClientForm() {
             onChange={(e: { target: { value: string | number } }) => handleChange("mobile", e.target.value)}
           />
 
-          <FormField
+          <MyCustomFormField
             id="address"
             label="Address"
             icon={<MapPin size={16} />}
@@ -110,14 +126,14 @@ export default function NewClientForm() {
             onChange={(e: { target: { value: string | number } }) => handleChange("address", e.target.value)}
           />
 
-          <FormField
+          <MyCustomFormField
             id="postal"
             label="Postal Code"
             value={client.postal}
             onChange={(e: { target: { value: string | number } }) => handleChange("postal", e.target.value)}
           />
 
-          <FormField
+          <MyCustomFormField
             id="state"
             label="State/Province"
             value={client.state}
@@ -141,7 +157,7 @@ export default function NewClientForm() {
             </select>
           </div>
 
-          <FormField
+          <MyCustomFormField
             id="service-charge"
             label="Service Charge"
             type="number"
@@ -151,7 +167,7 @@ export default function NewClientForm() {
             }
           />
 
-          <FormField
+          <MyCustomFormField
             id="website"
             label="Website"
             icon={<Globe size={16} />}
@@ -189,8 +205,18 @@ export default function NewClientForm() {
   )
 }
 
+
+export interface MyCustomFormFieldPropTypes {
+  id: string,
+  label: string,
+  icon?: ReactNode,
+  value: string | number,
+  type?: string;
+  onChange: (e: ChangeEvent<HTMLInputElement>) => void;
+}
+
 // Helper Components:
-function FormField({ id, label, icon, value, onChange }: any) {
+function MyCustomFormField({ id, label, icon, value, onChange, type = "text" }: MyCustomFormFieldPropTypes) {
   return (
     <div>
       <Label htmlFor={id} className="text-gray-500">{label}</Label>
@@ -198,6 +224,7 @@ function FormField({ id, label, icon, value, onChange }: any) {
         {icon}
         <Input
           id={id}
+          type={type}
           placeholder={`Enter ${label.toLowerCase()}`}
           className="border-none w-full outline-none py-1 focus:outline-none text-gray-800"
           value={value}
@@ -207,19 +234,3 @@ function FormField({ id, label, icon, value, onChange }: any) {
     </div>
   )
 }
-
-// function InputField({ id, label, value, onChange, type = "text" }: any) {
-//   return (
-//     <div>
-//       <Label htmlFor={id}>{label}</Label>
-//       <Input
-//         id={id}
-//         type={type}
-//         placeholder={`Enter ${label.toLowerCase()}`}
-//         className="border-none rounded-md p-2 w-full"
-//         value={value}
-//         onChange={onChange}
-//       />
-//     </div>
-//   )
-// }

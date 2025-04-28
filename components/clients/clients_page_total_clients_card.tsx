@@ -1,5 +1,4 @@
-import { ClientType } from "@/app/clients/columns";
-import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
+import { Card, CardContent } from "../ui/card";
 
 interface ClientsPageCardPropType {
     title: string,

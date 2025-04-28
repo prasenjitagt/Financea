@@ -9,10 +9,13 @@ export async function POST(req: Request) {
   try {
 
     await connectDB("api/clients/route.ts");
+
+
     //get UserID from session
     const session = await getServerSession(FinanceaAuthOptions);
     if (!session) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+      console.log("Unauthorized");
+      throw new Error("Unauthorized");
     }
     const userId = session.user._id;
 
@@ -92,7 +95,8 @@ export async function DELETE(req: NextRequest) {
 
     const session = await getServerSession(FinanceaAuthOptions);
     if (!session) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+      console.log("Unauthorized");
+      throw new Error("Unauthorized");
     }
 
     const { searchParams } = new URL(req.url);

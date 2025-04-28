@@ -7,10 +7,8 @@ import Link from "next/link";
 import { Eye, EyeOff } from "lucide-react";
 import Image from "next/image";
 import "@/app/globals.css";
-import Swal from "sweetalert2";
 import { signIn } from "next-auth/react";
 import axios from "axios";
-import { useRouter } from "next/navigation";
 
 export default function SignupPage() {
 
@@ -22,7 +20,6 @@ export default function SignupPage() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
-  const router = useRouter();
 
   const togglePasswordVisibility = () => setShowPassword(!showPassword);
 
@@ -60,22 +57,13 @@ export default function SignupPage() {
         const signInResult = await signIn("credentials", {
           email: email,
           password: password,
-          redirect: false,
+          redirect: true,
           callbackUrl: "/"// Do not redirect automatically
         });
 
         if (signInResult?.error) {
           throw new Error("Login failed");
         }
-
-
-        // Redirect to dashboard or other page
-        Swal.fire({
-          title: "Signed Up Successfully!",
-          icon: "success",
-        });
-
-        router.push("/login");
 
       }
       else {

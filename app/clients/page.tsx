@@ -1,12 +1,18 @@
-import { ClientType, columns } from "@/app/clients/columns";
+
+
+import { columns } from "@/app/clients/columns";
 import { ClientDataTable } from "@/app/clients/data-table";
 import { getServerSession } from "next-auth";
 import { FinanceaAuthOptions } from "../api/auth/[...nextauth]/options";
 import { Client } from "@/lib/models/Clients.model";
 import ClientsPageTotalClientsCards from "@/components/clients/clients_page_total_clients_card";
 import ClientsPageTotalPaymentsCards from "@/components/clients/clients_page_total_payments_card";
+import { IndividualClientFromDataBaseType, ClientType } from "@/lib/types";
 
-function sanitizeClient(client: any): ClientType {
+
+
+
+function sanitizeClient(client: IndividualClientFromDataBaseType): ClientType {
   return {
     _id: client._id.toString(),
     clientName: client.clientName,
@@ -21,7 +27,9 @@ function sanitizeClient(client: any): ClientType {
     website: client.website,
     isClientActive: client.isClientActive,
     userId: client.userId.toString(),
-    createdAt: client.createdAt,
+    createdAt: client.createdAt.toString(),
+    updatedAt: client.updatedAt.toString(),
+    __v: client.__v,
   };
 }
 
@@ -34,7 +42,9 @@ async function getData(): Promise<ClientType[]> {
     }
 
     const userId = session.user._id;
-    const clients = await Client.find({ userId }).sort({ createdAt: -1 }).lean();
+    const clients = await Client.find({ userId })
+      .sort({ createdAt: -1 })
+      .lean<IndividualClientFromDataBaseType[]>();
 
     if (!clients) {
       console.log("No Clients Found");

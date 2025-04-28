@@ -30,8 +30,12 @@ export async function GET() {
 
 
         return NextResponse.json(invoices, { status: 200 });
-    } catch (error: any) {
-        console.error("Invoice Error:", error.message);
-        return NextResponse.json({ error: error.message }, { status: 500 });
+    } catch (error) {
+        console.log("Error Fetching Invoices:", error);
+
+        return NextResponse.json({
+            message: "Error Fetching Invoices",
+            error: error instanceof Error ? error.message : String(error)
+        }, { status: 500 }) // 500 is more appropriate for server errors
     }
 }

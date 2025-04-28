@@ -90,14 +90,12 @@ export async function POST(req: NextRequest) {
 
         return NextResponse.json(razorpayRes.data, { status: 200 });
 
-    } catch (error: any) {
-        console.error("Error CREATING Razorpay Payment Link:", error.response?.data || error.message);
-        return NextResponse.json(
-            {
-                error: "Failed to create payment link",
-                details: error.response?.data || error.message,
-            },
-            { status: 500 }
-        );
+    } catch (error) {
+        console.log("Error Creating Razorpay Payment Link:", error);
+
+        return NextResponse.json({
+            message: "Error Creating Razorpay Payment Link",
+            error: error instanceof Error ? error.message : String(error)
+        }, { status: 500 }) // 500 is more appropriate for server errors
     }
 }

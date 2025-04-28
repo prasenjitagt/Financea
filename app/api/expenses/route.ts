@@ -2,7 +2,6 @@
 //api/expenses/route.ts
 
 import { NextRequest, NextResponse } from "next/server";
-import jwt from "jsonwebtoken";
 import connectDB from "@/lib/database/db_connection";
 import { expenseSchema } from "@/lib/helpers/validations";
 import { getServerSession } from "next-auth";
@@ -46,18 +45,22 @@ export interface ExpensesReturnPayloadType {
   expensesStats: ExpensesStatsType
 }
 
-const JWT_SECRET = process.env.JWT_SECRET as string;
 
 // 👇 POST handler for creating expenses
 export async function POST(req: NextRequest) {
   try {
     await connectDB("/api/expenses/route.ts")
+
+
     //get UserID from session
     const session = await getServerSession(FinanceaAuthOptions);
     if (!session) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+      console.log("Unauthorized");
+      throw new Error("Unauthorized");
     }
     const userId = session.user._id;
+
+
 
     const body = await req.json();
     const parsed = expenseSchema.safeParse(body);
@@ -93,7 +96,8 @@ export async function GET() {
     //get UserID from session
     const session = await getServerSession(FinanceaAuthOptions);
     if (!session) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+      console.log("Unauthorized");
+      throw new Error("Unauthorized");
     }
     const userId = session.user._id;
 
@@ -151,18 +155,22 @@ export async function GET() {
 
 // 👇 DELETE handler for deleting expenses
 export async function DELETE(req: NextRequest) {
-  await connectDB("api/expenses/route.ts");
 
-  const authHeader = req.headers.get("authorization");
-  if (!authHeader || !authHeader.startsWith("Bearer ")) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  }
-
-  const token = authHeader.split(" ")[1];
 
   try {
-    const decoded: any = jwt.verify(token, JWT_SECRET);
-    const userId = decoded.userId;
+    await connectDB("api/clients/stats/route.ts");
+
+    const session = await getServerSession(FinanceaAuthOptions);
+
+    if (!session) {
+
+      console.log("Unauthorized");
+
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+
+    const userId = session.user._id;
+
 
     const { expenseIds } = await req.json();
 

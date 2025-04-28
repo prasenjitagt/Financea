@@ -1,7 +1,7 @@
 
 //api/expenses/route.ts
 
-import { NextRequest, NextResponse } from "next/server";
+import { NextResponse } from "next/server";
 import connectDB from "@/lib/database/db_connection";
 import { getServerSession } from "next-auth";
 import { FinanceaAuthOptions } from "@/app/api/auth/[...nextauth]/options";

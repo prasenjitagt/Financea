@@ -27,7 +27,7 @@ export default function BilledToClientDetails({ selectedClientDetails }: PropTyp
         )
     }
 
-    const { _id, clientName, companyName, email, mobile, address, state, country, postal } = selectedClientDetails;
+    const { clientName, companyName, email, mobile, address, state, country, postal } = selectedClientDetails;
 
     const countryTelephoneCode = getTelephoneCode(country);
 

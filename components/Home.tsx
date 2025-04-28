@@ -1,7 +1,6 @@
 
 "use client";
 
-import { useState, useEffect } from "react";
 import PaymentRequests from "@/components/dashboard/PayementRequests";
 import RecentExpenses from "@/components/dashboard/RecentExpenses";
 import FinancialAnalytics2 from "@/components/dashboard/FinancialAnalytics";
@@ -24,11 +23,7 @@ const frquencyValues = {
 };
 
 const Dashboard = () => {
-    const [isLoading, setIsLoading] = useState(true);
 
-    useEffect(() => {
-        setTimeout(() => setIsLoading(false), 2000);
-    }, []);
 
     return (
         <div>

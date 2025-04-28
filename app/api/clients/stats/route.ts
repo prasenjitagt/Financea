@@ -1,19 +1,22 @@
 // app/api/clients/stats/route.ts
 
-import { NextRequest, NextResponse } from "next/server";
+import { NextResponse } from "next/server";
 import { Client } from "@/lib/models/Clients.model";
 import connectDB from "@/lib/database/db_connection";
 import { getServerSession } from "next-auth";
 import { FinanceaAuthOptions } from "../../auth/[...nextauth]/options";
 
 
-export async function GET(req: NextRequest) {
+export async function GET() {
   try {
     await connectDB("api/clients/stats/route.ts");
 
     const session = await getServerSession(FinanceaAuthOptions);
 
     if (!session) {
+
+      console.log("Unauthorized");
+
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 

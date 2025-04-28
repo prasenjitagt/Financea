@@ -1,29 +1,14 @@
 "use client";
-import {
-  Table,
-  TableBody,
-  TableCaption,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
+
 import { useState, useEffect } from "react";
 import PaymentRequestsLoading from "@/components/loading_ui/PaymentRequestsLoading";
 import { payments_request_route } from "@/lib/helpers/api-endpoints";
 import axios from "axios";
 import { InvoiceType } from "@/app/invoices/columns";
-import { stringToDate } from "@/lib/helpers/payment_requests/stringToDate";
-import { formatAmountToCurrency } from "@/lib/helpers/invoices/format_amount_to_currency";
 import PaymentRequestsTable from "./payment_requests_table";
 import Image from "next/image";
 import ReceiptIcon from "@/assets/icons/receipt_icon.svg";
 
-const statusColors: Record<string, string> = {
-  Paid: "bg-green-100 text-green-600",
-  Overdue: "bg-red-100 text-red-600",
-  Pending: "bg-yellow-100 text-yellow-600",
-};
 
 const PaymentRequests = () => {
   const [invoices, setInvoices] = useState<InvoiceType[]>([]);

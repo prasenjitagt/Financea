@@ -31,7 +31,7 @@ const Page = () => {
     setIsSubmitting(true);
 
     try {
-      const res = await axios.post(expenses_route, expense);
+      await axios.post(expenses_route, expense);
 
       Swal.fire("Created!", "Your expense has been added.", "success");
       dispatch(resetExpense());

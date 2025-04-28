@@ -1,7 +1,7 @@
 // lib/helpers/payments/createRazorpayPaymentLink.ts
 
 import axios from "axios";
-
+import { RazorpayPaymentLinkPayloadType } from "@/lib/types"
 export interface CreatePaymentLinkInput {
     amount: number;
     currency: "INR" | "USD";
@@ -25,7 +25,7 @@ export async function createRazorpayPaymentLink({
 
     const contactString = customerContact.toString();
 
-    const paymentLinkPayload = {
+    const rzpPaymentLinkPayload: RazorpayPaymentLinkPayloadType = {
         amount,
         currency,
         description: "Payment for your order",
@@ -47,19 +47,26 @@ export async function createRazorpayPaymentLink({
 
     const authHeader = Buffer.from(`${keyId}:${keySecret}`).toString("base64");
 
-    const response = await axios.post(
-        "https://api.razorpay.com/v1/payment_links",
-        paymentLinkPayload,
-        {
-            headers: {
-                Authorization: `Basic ${authHeader}`,
-                "Content-Type": "application/json",
-            },
-        }
-    );
+
+    try {
+        const response = await axios.post(
+            "https://api.razorpay.com/v1/payment_links",
+            rzpPaymentLinkPayload,
+            {
+                headers: {
+                    Authorization: `Basic ${authHeader}`,
+                    "Content-Type": "application/json",
+                },
+            }
+        );
+        return response.data;
+
+    } catch (error) {
+        console.error("Error Sending Payment Link:", error);
+    }
 
 
 
 
-    return response.data;
+
 }

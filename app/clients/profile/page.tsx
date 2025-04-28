@@ -13,42 +13,32 @@ import { useRouter } from "next/navigation";
 import { Card, CardContent } from "@/components/ui/card";
 import HeaderInfoCard from "@/components/profile/header-info-card";
 import HeaderStats from "@/components/profile/header-stats";
+import { clients_route } from "@/lib/helpers/api-endpoints";
+import { ClientType } from "@/lib/types";
 
-interface Client {
-  _id: string;
-  clientName: string;
-  email: string;
-  mobile: string;
-  companyName: string;
-  serviceCharge: number;
-  createdAt: string;
-}
+
+
 
 const ClientPage = () => {
   const router = useRouter();
-  const [client, setClient] = useState<Client | null>(null);
-  const [clients, setClients] = useState<Client[]>([]);
+  const [client, setClient] = useState<ClientType | null>(null);
+  const [clients, setClients] = useState<ClientType[]>([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedClients, setSelectedClients] = useState<string[]>([]);
-  const [filteredClients, setFilteredClients] = useState<Client[]>([]);
+  const [filteredClients, setFilteredClients] = useState<ClientType[]>([]);
   const [selectedDays, setSelectedDays] = useState<number | null>(null);
 
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 5;
 
   const searchParams = useSearchParams();
-  const id = searchParams.get("id");
+  const clientId = searchParams.get("id");
 
   //Fetching Clients
   useEffect(() => {
     const fetchClients = async () => {
       try {
-        const token = localStorage.getItem("token");
-        const res = await axios.get<Client[]>("/api/clients", {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
+        const res = await axios.get<ClientType[]>(clients_route);
         setClients(res.data);
         setFilteredClients(res.data);
       } catch (err) {
@@ -56,15 +46,19 @@ const ClientPage = () => {
       }
     };
 
-    if (!id) return;
+    if (!clientId) return;
     const fetchClient = async () => {
       try {
-        const res = await axios.get(`/api/clients/${id}`, {
+        const res = await axios.get(`/api/clients/${clientId}`, {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,
           },
         });
-        setClient(res.data as Client);
+
+        console.log(res.data);
+
+
+        setClient(res.data as ClientType);
       } catch (err) {
         console.error("Error fetching client:", err);
       }
@@ -72,7 +66,7 @@ const ClientPage = () => {
 
     fetchClient();
     fetchClients();
-  }, [id]);
+  }, [clientId]);
 
   const filterLastNDays = (days: number) => {
     setSelectedDays(days);
@@ -147,7 +141,7 @@ const ClientPage = () => {
 
     try {
       const token = localStorage.getItem("token");
-      const res = await axios.delete<Client[]>("/api/clients", {
+      const res = await axios.delete<ClientType[]>("/api/clients", {
         headers: {
           Authorization: `Bearer ${token}`,
         },

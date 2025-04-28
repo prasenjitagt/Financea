@@ -1,6 +1,6 @@
 "use client";
 
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 import { IoAddCircle } from "react-icons/io5";
 import { GoX } from "react-icons/go";
 import { useForm } from "react-hook-form";
@@ -74,6 +74,7 @@ type DuplicateCheckResponse = {
 
 
 const CreateInvoiceForm = () => {
+    const [isClientSelectOpen, setIsClientSelectOpen] = useState(false);
     const [issueDatePopoverOpen, setIssueDatePopoverOpen] = useState(false);
     const [dueDatePopoverOpen, setDueDatePopoverOpen] = useState(false);
     const [recurringDueDatePopoverOpen, setRecurringDueDatePopoverOpen] = useState(false);
@@ -199,12 +200,21 @@ const CreateInvoiceForm = () => {
                 form.reset();
             }
 
-        } catch (error: any) {
+        } catch (error) {
             console.error("Error submitting invoice:", error);
+
+            let errorMessage = "Failed to create invoice";
+
+            if (error instanceof AxiosError) {
+                // Type-safe access to Axios error properties
+                errorMessage = error.response?.data?.message || error.message || errorMessage;
+            } else if (error instanceof Error) {
+                errorMessage = error.message;
+            }
 
             Swal.fire({
                 title: "Error!",
-                text: error.response?.data?.message || "Failed to create invoice",
+                text: errorMessage,
                 icon: "error",
                 confirmButtonText: "OK",
             });
@@ -288,12 +298,12 @@ const CreateInvoiceForm = () => {
                         control={form.control}
                         name="clientId"
                         render={({ field }) => {
-                            const [open, setOpen] = useState(false);
+
 
                             return (
                                 <FormItem className="flex flex-col">
                                     <FormLabel>Bill To</FormLabel>
-                                    <Popover open={open} onOpenChange={setOpen}>
+                                    <Popover open={isClientSelectOpen} onOpenChange={setIsClientSelectOpen}>
                                         <PopoverTrigger asChild>
                                             <FormControl>
                                                 <Button
@@ -324,7 +334,7 @@ const CreateInvoiceForm = () => {
                                                                     form.setValue("clientName", client.clientName);
                                                                     form.setValue("clientEmail", client.email);
                                                                     form.setValue("clientMobile", parseInt(client.mobile));
-                                                                    setOpen(false);
+                                                                    setIsClientSelectOpen(false);
                                                                 }}
                                                             >
                                                                 <Check

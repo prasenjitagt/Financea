@@ -40,11 +40,16 @@ export async function POST(req: NextRequest) {
 
 
         return NextResponse.json({ message: "Credentials saved successfully!" }, { status: 201 });
-    } catch (error: any) {
-        console.error("Error Saving Razorpay Creds:", error.message);
-        return NextResponse.json({ error: "Error Saving Razorpay Creds" }, { status: 500 });
+    } catch (error) {
+        console.log("Error Saving Razorpay Creds:", error);
+
+        return NextResponse.json({
+            message: "Error Saving Razorpay Creds",
+            error: error instanceof Error ? error.message : String(error)
+        }, { status: 500 }) // 500 is more appropriate for server errors
     }
 }
+
 
 
 export async function GET() {
@@ -72,8 +77,12 @@ export async function GET() {
             },
             { status: 200 }
         );
-    } catch (error: any) {
-        console.error("Error Checking Razorpay Creds:", error.message);
-        return NextResponse.json({ error: "Error Checking Razorpay Creds" }, { status: 500 });
+    } catch (error) {
+        console.log("Error Checking Razorpay Creds:", error);
+
+        return NextResponse.json({
+            message: "Error Checking Razorpay Creds",
+            error: error instanceof Error ? error.message : String(error)
+        }, { status: 500 }) // 500 is more appropriate for server errors
     }
 }

@@ -1,3 +1,8 @@
+//lib/types.ts
+
+import { ObjectId } from 'mongodb';
+
+//resposne from razorpay after generating invoice and sending payment link
 export interface RazorpayPaymentLinkResponseType {
     accept_partial: boolean;
     amount: number;
@@ -16,18 +21,18 @@ export interface RazorpayPaymentLinkResponseType {
     first_min_partial_amount: number;
     id: string;
     notes: {
-        source: string;
-        [key: string]: any;
+        source: string,
+        [key: string]: string | number | boolean;
     };
     notify: {
         email: boolean;
         sms: boolean;
         whatsapp: boolean;
     };
-    payments: any | null;
+    // payments: any | null;
     reference_id: string;
     reminder_enable: boolean;
-    reminders: any[];
+    // reminders: any[];
     short_url: string;
     status: "created" | "paid" | "cancelled" | "expired";  // Possible status values
     updated_at: number;
@@ -35,79 +40,180 @@ export interface RazorpayPaymentLinkResponseType {
     user_id: string;
     whatsapp_link: boolean;
 }
-
-
-
-export type InvoiceItem = {
-    name: string;
-    qty: number;
-    rate: number;
-    total: number;
-};
-
-export type BilledTo = {
-    name: string;
-    address: string;
-    email: string;
-    phone: string;
-};
-
-export type Invoice = {
-    invoiceNumber: string;
-    issueDate: string;
-    dueDate: string;
-    billedTo: BilledTo;
-    isRecurring: boolean;
-    recurringPeriod: "Daily" | "Weekly" | "Monthly" | "Yearly"; // You can adjust options as needed
-    items: InvoiceItem[];
-    discount: number; // Percentage
-    tax: number; // Percentage
-};
-
-
-export interface RzpPaymentLinkResponse {
-    accept_partial: boolean;
+export interface RazorpayPaymentLinkPayloadType {
     amount: number;
-    amount_paid: number;
-    cancelled_at: number;
-    created_at: number;
     currency: string;
-    customer: {
-        contact: string;
-        email: string;
-        name: string;
-    };
     description: string;
-    expire_by: number;
-    expired_at: number;
-    first_min_partial_amount: number;
-    id: string;
-    notes: {
-        message: string;
+    customer: {
+        name: string;
+        email: string;
+        contact: string;
     };
     notify: {
-        email: boolean;
         sms: boolean;
-        whatsapp: boolean;
+        email: boolean;
+        whatsapp?: boolean; // Optional if you might use it
     };
-    payments: any; // You can replace `any` with a more specific type if needed
-    reference_id: string;
     reminder_enable: boolean;
-    reminders: any[]; // Replace `any` if you know the reminder structure
-    short_url: string;
-    status: string;
-    updated_at: number;
-    upi_link: boolean;
-    user_id: string;
-    whatsapp_link: boolean;
-    // "created" is shown here, but you can extend with other possible statuses
+    notes: {
+        source: string;
+        [key: string]: string | number | boolean; // For additional note fields
+    };
+    expire_by: number;
 }
 
 
-// types.ts
-export type Item = {
-    desc: string;
-    qty: number;
-    price: number;
-};
+// export type InvoiceItem = {
+//     name: string;
+//     qty: number;
+//     rate: number;
+//     total: number;
+// };
+
+// export type BilledTo = {
+//     name: string;
+//     address: string;
+//     email: string;
+//     phone: string;
+// };
+
+// export type Invoice = {
+//     invoiceNumber: string;
+//     issueDate: string;
+//     dueDate: string;
+//     billedTo: BilledTo;
+//     isRecurring: boolean;
+//     recurringPeriod: "Daily" | "Weekly" | "Monthly" | "Yearly"; // You can adjust options as needed
+//     items: InvoiceItem[];
+//     discount: number; // Percentage
+//     tax: number; // Percentage
+// };
+
+
+
+//Individual Client Type for Client Components
+export interface ClientType {
+    _id: string;
+    clientName: string;
+    companyName: string;
+    email: string;
+    mobile: string;
+    address: string;
+    postal: string;
+    state: string;
+    country: string;
+    serviceCharge: number;
+    website: string;
+    isClientActive: boolean;
+    userId: string;
+    createdAt: string;
+    updatedAt: string;
+    __v: number;
+}
+
+
+//Individual Client Type for Server Components
+export interface IndividualClientFromDataBaseType {
+    _id: ObjectId | string;
+    clientName: string;
+    companyName: string;
+    email: string;
+    mobile: string;
+    address: string;
+    postal: string;
+    state: string;
+    country: string;
+    serviceCharge: number;
+    website: string;
+    isClientActive: boolean;
+    userId: ObjectId;
+    createdAt: Date;
+    updatedAt: Date;
+    __v: number;
+}
+
+
+type Currency = 'INR' | 'USD' | string; // Add other currencies you support
+type RecurringFrequency = 'Weekly' | 'Monthly' | 'Yearly' | 'Quarterly';
+
+interface InvoiceItemFromDataBaseType {
+    _id: ObjectId;
+    ishourly: boolean;
+    name: string;
+    quantity: number;
+    rate: number;
+}
+
+export interface IndividualInvoiceFromDataBaseType {
+    _id: ObjectId;
+    user: ObjectId;
+    client: ObjectId;
+    invoiceNumber: string;
+    issueDate: Date;
+    dueDate: Date;
+    clientEmail: string;
+    clientName: string;
+    clientMobile: number;
+    isRecurring: boolean;
+    recurringFrequency?: RecurringFrequency;
+    recurringIssueDate?: Date;
+    recurringDueDate?: Date;
+    items: InvoiceItemFromDataBaseType[];
+    discountPercent: number;
+    taxPercent: number;
+    note?: string;
+    terms?: string;
+    subTotal: number;
+    discountAmount: number;
+    taxAmount: number;
+    totalAmount: number;
+    currency: Currency;
+    isPaid: boolean;
+    paymentId?: string;
+    createdAt: Date;
+    updatedAt: Date;
+    __v: number;
+}
+
+interface InvoiceItem {
+    _id: string; // Changed from ObjectId to string
+    ishourly: boolean;
+    name: string;
+    quantity: number;
+    rate: number;
+}
+
+export interface InvoiceType {
+    _id: string; // Changed from ObjectId to string
+    user: string; // Changed from ObjectId to string
+    client: string; // Changed from ObjectId to string
+    invoiceNumber: string;
+    issueDate: string;
+    dueDate: string;
+    clientEmail: string;
+    clientName: string;
+    clientMobile: number;
+    isRecurring: boolean;
+    recurringFrequency?: 'Weekly' | 'Monthly' | 'Yearly' | 'Quarterly';
+    recurringIssueDate?: string;
+    recurringDueDate?: string;
+    items: InvoiceItem[];
+    discountPercent: number;
+    taxPercent: number;
+    note?: string;
+    terms?: string;
+    subTotal: number;
+    discountAmount: number;
+    taxAmount: number;
+    totalAmount: number;
+    currency: string;
+    isPaid: boolean;
+    paymentId?: string;
+    createdAt: string;
+    updatedAt: string;
+    __v?: number;
+}
+
+
+
 

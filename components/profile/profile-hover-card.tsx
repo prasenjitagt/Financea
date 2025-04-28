@@ -3,7 +3,6 @@
 
 
 import { TbCopy } from "react-icons/tb";
-import { Button } from "../ui/button";
 import { useState } from "react";
 
 interface PropTypes {
