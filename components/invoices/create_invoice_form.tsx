@@ -152,6 +152,7 @@ const CreateInvoiceForm = () => {
     const discountAmount = form.watch("discountAmount");
     const taxAmount = form.watch("taxAmount");
     const totalAmount = form.watch("totalAmount");
+    const isRecurring = form.watch("isRecurring");
 
 
 
@@ -506,7 +507,9 @@ const CreateInvoiceForm = () => {
 
 
                 {/* Recurring Frequency Dates */}
-                <section className="mt-[21px] flex items-center space-x-14">
+
+
+                {isRecurring && (<section className="mt-[21px] flex items-center space-x-14">
 
 
                     {/* Recurring Issue Date */}
@@ -604,8 +607,8 @@ const CreateInvoiceForm = () => {
                             </FormItem>
                         )}
                     />
-                </section>
-
+                </section>)
+                }
                 {/* Add items section */}
                 <section className="mt-[33px] space-y-4">
                     <h2 className="text-lg font-medium">Invoice Items</h2>
