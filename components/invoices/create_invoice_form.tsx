@@ -217,6 +217,8 @@ const CreateInvoiceForm = () => {
 
                 {/* Inovice Number & Issue date section */}
                 <section className="flex justify-between">
+
+                    {/* Invoice Number */}
                     <FormField
                         control={form.control}
                         name="invoiceNumber"
@@ -231,6 +233,7 @@ const CreateInvoiceForm = () => {
                         )}
                     />
 
+                    {/* Issue Date */}
                     <FormField
                         control={form.control}
                         name="issueDate"
@@ -263,6 +266,8 @@ const CreateInvoiceForm = () => {
                                             onSelect={(date) => {
                                                 field.onChange(date);
                                                 setIssueDatePopoverOpen(false); // Close popover on selection
+                                                form.setValue("dueDate", undefined);
+                                                form.trigger("dueDate");
                                             }}
 
                                             initialFocus
@@ -376,9 +381,15 @@ const CreateInvoiceForm = () => {
                                                 field.onChange(date);
                                                 setDueDatePopoverOpen(false); // Close popover on selection
                                             }}
-
+                                            disabled={(date) => {
+                                                const issueDate = form.watch("issueDate");
+                                                if (!issueDate) return false;
+                                                // Disable dates that are same or before the issueDate
+                                                return date <= issueDate;
+                                            }}
                                             initialFocus
                                         />
+
                                     </PopoverContent>
                                 </Popover>
                                 <FormMessage />
@@ -486,6 +497,9 @@ const CreateInvoiceForm = () => {
 
                 {/* Recurring Frequency Dates */}
                 <section className="mt-[21px] flex items-center space-x-14">
+
+
+                    {/* Recurring Issue Date */}
                     <FormField
                         control={form.control}
                         name="recurringIssueDate"
@@ -518,6 +532,8 @@ const CreateInvoiceForm = () => {
                                             onSelect={(date) => {
                                                 field.onChange(date);
                                                 setRecurringIssueDatePopoverOpen(false); // Close popover on selection
+                                                form.setValue("recurringDueDate", undefined);
+                                                form.trigger("recurringDueDate");
                                             }}
 
                                             initialFocus
@@ -530,7 +546,7 @@ const CreateInvoiceForm = () => {
                     />
 
 
-
+                    {/* Recurring Due Date */}
                     <FormField
                         control={form.control}
                         name="recurringDueDate"
@@ -564,9 +580,14 @@ const CreateInvoiceForm = () => {
                                                 field.onChange(date);
                                                 setRecurringDueDatePopoverOpen(false); // Close popover on selection
                                             }}
-
+                                            disabled={(date) => {
+                                                const recurringIssueDate = form.getValues("recurringIssueDate");
+                                                if (!recurringIssueDate) return false; // If no recurring issue date selected, allow all
+                                                return date <= recurringIssueDate; // Disable dates before or same as recurringIssueDate
+                                            }}
                                             initialFocus
                                         />
+
                                     </PopoverContent>
                                 </Popover>
                                 <FormMessage />
