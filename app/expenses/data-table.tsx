@@ -32,8 +32,8 @@ import {
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
-import { ClientType } from "./columns";
 import NoResultsForTables from "@/components/no_results_for_tables";
+import { ClientType } from "@/lib/types";
 
 interface DataTableProps<TData, TValue> {
     columns: ColumnDef<TData, TValue>[]
@@ -224,7 +224,7 @@ export function ClientDataTable<TData, TValue>({
                         ) : (
                             <TableRow>
                                 <TableCell colSpan={columns.length} className="text-center">
-                                    <NoResultsForTables IconWidth={75} MainText="No Clients Yet!" />
+                                    <NoResultsForTables IconWidth={75} MainText="No Expenses Yet!" />
                                 </TableCell>
                             </TableRow>
                         )}

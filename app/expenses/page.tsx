@@ -1,34 +1,33 @@
+
+
 import { columns } from "@/app/clients/columns";
 import { ClientDataTable } from "@/app/clients/data-table";
 import { getServerSession } from "next-auth";
 import { FinanceaAuthOptions } from "../api/auth/[...nextauth]/options";
-import { Client } from "@/lib/models/Clients.model";
 import ClientsPageTotalClientsCards from "@/components/clients/clients_page_total_clients_card";
 import ClientsPageTotalPaymentsCards from "@/components/clients/clients_page_total_payments_card";
-import { ClientType, IndividualClientFromDataBaseType } from "@/lib/types";
+import { ExpenseType, IndividualExpenseFromDataBaseType } from "@/lib/types";
+import ExpenseModel from "@/lib/models/Expenses.model";
 
-function sanitizeClient(client: any): ClientType {
+
+
+
+function sanitizeExpenses(expense: IndividualExpenseFromDataBaseType): ExpenseType {
   return {
-    _id: client._id.toString(),
-    clientName: client.clientName,
-    companyName: client.companyName,
-    email: client.email,
-    mobile: client.mobile,
-    address: client.address,
-    postal: client.postal,
-    state: client.state,
-    country: client.country,
-    serviceCharge: client.serviceCharge,
-    website: client.website,
-    isClientActive: client.isClientActive,
-    userId: client.userId.toString(),
-    createdAt: client.createdAt.toString(),
-    updatedAt: client.updatedAt.toString(),
-    __v: client.__v,
+    _id: expense._id.toString(),
+    userId: expense.userId.toString(),
+    amount: expense.amount,
+    category: expense.category,
+    currency: expense.currency,
+    date: expense.date.toString(),
+    description: expense.description,
+    createdAt: expense.createdAt.toString(),
+    updatedAt: expense.updatedAt.toString(),
+    __v: expense.__v
   };
 }
 
-async function getData(): Promise<ClientType[]> {
+async function getData() {
   try {
     const session = await getServerSession(FinanceaAuthOptions);
     if (!session) {
@@ -37,14 +36,19 @@ async function getData(): Promise<ClientType[]> {
     }
 
     const userId = session.user._id;
-    const clients = await Client.find({ userId }).sort({ createdAt: -1 }).lean<IndividualClientFromDataBaseType[]>();
+    const expenses = await ExpenseModel.find({ userId })
+      .sort({ createdAt: -1 })
+      .lean<IndividualExpenseFromDataBaseType[]>();
 
-    if (!clients) {
-      console.log("No Clients Found");
+    // console.log("Get your expense type:", expenses[0]);
+
+
+    if (!expenses) {
+      console.log("No Expenses Found");
       return [];
     }
 
-    return clients.map(sanitizeClient);
+    return expenses.map(sanitizeExpenses);
   } catch (error) {
     console.error("Error in fetching clients:", error);
     return [];
@@ -54,26 +58,26 @@ async function getData(): Promise<ClientType[]> {
 
 
 
-export default async function ClientsDesktopView() {
-  const clientsData = await getData();
+export default async function ExpensesDesktopView() {
+  const expensesData = await getData();
 
-  const totalClients = clientsData.length;
+  const numberOfExpenses = expensesData.length;
 
-  const totalPayments = clientsData.reduce((sum, client) => sum + client.serviceCharge, 0);
+  const totalPayments = expensesData.reduce((sum, expense) => sum + expense.amount, 0);
 
   return (
     <div className="h-full flex flex-col bg-white p-5 rounded-lg container mx-auto">
       {/* Top Cards Section */}
       <section className="flex space-x-[12px] mb-[38px]">
         <ClientsPageTotalClientsCards
-          title="Total Clients"
+          title="Total Expenses"
           description="Last 30 Days"
-          totalClients={totalClients}
+          totalClients={numberOfExpenses}
         />
         <ClientsPageTotalPaymentsCards
-          title="Total Payments"
-          description="Outstanding Balance"
-          clients={clientsData}
+          title="Total Amount"
+          description="Last 30 Days"
+          clients={expensesData}
           totalPayments={totalPayments}
         />
       </section>
@@ -82,9 +86,11 @@ export default async function ClientsDesktopView() {
       <section className="hidden md:block w-full flex-1 overflow-scroll">
         <ClientDataTable
           columns={columns}
-          data={clientsData}
+          data={expensesData}
         />
       </section>
     </div>
+
+
   );
 }

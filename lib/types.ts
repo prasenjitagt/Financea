@@ -136,45 +136,7 @@ export interface IndividualClientFromDataBaseType {
 type Currency = 'INR' | 'USD' | string; // Add other currencies you support
 type RecurringFrequency = 'Weekly' | 'Monthly' | 'Yearly' | 'Quarterly';
 
-interface InvoiceItemFromDataBaseType {
-    _id: ObjectId;
-    ishourly: boolean;
-    name: string;
-    quantity: number;
-    rate: number;
-}
-
-export interface IndividualInvoiceFromDataBaseType {
-    _id: ObjectId;
-    user: ObjectId;
-    client: ObjectId;
-    invoiceNumber: string;
-    issueDate: Date;
-    dueDate: Date;
-    clientEmail: string;
-    clientName: string;
-    clientMobile: number;
-    isRecurring: boolean;
-    recurringFrequency?: RecurringFrequency;
-    recurringIssueDate?: Date;
-    recurringDueDate?: Date;
-    items: InvoiceItemFromDataBaseType[];
-    discountPercent: number;
-    taxPercent: number;
-    note?: string;
-    terms?: string;
-    subTotal: number;
-    discountAmount: number;
-    taxAmount: number;
-    totalAmount: number;
-    currency: Currency;
-    isPaid: boolean;
-    paymentId?: string;
-    createdAt: Date;
-    updatedAt: Date;
-    __v: number;
-}
-
+//Individual Invoice Item Type for Client Components
 interface InvoiceItem {
     _id: string; // Changed from ObjectId to string
     ishourly: boolean;
@@ -183,6 +145,8 @@ interface InvoiceItem {
     rate: number;
 }
 
+
+//Individual Invoice Type for Client Components
 export interface InvoiceType {
     _id: string; // Changed from ObjectId to string
     user: string; // Changed from ObjectId to string
@@ -214,6 +178,78 @@ export interface InvoiceType {
     __v?: number;
 }
 
+
+//Individual Invoice Item Type for Server Components
+interface InvoiceItemFromDataBaseType {
+    _id: ObjectId;
+    ishourly: boolean;
+    name: string;
+    quantity: number;
+    rate: number;
+}
+
+//Individual Invoice Type for Server Components
+export interface IndividualInvoiceFromDataBaseType {
+    _id: ObjectId;
+    user: ObjectId;
+    client: ObjectId;
+    invoiceNumber: string;
+    issueDate: Date;
+    dueDate: Date;
+    clientEmail: string;
+    clientName: string;
+    clientMobile: number;
+    isRecurring: boolean;
+    recurringFrequency?: RecurringFrequency;
+    recurringIssueDate?: Date;
+    recurringDueDate?: Date;
+    items: InvoiceItemFromDataBaseType[];
+    discountPercent: number;
+    taxPercent: number;
+    note?: string;
+    terms?: string;
+    subTotal: number;
+    discountAmount: number;
+    taxAmount: number;
+    totalAmount: number;
+    currency: Currency;
+    isPaid: boolean;
+    paymentId?: string;
+    createdAt: Date;
+    updatedAt: Date;
+    __v: number;
+}
+
+//Individual Expense Type for Client Components
+export interface ExpenseType {
+    _id: string;
+    userId: string;
+    amount: number;
+    currency: string;
+    date: string;
+    category: string;
+    description: string;
+    createdAt: string;
+    updatedAt: string;
+    __v: number;
+}
+
+
+
+
+//Individual Expense Type for Server Components
+export interface IndividualExpenseFromDataBaseType {
+    _id: ObjectId;
+    userId: ObjectId;
+    amount: number;
+    currency: string;
+    date: Date;
+    category: string;
+    description: string;
+    createdAt: Date;
+    updatedAt: Date;
+    __v: number;
+}
 
 
 

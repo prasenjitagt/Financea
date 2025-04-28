@@ -104,7 +104,7 @@ function filterInvoicesForLast30Days(invoices: InvoiceType[]): InvoiceType[] {
 
 
 
-export default async function ClientsDesktopView() {
+export default async function InvoicesDesktopView() {
   const invoiceData = await getData();
 
   const last30DaysInvoiceData = filterInvoicesForLast30Days(invoiceData);

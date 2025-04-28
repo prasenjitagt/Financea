@@ -32,8 +32,8 @@ import {
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
-import { ClientType } from "./columns";
 import NoResultsForTables from "@/components/no_results_for_tables";
+import { ClientType } from "@/lib/types";
 
 interface DataTableProps<TData, TValue> {
     columns: ColumnDef<TData, TValue>[]

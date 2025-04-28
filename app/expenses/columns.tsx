@@ -1,46 +1,29 @@
 "use client"
 
+
 import { ColumnDef } from "@tanstack/react-table";
 import CopyIcon from "@/assets/icons/copy_clients_table_icon.svg";
-// import { MoreHorizontal } from "lucide-react";
+import { MoreHorizontal } from "lucide-react";
 import { ArrowUpDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
-// import {
-//     DropdownMenu,
-//     DropdownMenuContent,
-//     DropdownMenuItem,
-//     DropdownMenuLabel,
-//     DropdownMenuSeparator,
-//     DropdownMenuTrigger,
-// } from "@/components/ui/dropdown-menu";
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuLabel,
+    DropdownMenuSeparator,
+    DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import { Checkbox } from "@/components/ui/checkbox";
 import Image from "next/image";
 import { showToast } from "@/lib/helpers/clients_table/copied_to_clipboard_toast";
-// import { useRouter } from "next/navigation";
-// import Swal from "sweetalert2";
-// import axios from "axios";
-// import { clients_route } from "@/lib/helpers/api-endpoints";
+import { useRouter } from "next/navigation";
+import Swal from "sweetalert2";
+import axios from "axios";
+import { clients_route } from "@/lib/helpers/api-endpoints";
+import { ExpenseType } from "@/lib/types";
 
-export interface ClientType {
-    _id: string;
-    clientName: string;
-    companyName: string;
-    email: string;
-    mobile: string;
-    address: string;
-    postal: string;
-    state: string;
-    country: string;
-    serviceCharge: number;
-    website: string;
-    isClientActive: boolean;
-    userId: string;
-    createdAt: string;
-
-}
-
-
-export const columns: ColumnDef<ClientType>[] = [
+export const columns: ColumnDef<ExpenseType>[] = [
 
     //seletc
     {
@@ -216,78 +199,83 @@ export const columns: ColumnDef<ClientType>[] = [
     },
 
     //actions
-    // {
-    //     id: "actions",
-    //     header: "Actions",
-    //     cell: ({ row }) => {
-    //         const client = row.original;
-    //         const router = useRouter();
-
-    //         const handleDelete = async () => {
-    //             const confirmResult = await Swal.fire({
-    //                 title: "Are you sure?",
-    //                 text: "You want to delete the client?",
-    //                 icon: "warning",
-    //                 showCancelButton: true,
-    //                 confirmButtonColor: "#d33",
-    //                 confirmButtonText: "Yes, delete!",
-    //             });
-
-    //             if (confirmResult.isConfirmed) {
-    //                 try {
-    //                     // Send the clientId in the URL as a query parameter
-    //                     const res = await axios.delete(`${clients_route}?clientId=${client._id}`);
-
-    //                     if (res.status === 200) {
-    //                         showToast("Client deleted successfully");
-
-    //                         router.refresh();
-    //                     }
-    //                 } catch (error) {
-    //                     console.error("Error deleting client:", error);
-    //                     showToast("Error deleting client");
-    //                 }
-    //             }
-    //         };
-
-    //         return (
-    //             <DropdownMenu>
-    //                 <DropdownMenuTrigger asChild>
-    //                     <Button variant="ghost" className="h-8 w-8 p-0">
-    //                         <span className="sr-only">Open menu</span>
-    //                         <MoreHorizontal className="h-4 w-4" />
-    //                     </Button>
-    //                 </DropdownMenuTrigger>
-    //                 <DropdownMenuContent align="end">
-    //                     <DropdownMenuLabel>Actions</DropdownMenuLabel>
-    //                     <DropdownMenuSeparator />
-    //                     <DropdownMenuItem
-    //                         className="cursor-pointer"
-    //                         onClick={() => {
-    //                             showToast("Client ID Copied");
-
-    //                             navigator.clipboard.writeText(client._id);
-    //                         }}
-    //                     >
-    //                         Copy Client ID
-    //                     </DropdownMenuItem>
-    //                     <DropdownMenuItem
-    //                         className="cursor-pointer"
-    //                         onClick={() => router.push(`/clients/profile?id=${client._id}`)}
-    //                     >
-    //                         View Client
-    //                     </DropdownMenuItem>
-    //                     <DropdownMenuItem
-    //                         variant="destructive"
-    //                         className="cursor-pointer"
-    //                         onClick={handleDelete}
-    //                     >
-    //                         Delete Client
-    //                     </DropdownMenuItem>
-
-    //                 </DropdownMenuContent>
-    //             </DropdownMenu>
-    //         )
-    //     },
-    // },
+    {
+        id: "actions",
+        header: "Actions",
+        cell: ({ row }) => {
+            const client = row.original;
+            return <ClientActions client={client} />;
+        },
+    },
 ]
+
+
+function ClientActions({ client }: { client: ClientType }) {
+    const router = useRouter();
+
+    const handleDelete = async () => {
+        const confirmResult = await Swal.fire({
+            title: "Are you sure?",
+            text: "You want to delete the client?",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#d33",
+            confirmButtonText: "Yes, delete!",
+        });
+
+        if (confirmResult.isConfirmed) {
+            try {
+                // Send the clientId in the URL as a query parameter
+                const res = await axios.delete(`${clients_route}?clientId=${client._id}`);
+
+                if (res.status === 200) {
+                    showToast("Client deleted successfully");
+
+                    router.refresh();
+                }
+            } catch (error) {
+                console.error("Error deleting client:", error);
+                showToast("Error deleting client");
+            }
+        }
+    };
+
+    return (
+        <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+                <Button variant="ghost" className="h-8 w-8 p-0">
+                    <span className="sr-only">Open menu</span>
+                    <MoreHorizontal className="h-4 w-4" />
+                </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+                <DropdownMenuLabel>Actions</DropdownMenuLabel>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem
+                    className="cursor-pointer"
+                    onClick={() => {
+                        showToast("Client ID Copied");
+
+                        navigator.clipboard.writeText(client._id);
+                    }}
+                >
+                    Copy Client ID
+                </DropdownMenuItem>
+                <DropdownMenuItem
+                    className="cursor-pointer"
+                    onClick={() => router.push(`/clients/profile?id=${client._id}`)}
+                >
+                    View Client
+                </DropdownMenuItem>
+                <DropdownMenuItem
+                    variant="destructive"
+                    className="cursor-pointer"
+                    onClick={handleDelete}
+                >
+                    Delete Client
+                </DropdownMenuItem>
+
+            </DropdownMenuContent>
+        </DropdownMenu>
+    )
+}
