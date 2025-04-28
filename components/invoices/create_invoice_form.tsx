@@ -145,7 +145,7 @@ const CreateInvoiceForm = () => {
         form.setValue("taxAmount", taxAmount, { shouldValidate: false });
         form.setValue("totalAmount", totalAmount, { shouldValidate: false });
 
-    }, [watchedItems, discountPercent, taxPercent]);
+    }, [form, watchedItems, discountPercent, taxPercent]);
 
 
     const subTotal = form.watch("subTotal");

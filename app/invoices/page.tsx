@@ -10,6 +10,7 @@ import InvoiceModel from "@/lib/models/Invoice.model";
 import HeaderInfoCard from "@/components/profile/header-info-card";
 import { getInvoiceStats } from "@/lib/helpers/invoices/getInvoiceStats";
 import { IndividualInvoiceFromDataBaseType, InvoiceType } from "@/lib/types";
+import connectDB from "@/lib/database/db_connection";
 
 
 export function sanitizeInvoice(invoice: IndividualInvoiceFromDataBaseType): InvoiceType {
@@ -31,7 +32,7 @@ export function sanitizeInvoice(invoice: IndividualInvoiceFromDataBaseType): Inv
     recurringDueDate: invoice.recurringDueDate
       ? (invoice.recurringDueDate instanceof Date ? invoice.recurringDueDate.toISOString() : invoice.recurringDueDate)
       : undefined,
-    items: invoice.items.map((item: any) => ({
+    items: invoice.items.map((item) => ({
       ishourly: Boolean(item.ishourly),
       name: item.name,
       quantity: Number(item.quantity),
@@ -59,6 +60,8 @@ export function sanitizeInvoice(invoice: IndividualInvoiceFromDataBaseType): Inv
 
 async function getData(): Promise<InvoiceType[]> {
   try {
+    await connectDB("api/invoices/route.ts");
+
     const session = await getServerSession(FinanceaAuthOptions);
     if (!session) {
       console.log("Unauthorized");
