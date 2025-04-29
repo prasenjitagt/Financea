@@ -169,30 +169,21 @@ export async function DELETE(req: NextRequest) {
     const expenseId = searchParams.get("expenseId");
 
 
-    const { expenseIds } = await req.json();
-
-    if (!Array.isArray(expenseIds) || expenseIds.length === 0) {
-      return NextResponse.json(
-        { error: "No expense IDs provided" },
-        { status: 400 }
-      );
-    }
-
-    const deleteResult = await ExpenseModel.deleteOne({
+    await ExpenseModel.deleteOne({
       _id: expenseId,
       userId: userId,
     });
 
     return NextResponse.json(
       {
-        message: `${deleteResult.deletedCount} expense(s) deleted successfully`,
+        message: "expense deleted successfully",
       },
       { status: 200 }
     );
   } catch (error) {
     console.error("Error in deleting expenses:", error);
     return NextResponse.json(
-      { error: "Server error or invalid token" + error },
+      { error: "Error in deleting expenses:" + error },
       { status: 500 }
     );
   }

@@ -25,7 +25,12 @@ import { ExpenseType } from "@/lib/types";
 import { formatAmountToCurrency } from "@/lib/helpers/invoices/format_amount_to_currency";
 import { ExpenseCategoryColor } from "@/lib/constants/expenses_constants";
 import { truncateString } from "@/lib/helpers/expenses_table/truncate_string";
-
+import {
+    Tooltip,
+    TooltipContent,
+    TooltipProvider,
+    TooltipTrigger,
+} from "@/components/ui/tooltip"
 
 
 
@@ -120,13 +125,18 @@ export const columns: ColumnDef<ExpenseType>[] = [
         header: "Description",
         cell: ({ row }) => {
             const descripton = row.original.description;
-
-            const concatedDescription = truncateString(descripton, 50);
-
+            const concatedDescription = truncateString(descripton, 20);
             return (
-                <p>
-                    {concatedDescription}
-                </p>
+                <TooltipProvider>
+                    <Tooltip >
+                        <TooltipTrigger asChild>
+                            <p>{concatedDescription}</p>
+                        </TooltipTrigger>
+                        <TooltipContent className="max-w-[400px]">
+                            <p>{descripton}</p>
+                        </TooltipContent>
+                    </Tooltip>
+                </TooltipProvider>
             );
         },
     },
@@ -160,7 +170,7 @@ function ExpensesActions({ expense }: { expense: ExpenseType }) {
         if (confirmResult.isConfirmed) {
             try {
                 // Send the expenseId in the URL as a query parameter
-                const res = await axios.delete(`${expenses_route}?clientId=${expense._id}`);
+                const res = await axios.delete(`${expenses_route}?expenseId=${expense._id}`);
 
                 if (res.status === 200) {
                     showToast("Expense deleted successfully");

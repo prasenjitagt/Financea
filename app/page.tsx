@@ -9,19 +9,33 @@ import ExpensesChart from "@/components/dashboard/ExpensesChart";
 import FinancialMetrics from "@/components/dashboard/FinancialMetrics";
 import { Select, SelectTrigger, SelectValue, SelectItem, SelectGroup, SelectContent, SelectLabel } from "@/components/ui/select";
 import { Archivo } from "next/font/google";
+import { useState } from "react";
 
 const archivo = Archivo({
   weight: "500",
   subsets: ["latin"],
 });
 
-const frquencyValues = {
-  Quarterly: "Quarterly",
-  Monthly: "Monthly",
-  Yearly: "Yearly",
+export enum DashboardFrequency {
+  Daily = "Daily",
+  Monthly = "Monthly",
+  Quarterly = "Quarterly",
+  Yearly = "Yearly"
+}
+
+
+
+const frequencyValues = {
+  [DashboardFrequency.Daily]: "Daily",
+  [DashboardFrequency.Monthly]: "Monthly",
+  [DashboardFrequency.Quarterly]: "Quarterly",
+  [DashboardFrequency.Yearly]: "Yearly"
 };
 
+
 const Dashboard = () => {
+
+  const [frequency, setFrequency] = useState<DashboardFrequency>(DashboardFrequency.Daily);
 
 
   return (
@@ -29,30 +43,36 @@ const Dashboard = () => {
       {/* ✅ Financial Analytics Header */}
       <div className={`${archivo.className} flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4`}>
         <h1 className="md:text-3xl text-2xl text-gray-800 md:py-1">Financial Analytics</h1>
-        <Select>
+        <Select
+          value={frequency}
+          onValueChange={(value) => setFrequency(value as DashboardFrequency)}
+        >
           <SelectTrigger className="w-[180px]">
-            <SelectValue placeholder="Quarterly" />
+            <SelectValue placeholder="Select Frquency" />
           </SelectTrigger>
           <SelectContent>
             <SelectGroup>
-              <SelectLabel>Frequency</SelectLabel>
-              <SelectItem value={frquencyValues.Monthly}>{frquencyValues.Monthly}</SelectItem>
-              <SelectItem value={frquencyValues.Quarterly}>{frquencyValues.Quarterly}</SelectItem>
-              <SelectItem value={frquencyValues.Yearly}>{frquencyValues.Yearly}</SelectItem>
+              <SelectLabel>Frequencies</SelectLabel>
+              {Object.entries(frequencyValues).map(([key, value]) => (
+                <SelectItem key={key} value={value}>
+                  {value}
+                </SelectItem>
+              ))}
             </SelectGroup>
           </SelectContent>
         </Select>
       </div>
 
       {/* ✅ Analytics & Metrics Section */}
-      <div className="mt-[22px] grid grid-cols-1 lg:grid-cols-3 gap-[14px]">
-        <div className="col-span-1 lg:col-span-2">
-          <FinancialAnalytics />
+      <section className="mt-[22px] h-[440px] grid grid-cols-1 lg:grid-cols-3 gap-[14px]">
+        <div className=" col-span-1 lg:col-span-2">
+          <FinancialAnalytics frequency={frequency} />
         </div>
         <div>
+
           <FinancialMetrics />
         </div>
-      </div>
+      </section>
 
       {/* ✅ Your Overview Section */}
       <div className="mt-[22px]">

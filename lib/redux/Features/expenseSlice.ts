@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 interface ExpenseState {
-  amount: number;
+  amount: number | null;
   currency: string;
   category: string;
   description: string;
@@ -9,7 +9,7 @@ interface ExpenseState {
 }
 
 const initialState: ExpenseState = {
-  amount: 0,
+  amount: null,
   currency: "INR",
   category: "",
   description: "",

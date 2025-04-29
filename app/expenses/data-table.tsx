@@ -34,6 +34,7 @@ import {
 import { Input } from "@/components/ui/input";
 import NoResultsForTables from "@/components/no_results_for_tables";
 import { ExpenseType } from "@/lib/types";
+import { formatAmountToCurrency } from "@/lib/helpers/invoices/format_amount_to_currency";
 
 interface DataTableProps<TData, TValue> {
     columns: ColumnDef<TData, TValue>[]
@@ -56,7 +57,7 @@ export function ExpenseDataTable<TData, TValue>({
 
 
     //exporting excel sheet
-    async function handleClientsExport() {
+    async function handleExpensesExport() {
         try {
             let dataToBeExported: ExpenseType[];
 
@@ -68,40 +69,30 @@ export function ExpenseDataTable<TData, TValue>({
             }
 
             const workbook = new ExcelJS.Workbook();
-            const worksheet = workbook.addWorksheet("Clients");
+            const worksheet = workbook.addWorksheet("Expenses");
 
             worksheet.columns = [
-                { header: "Client Name", key: "clientName" },
-                { header: "Status", key: "status" },
-                { header: "Mobile", key: "mobile" },
-                { header: "Email", key: "email" },
-                { header: "Website", key: "website" },
-                { header: "Country", key: "country" },
-                { header: "Service Charge", key: "serviceCharge" },
-                { header: "Currency", key: "currency" },
-                { header: "Created At", key: "createdAt" },
+                { header: "Amount", key: "amount" },
+                { header: "Category", key: "category" },
+                { header: "Date", key: "date" },
+                { header: "Description", key: "description" },
             ];
 
-            // dataToBeExported.forEach(client => {
-            //     const currency = client.country === "India" ? "INR" : "USD"; // Check country and set currency
+            dataToBeExported.forEach(expense => {
+                const amount = formatAmountToCurrency(expense.amount, expense.currency)
 
-            //     worksheet.addRow({
-            //         clientName: client.clientName,
-            //         status: client.isClientActive ? "Active" : "Inactive",
-            //         mobile: client.mobile,
-            //         email: client.email,
-            //         website: client.website,
-            //         country: client.country,
-            //         serviceCharge: client.serviceCharge,
-            //         currency: currency, // Use the determined currency
-            //         createdAt: new Date(client.createdAt).toLocaleDateString(),
-            //     });
-            // });
+                worksheet.addRow({
+                    amount: amount,
+                    category: expense.category,
+                    date: new Date(expense.date).toLocaleDateString(),
+                    description: expense.description,
+                });
+            });
 
 
             const buffer = await workbook.xlsx.writeBuffer();
             const blob = new Blob([buffer], { type: "application/octet-stream" });
-            saveAs(blob, "clients.xlsx");
+            saveAs(blob, "expenses.xlsx");
 
         } catch (error) {
             console.log("Error Exporting ExcelSheet:", error);
@@ -156,7 +147,7 @@ export function ExpenseDataTable<TData, TValue>({
                 {/* Right: Visibility Dropdown and Export Button */}
                 <section className="flex items-center space-x-2">
                     <Button
-                        onClick={handleClientsExport}
+                        onClick={handleExpensesExport}
                     >
                         <FaDownload className="mr-2" /> Export
                     </Button>

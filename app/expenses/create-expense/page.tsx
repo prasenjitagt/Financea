@@ -75,7 +75,7 @@ const Page = () => {
               <label className="block text-md font-medium text-gray-500 mb-1">Amount</label>
               <input
                 type="number"
-                value={expense.amount}
+                value={expense.amount === null ? "" : expense.amount}
                 onChange={(e) => dispatch(setExpenseField({ field: "amount", value: parseFloat(e.target.value) || 0 }))}
                 placeholder="Enter your amount"
                 className="w-full border rounded-md px-3 py-2 text-md focus:outline-none focus:ring-2 focus:ring-blue-500"

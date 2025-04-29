@@ -25,7 +25,7 @@ const RecentExpenses = () => {
         const response = await axios.get<ExpensesReturnPayloadType>(recent_expenses_route);
         setExpenses(response.data.expenses);
 
-        console.log(response.data.expenses);
+        // console.log(response.data.expenses);  //debug log
 
 
 

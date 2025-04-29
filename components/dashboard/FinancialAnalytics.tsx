@@ -1,14 +1,15 @@
 "use client"
 
-import React, { PureComponent } from 'react';
+import React from 'react';
 import { AreaChart, Area, XAxis, YAxis, Tooltip, CartesianGrid, ResponsiveContainer } from 'recharts';
 import { Archivo } from 'next/font/google';
+import { DashboardFrequency } from '@/app/page';
+import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '../ui/card';
 
 // Import Archivo font from Google Fonts
 const archivo = Archivo({
     subsets: ['latin'],
 });
-
 
 type chartData = {
     month: string;
@@ -26,14 +27,19 @@ const data: chartData[] = [
     { month: 'July', revenue: 3490, expense: 4300 },
 ];
 
-export default class Example extends PureComponent {
-    render() {
-        return (
-            <div className="bg-white py-6 px-[15px]  mt-[-0.15rem] rounded-[16px] border border-[#e8e8e8] h-[410px] md:h-[440px] flex flex-col justify-between">
+interface FinancialAnalyticsProps {
+    frequency: DashboardFrequency;
+}
 
-
-                {/* Chart Section */}
-                <div className={`${archivo.className} flex-grow flex items-center text-[14px]`}>
+export default function FinancialAnalytics({ frequency }: FinancialAnalyticsProps) {
+    return (
+        <Card className="border border-[#e8e8e8]">
+            <CardHeader>
+                <CardTitle className={`${archivo.className} text-lg`}>Financial Analytics</CardTitle>
+                <CardDescription>January - July 2024</CardDescription>
+            </CardHeader>
+            <CardContent className="h-[325px]">
+                <div className="h-full w-full">
                     <ResponsiveContainer width="100%" height="100%">
                         <AreaChart
                             width={500}
@@ -60,13 +66,11 @@ export default class Example extends PureComponent {
                                 axisLine={false}
                                 tickLine={false}
                                 padding={{ left: 30 }}
-
                             />
                             <YAxis
                                 axisLine={false}
                                 tickLine={false}
                                 tickCount={8}
-                            // padding={{ bottom: 20 }}
                             />
 
                             <CartesianGrid
@@ -75,21 +79,29 @@ export default class Example extends PureComponent {
                                 stroke='#e8e8e8'
                             />
 
-
                             <Tooltip />
 
-
                             {/* Revenue Area */}
-                            <Area type="monotone" dataKey="revenue" stroke="#0052CC" fillOpacity={1} fill="url(#colorRevenue)" />
+                            <Area
+                                type="monotone"
+                                dataKey="revenue"
+                                stroke="#0052CC"
+                                fillOpacity={1}
+                                fill="url(#colorRevenue)"
+                            />
 
                             {/* Expense Area */}
-                            <Area type="monotone" dataKey="expense" stroke="#172B4D" fillOpacity={1} fill="url(#colorExpense)" />
-
-
+                            <Area
+                                type="monotone"
+                                dataKey="expense"
+                                stroke="#172B4D"
+                                fillOpacity={1}
+                                fill="url(#colorExpense)"
+                            />
                         </AreaChart>
                     </ResponsiveContainer>
                 </div>
-            </div>
-        );
-    }
-}
+            </CardContent>
+        </Card>
+    );
+}   

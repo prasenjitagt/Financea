@@ -1,6 +1,7 @@
 
 "use client";
 
+import { Separator } from "../ui/separator";
 import FinMetricCard from "./FinMetricCard";
 import { Archivo } from 'next/font/google';
 
@@ -13,7 +14,7 @@ const archivo = Archivo({
 const FinancialMetrics = () => {
 
     return (
-        <div className="bg-white px-[31px] py-[26px] rounded-[16px] border border-[#e8e8e8]   w-full h-[440px] flex flex-col">
+        <div className=" bg-white px-[31px] py-[26px] rounded-[16px] border border-[#e8e8e8]   w-full h-full flex flex-col justify-between">
             <FinMetricCard
                 title="Total Revenue"
                 amount={1200}
@@ -22,7 +23,7 @@ const FinancialMetrics = () => {
                 text="from last month"
             />
 
-            <Divider />
+            <Separator />
 
             <FinMetricCard
                 title="Total Expense"
@@ -32,7 +33,7 @@ const FinancialMetrics = () => {
                 text="from last month"
             />
 
-            <Divider />
+            <Separator />
 
 
             <FinMetricCard
@@ -43,7 +44,7 @@ const FinancialMetrics = () => {
                 text="from last month"
             />
 
-            <Divider />
+            <Separator />
 
 
             <FinMetricCardExtra
@@ -60,12 +61,6 @@ const FinancialMetrics = () => {
 export default FinancialMetrics;
 
 
-// Divider Component
-export const Divider = () => {
-    return (
-        <div className="border-t border-gray-300 my-2"></div>
-    )
-}
 
 
 
@@ -80,7 +75,7 @@ type FinMetricCardExtraProps = {
 export const FinMetricCardExtra = ({ title, amount, text }: FinMetricCardExtraProps) => {
     return (
         <div
-            className={`${archivo.className} h-[107px] flex justify-between  rounded-lg`}
+            className={`${archivo.className} flex justify-between  rounded-lg`}
         >
             {/* Left Section - Title and Amount */}
             <div className="flex flex-col justify-between items-start">

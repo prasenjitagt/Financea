@@ -18,7 +18,7 @@ type Proptype = {
 const FinMetricCard = ({ title, amount, incDecPercentage, isIncreased, text }: Proptype) => {
     return (
         <div
-            className={`${archivo.className} h-[107px] flex justify-between  rounded-lg`}
+            className={`${archivo.className} flex justify-between  rounded-lg`}
         >
             {/* Left Section - Title and Amount */}
             <div className="flex flex-col justify-between items-start">

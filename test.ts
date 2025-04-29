@@ -1,87 +1,86 @@
-// "use client";
+"use client"
 
-// import { useState, useEffect } from "react";
-// import PaymentRequestsLoading from "@/components/loading_ui/PaymentRequestsLoading";
-// import { payments_request_route } from "@/lib/helpers/api-endpoints";
-// import axios from "axios";
-// import { InvoiceType } from "@/app/invoices/columns";
-// import { stringToDate } from "@/lib/helpers/payment_requests/stringToDate";
-// import { formatAmountToCurrency } from "@/lib/helpers/invoices/format_amount_to_currency";
+import { TrendingUp } from "lucide-react"
+import { CartesianGrid, Line, LineChart, XAxis } from "recharts"
 
-// const statusColors: Record<string, string> = {
-//   Paid: "bg-green-100 text-green-600",
-//   Overdue: "bg-red-100 text-red-600",
-//   Pending: "bg-yellow-100 text-yellow-600",
-// };
+import {
+    Card,
+    CardContent,
+    CardDescription,
+    CardFooter,
+    CardHeader,
+    CardTitle,
+} from "@/components/ui/card"
+import {
+    ChartConfig,
+    ChartContainer,
+    ChartTooltip,
+    ChartTooltipContent,
+} from "@/components/ui/chart"
+const chartData = [
+    { month: "January", desktop: 186 },
+    { month: "February", desktop: 305 },
+    { month: "March", desktop: 237 },
+    { month: "April", desktop: 73 },
+    { month: "May", desktop: 209 },
+    { month: "June", desktop: 214 },
+]
 
-// const PaymentRequests = () => {
-//   const [invoices, setInvoices] = useState<InvoiceType[]>([]);
-//   const [loading, setLoading] = useState(true);
-//   const [error, setError] = useState<string | null>(null);
+const chartConfig = {
+    desktop: {
+        label: "Desktop",
+        color: "hsl(var(--chart-1))",
+    },
+} satisfies ChartConfig
 
-//   useEffect(() => {
-//     const fetchInvoices = async () => {
-//       try {
-//         const response = await axios.get<InvoiceType[]>(payments_request_route); // Replace with actual API URL
-
-//         setInvoices(response.data);
-
-
-//       } catch (error) {
-//         setError((error as Error).message);
-//       } finally {
-//         setLoading(false);
-//       }
-//     };
-
-//     fetchInvoices();
-//   }, []);
-
-//   if (loading) return <PaymentRequestsLoading />;
-//   if (error) return <p className="text-center text-red-500">{error}</p>;
-
-//   return (
-//     <div className="bg-white p-5 rounded-xl shadow-md mt-6 md:h-[34.3rem]">
-//       {/* Header Section */}
-//       <div className="flex justify-between items-center mb-4">
-//         <h2 className="text-lg font-semibold text-black">Payment Requests</h2>
-//         <select className="border px-3 py-1.5 rounded-lg text-black text-sm">
-//           <option>All Status</option>
-//         </select>
-//       </div>
-
-//       {/* Table Header */}
-//       <div className="flex justify-between pb-2 border-b text-gray-500 text-sm font-semibold">
-//         <span>Amount</span>
-//         <span className="w-24 ml-[9rem]">Date</span>
-//         <span>Status</span>
-//       </div>
-
-//       {/* Payment List */}
-//       <div className="w-full">
-//         {invoices.length > 0 ? (
-//           invoices.map((invoice, index) => {
-
-//             const formattedDate = stringToDate(invoice.issueDate);
-//             const formattedCurrencyString = formatAmountToCurrency(invoice.totalAmount, invoice.currency);
-//             return (
-//               <div key={index} className="flex justify-between items-center border-b py-4 last:border-none md:gap-0 gap-3">
-//                 <div>
-//                   <p className="text-sm font-bold">{formattedCurrencyString}</p>
-//                 </div>
-//                 <p className="text-gray-600 text-sm text-center w-24">{formattedDate}</p>
-//                 <span className={`px-3 py-1 rounded-full text-sm font-semibold `}>
-//                   {invoice.isPaid}
-//                 </span>
-//               </div>
-//             )
-//           })
-//         ) : (
-//           <p className="text-center text-gray-500">No payments found.</p>
-//         )}
-//       </div>
-//     </div>
-//   );
-// };
-
-// export default PaymentRequests;
+export function Component() {
+    return (
+        <Card>
+        <CardHeader>
+        <CardTitle>Line Chart - Linear </CardTitle>
+            < CardDescription > January - June 2024 </CardDescription>
+                </CardHeader>
+                < CardContent >
+                <ChartContainer config={ chartConfig }>
+                    <LineChart
+            accessibilityLayer
+    data = { chartData }
+    margin = {{
+        left: 12,
+            right: 12,
+            }
+}
+          >
+    <CartesianGrid vertical={ false } />
+        < XAxis
+dataKey = "month"
+tickLine = { false}
+axisLine = { false}
+tickMargin = { 8}
+tickFormatter = {(value) => value.slice(0, 3)}
+            />
+    < ChartTooltip
+cursor = { false}
+content = {< ChartTooltipContent hideLabel />}
+            />
+    < Line
+dataKey = "desktop"
+type = "linear"
+stroke = "var(--color-desktop)"
+strokeWidth = { 2}
+dot = { false}
+    />
+    </LineChart>
+    </ChartContainer>
+    </CardContent>
+    < CardFooter className = "flex-col items-start gap-2 text-sm" >
+        <div className="flex gap-2 font-medium leading-none" >
+            Trending up by 5.2 % this month < TrendingUp className = "h-4 w-4" />
+                </div>
+                < div className = "leading-none text-muted-foreground" >
+                    Showing total visitors for the last 6 months
+                        </div>
+                        </CardFooter>
+                        </Card>
+  )
+}
