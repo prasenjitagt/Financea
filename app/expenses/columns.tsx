@@ -20,12 +20,19 @@ import { showToast } from "@/lib/helpers/clients_table/copied_to_clipboard_toast
 import { useRouter } from "next/navigation";
 import Swal from "sweetalert2";
 import axios from "axios";
-import { clients_route } from "@/lib/helpers/api-endpoints";
+import { expenses_route } from "@/lib/helpers/api-endpoints";
 import { ExpenseType } from "@/lib/types";
+import { formatAmountToCurrency } from "@/lib/helpers/invoices/format_amount_to_currency";
+import { ExpenseCategoryColor } from "@/lib/constants/expenses_constants";
+import { truncateString } from "@/lib/helpers/expenses_table/truncate_string";
+
+
+
+
 
 export const columns: ColumnDef<ExpenseType>[] = [
 
-    //seletc
+    //select
     {
         id: "select",
         header: ({ table }) => (
@@ -51,172 +58,99 @@ export const columns: ColumnDef<ExpenseType>[] = [
     },
 
 
-    //name
+    //amount
     {
-        accessorKey: "clientName",
+        accessorKey: "amount",
         header: ({ column }) => {
             return (
                 <Button
                     variant="ghost"
                     onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
                 >
-                    Name
+                    Amount
                     <ArrowUpDown className="ml-2 h-4 w-4" />
                 </Button>
             );
         },
-        cell: ({ row }) => (
-            <p className="text-[14px]">{row.getValue("clientName")}</p>
-        )
+        cell: ({ row }) => {
+            const expense = row.original;
+            const amountToDisplay = formatAmountToCurrency(expense.amount, expense.currency)
+            return (
+                <p>
+                    {amountToDisplay}
+                </p>
+            )
+        }
+
+
     },
 
-    //client status
+    //category 
     {
-        accessorKey: "isClientActive",
-        header: "Status",
+        accessorKey: "category",
+        header: "Category",
         cell: ({ row }) => {
-            const isActive = row.getValue("isClientActive");
+            const category = row.original.category;
 
             return (
-                <span
-                    className={`px-2 py-1 text-xs rounded-full font-medium
-                ${isActive
-                            ? "bg-green-100 text-green-700"
-                            : "bg-red-100 text-red-700"}`}
-                >
-                    {isActive ? "Active" : "Inactive"}
-                </span>
-            );
-        },
-    },
-
-
-    //contact
-    {
-        id: "contact",
-        header: "Contact",
-        cell: ({ row }) => {
-            const client = row.original;
-            return (
-                <div className="flex flex-col text-[14px]">
-                    <section className="flex space-x-2">
-                        <p className="">{client.mobile}</p>
-                        <Image
-                            className="cursor-pointer"
-                            src={CopyIcon}
-                            alt="Copy-Icon"
-                            width={16}
-                            onClick={() => {
-                                showToast("Phone Number Copied");
-                                navigator.clipboard.writeText(client.mobile);
-                            }}
-                        />
-                    </section>
-                    <section className="flex space-x-2">
-                        <p className="">{client.email}</p>
-                        <Image
-                            className="cursor-pointer"
-                            src={CopyIcon}
-                            alt="Copy-Icon"
-                            width={16}
-                            onClick={() => {
-                                showToast("Email Copied");
-                                navigator.clipboard.writeText(client.email);
-                            }}
-                        />
-                    </section>
+                <div className="flex items-center space-x-2">
+                    <span
+                        className="inline-block w-3 h-3 rounded-full"
+                        style={{ backgroundColor: ExpenseCategoryColor[category] }}
+                    />
+                    <div className="text-gray-800 text-sm">{category}</div>
                 </div>
             );
         },
     },
 
-    //website
-    {
-        accessorKey: "website",
-        header: "Website",
 
+    //Expense Date
+    {
+        accessorKey: "date",
+        header: "Date"
     },
 
-    //country
+
+
+
+    //Description
     {
-        accessorKey: "country",
-        header: "Country",
+        accessorKey: "description",
+        header: "Description",
         cell: ({ row }) => {
-            const country = row.getValue("country") as string;
-            const flagMap: { [key: string]: string } = {
-                USA: "🇺🇸",
-                India: "🇮🇳",
-                UK: "🇬🇧",
-            };
+            const descripton = row.original.description;
+
+            const concatedDescription = truncateString(descripton, 50);
 
             return (
-                <div className="flex items-center gap-2 text-[14px]">
-                    <span>{flagMap[country] || "🏳️"}</span>
-                    <span>{country}</span>
-                </div>
+                <p>
+                    {concatedDescription}
+                </p>
             );
         },
     },
 
-    //service charge
-    {
-        accessorKey: "serviceCharge",
-        header: () => <p>Service Charge</p>,
-        cell: ({ row }) => {
-            const amount = parseFloat(row.getValue("serviceCharge"));
-            const country = row.original.country;
-
-            const currencyMap: Record<string, string> = {
-                India: "INR",
-                USA: "USD",
-                UK: "GBP",
-            };
-
-            const formatted = new Intl.NumberFormat("en-US", {
-                style: "currency",
-                currency: currencyMap[country] || "USD",
-            }).format(amount);
-
-            return <div >{formatted}</div>;
-        },
-    }
-    ,
-
-    //Date
-    {
-        accessorKey: "createdAt",
-        header: "Date",
-        cell: ({ row }) => {
-            const date = new Date(row.getValue("createdAt"));
-            const formattedDate = date.toLocaleDateString("en-GB", {
-                day: "2-digit",
-                month: "short",
-                year: "numeric",
-            });
-
-            return <p>{formattedDate}</p>;
-        },
-    },
 
     //actions
     {
         id: "actions",
         header: "Actions",
         cell: ({ row }) => {
-            const client = row.original;
-            return <ClientActions client={client} />;
+            const expense = row.original;
+            return <ExpensesActions expense={expense} />;
         },
     },
 ]
 
 
-function ClientActions({ client }: { client: ClientType }) {
+function ExpensesActions({ expense }: { expense: ExpenseType }) {
     const router = useRouter();
 
     const handleDelete = async () => {
         const confirmResult = await Swal.fire({
             title: "Are you sure?",
-            text: "You want to delete the client?",
+            text: "You want to delete the expense?",
             icon: "warning",
             showCancelButton: true,
             confirmButtonColor: "#d33",
@@ -225,17 +159,17 @@ function ClientActions({ client }: { client: ClientType }) {
 
         if (confirmResult.isConfirmed) {
             try {
-                // Send the clientId in the URL as a query parameter
-                const res = await axios.delete(`${clients_route}?clientId=${client._id}`);
+                // Send the expenseId in the URL as a query parameter
+                const res = await axios.delete(`${expenses_route}?clientId=${expense._id}`);
 
                 if (res.status === 200) {
-                    showToast("Client deleted successfully");
+                    showToast("Expense deleted successfully");
 
                     router.refresh();
                 }
             } catch (error) {
-                console.error("Error deleting client:", error);
-                showToast("Error deleting client");
+                console.error("Error deleting expense:", error);
+                showToast("Error deleting expense");
             }
         }
     };
@@ -256,23 +190,18 @@ function ClientActions({ client }: { client: ClientType }) {
                     onClick={() => {
                         showToast("Client ID Copied");
 
-                        navigator.clipboard.writeText(client._id);
+                        navigator.clipboard.writeText(expense._id);
                     }}
                 >
-                    Copy Client ID
+                    Copy Expense ID
                 </DropdownMenuItem>
-                <DropdownMenuItem
-                    className="cursor-pointer"
-                    onClick={() => router.push(`/clients/profile?id=${client._id}`)}
-                >
-                    View Client
-                </DropdownMenuItem>
+
                 <DropdownMenuItem
                     variant="destructive"
                     className="cursor-pointer"
                     onClick={handleDelete}
                 >
-                    Delete Client
+                    Delete Expense
                 </DropdownMenuItem>
 
             </DropdownMenuContent>

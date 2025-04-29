@@ -25,7 +25,7 @@ import { ClientType } from "@/lib/types";
 
 export const columns: ColumnDef<ClientType>[] = [
 
-    //seletc
+    //select
     {
         id: "select",
         header: ({ table }) => (

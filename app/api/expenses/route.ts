@@ -10,6 +10,7 @@ import ExpenseModel from "@/lib/models/Expenses.model";
 import { Types } from "mongoose";
 import { formatAmountToCurrency } from "@/lib/helpers/invoices/format_amount_to_currency";
 import { stringToDate } from "@/lib/helpers/payment_requests/stringToDate";
+import { ExpenseCategoryColor } from "@/lib/constants/expenses_constants";
 
 export interface IExpense {
   _id: Types.ObjectId;
@@ -104,11 +105,7 @@ export async function GET() {
 
     const expenses: IExpense[] = await ExpenseModel.find({ userId: userId }).sort({ createdAt: -1 });
 
-    const ExpenseCategoryColor: Record<string, string> = {
-      Travel: "#532B88",
-      Food: "#5E84EC",
-      Office: "#19C13A"
-    }
+
 
 
     const expensesToBeReturned: ExpensesToBeReturnedType[] = expenses.map((exp) => ({
@@ -158,18 +155,18 @@ export async function DELETE(req: NextRequest) {
 
 
   try {
-    await connectDB("api/clients/stats/route.ts");
+    await connectDB("api/expenses/route.ts");
+
 
     const session = await getServerSession(FinanceaAuthOptions);
-
     if (!session) {
-
       console.log("Unauthorized");
-
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+      throw new Error("Unauthorized");
     }
 
-    const userId = session.user._id;
+    const userId = session.user._id
+    const { searchParams } = new URL(req.url);
+    const expenseId = searchParams.get("expenseId");
 
 
     const { expenseIds } = await req.json();
@@ -181,8 +178,8 @@ export async function DELETE(req: NextRequest) {
       );
     }
 
-    const deleteResult = await ExpenseModel.deleteMany({
-      _id: { $in: expenseIds },
+    const deleteResult = await ExpenseModel.deleteOne({
+      _id: expenseId,
       userId: userId,
     });
 

@@ -60,7 +60,7 @@ export function sanitizeInvoice(invoice: IndividualInvoiceFromDataBaseType): Inv
 
 async function getData(): Promise<InvoiceType[]> {
   try {
-    await connectDB("api/invoices/route.ts");
+    await connectDB("app/invoices/page.tsx");
 
     const session = await getServerSession(FinanceaAuthOptions);
     if (!session) {

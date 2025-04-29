@@ -8,6 +8,7 @@ import { Client } from "@/lib/models/Clients.model";
 import ClientsPageTotalClientsCards from "@/components/clients/clients_page_total_clients_card";
 import ClientsPageTotalPaymentsCards from "@/components/clients/clients_page_total_payments_card";
 import { IndividualClientFromDataBaseType, ClientType } from "@/lib/types";
+import connectDB from "@/lib/database/db_connection";
 
 
 
@@ -35,6 +36,8 @@ function sanitizeClient(client: IndividualClientFromDataBaseType): ClientType {
 
 async function getData(): Promise<ClientType[]> {
   try {
+    await connectDB("app/clients/page.tsx");
+
     const session = await getServerSession(FinanceaAuthOptions);
     if (!session) {
       console.log("Unauthorized");

@@ -36,7 +36,7 @@ export default function RecentExpensesTable({ expenses }: RecentExpensesTablePro
                         <TableRow key={exp._id} className="h-[50px]">
                             <TableCell className="flex items-center space-x-2 ">
                                 <span
-                                    className="w-3 h-3 justify-center rounded-full text-sm"
+                                    className="inline-block w-3 h-3 rounded-full"
                                     style={{ backgroundColor: exp.categoryColor }}
                                 />
 

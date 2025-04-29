@@ -1,4 +1,4 @@
-//clients/data-table.tsx
+//expenses/data-table.tsx
 "use client"
 import { saveAs } from "file-saver";
 import ExcelJS from "exceljs";
@@ -33,7 +33,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
 import NoResultsForTables from "@/components/no_results_for_tables";
-import { ClientType } from "@/lib/types";
+import { ExpenseType } from "@/lib/types";
 
 interface DataTableProps<TData, TValue> {
     columns: ColumnDef<TData, TValue>[]
@@ -43,7 +43,7 @@ interface DataTableProps<TData, TValue> {
 
 
 
-export function ClientDataTable<TData, TValue>({
+export function ExpenseDataTable<TData, TValue>({
     columns,
     data,
 }: DataTableProps<TData, TValue>) {
@@ -58,13 +58,13 @@ export function ClientDataTable<TData, TValue>({
     //exporting excel sheet
     async function handleClientsExport() {
         try {
-            let dataToBeExported: ClientType[];
+            let dataToBeExported: ExpenseType[];
 
             if (Object.keys(rowSelection).length === 0) {
-                dataToBeExported = data as ClientType[];
+                dataToBeExported = data as ExpenseType[];
 
             } else {
-                dataToBeExported = data.filter((_, index) => rowSelection[index]) as ClientType[];
+                dataToBeExported = data.filter((_, index) => rowSelection[index]) as ExpenseType[];
             }
 
             const workbook = new ExcelJS.Workbook();
@@ -82,21 +82,21 @@ export function ClientDataTable<TData, TValue>({
                 { header: "Created At", key: "createdAt" },
             ];
 
-            dataToBeExported.forEach(client => {
-                const currency = client.country === "India" ? "INR" : "USD"; // Check country and set currency
+            // dataToBeExported.forEach(client => {
+            //     const currency = client.country === "India" ? "INR" : "USD"; // Check country and set currency
 
-                worksheet.addRow({
-                    clientName: client.clientName,
-                    status: client.isClientActive ? "Active" : "Inactive",
-                    mobile: client.mobile,
-                    email: client.email,
-                    website: client.website,
-                    country: client.country,
-                    serviceCharge: client.serviceCharge,
-                    currency: currency, // Use the determined currency
-                    createdAt: new Date(client.createdAt).toLocaleDateString(),
-                });
-            });
+            //     worksheet.addRow({
+            //         clientName: client.clientName,
+            //         status: client.isClientActive ? "Active" : "Inactive",
+            //         mobile: client.mobile,
+            //         email: client.email,
+            //         website: client.website,
+            //         country: client.country,
+            //         serviceCharge: client.serviceCharge,
+            //         currency: currency, // Use the determined currency
+            //         createdAt: new Date(client.createdAt).toLocaleDateString(),
+            //     });
+            // });
 
 
             const buffer = await workbook.xlsx.writeBuffer();
@@ -139,10 +139,10 @@ export function ClientDataTable<TData, TValue>({
             <div className="flex items-center justify-between py-4 space-x-4 sticky top-0 bg-white z-20">
                 {/* Left: Search */}
                 <Input
-                    placeholder="Filter names..."
-                    value={(table.getColumn("clientName")?.getFilterValue() as string) ?? ""}
+                    placeholder="Filter Categories..."
+                    value={(table.getColumn("category")?.getFilterValue() as string) ?? ""}
                     onChange={(event) =>
-                        table.getColumn("clientName")?.setFilterValue(event.target.value)
+                        table.getColumn("category")?.setFilterValue(event.target.value)
                     }
                     className="max-w-sm"
                 />

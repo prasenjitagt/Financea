@@ -1,13 +1,15 @@
 
 
-import { columns } from "@/app/clients/columns";
-import { ClientDataTable } from "@/app/clients/data-table";
+import { columns } from "@/app/expenses/columns";
+import { ExpenseDataTable } from "@/app/expenses/data-table";
 import { getServerSession } from "next-auth";
 import { FinanceaAuthOptions } from "../api/auth/[...nextauth]/options";
 import ClientsPageTotalClientsCards from "@/components/clients/clients_page_total_clients_card";
 import ClientsPageTotalPaymentsCards from "@/components/clients/clients_page_total_payments_card";
 import { ExpenseType, IndividualExpenseFromDataBaseType } from "@/lib/types";
 import ExpenseModel from "@/lib/models/Expenses.model";
+import connectDB from "@/lib/database/db_connection";
+import { stringToDate } from "@/lib/helpers/payment_requests/stringToDate";
 
 
 
@@ -19,7 +21,7 @@ function sanitizeExpenses(expense: IndividualExpenseFromDataBaseType): ExpenseTy
     amount: expense.amount,
     category: expense.category,
     currency: expense.currency,
-    date: expense.date.toString(),
+    date: stringToDate(expense.date.toString()),
     description: expense.description,
     createdAt: expense.createdAt.toString(),
     updatedAt: expense.updatedAt.toString(),
@@ -29,6 +31,9 @@ function sanitizeExpenses(expense: IndividualExpenseFromDataBaseType): ExpenseTy
 
 async function getData() {
   try {
+
+    await connectDB("app/expenses/page.tsx");
+
     const session = await getServerSession(FinanceaAuthOptions);
     if (!session) {
       console.log("Unauthorized");
@@ -41,6 +46,7 @@ async function getData() {
       .lean<IndividualExpenseFromDataBaseType[]>();
 
     // console.log("Get your expense type:", expenses[0]);
+
 
 
     if (!expenses) {
@@ -84,7 +90,7 @@ export default async function ExpensesDesktopView() {
 
       {/* Desktop and Tablet View Table Section */}
       <section className="hidden md:block w-full flex-1 overflow-scroll">
-        <ClientDataTable
+        <ExpenseDataTable
           columns={columns}
           data={expensesData}
         />
