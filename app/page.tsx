@@ -69,8 +69,7 @@ const Dashboard = () => {
           <FinancialAnalytics frequency={frequency} />
         </div>
         <div>
-
-          <FinancialMetrics />
+          <FinancialMetrics frequency={frequency} />
         </div>
       </section>
 

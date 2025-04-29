@@ -4,7 +4,7 @@ import { NextResponse } from "next/server";
 import { Client } from "@/lib/models/Clients.model";
 import connectDB from "@/lib/database/db_connection";
 import { getServerSession } from "next-auth";
-import { FinanceaAuthOptions } from "../../auth/[...nextauth]/options";
+import { FinanceaAuthOptions } from "@/app/api/auth/[...nextauth]/options";
 
 
 export async function GET() {

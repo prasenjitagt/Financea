@@ -2,16 +2,11 @@
 "use client";
 
 import { Separator } from "../ui/separator";
+import { FinancialAnalyticsProps } from "./FinancialAnalytics";
 import FinMetricCard from "./FinMetricCard";
-import { Archivo } from 'next/font/google';
-
-// Import Archivo font from Google Fonts
-const archivo = Archivo({
-    subsets: ['latin'],
-});
 
 
-const FinancialMetrics = () => {
+const FinancialMetrics = ({ frequency }: FinancialAnalyticsProps) => {
 
     return (
         <div className=" bg-white px-[31px] py-[26px] rounded-[16px] border border-[#e8e8e8]   w-full h-full flex flex-col justify-between">
@@ -75,7 +70,7 @@ type FinMetricCardExtraProps = {
 export const FinMetricCardExtra = ({ title, amount, text }: FinMetricCardExtraProps) => {
     return (
         <div
-            className={`${archivo.className} flex justify-between  rounded-lg`}
+            className={`flex justify-between  rounded-lg`}
         >
             {/* Left Section - Title and Amount */}
             <div className="flex flex-col justify-between items-start">

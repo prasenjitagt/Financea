@@ -224,7 +224,7 @@ const CreateInvoiceForm = () => {
 
     return (
         <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="lg:pr-[100px]">
+            <form onSubmit={form.handleSubmit(onSubmit)} >
 
                 {/* Inovice Number & Issue date section */}
                 <section className="flex justify-between">

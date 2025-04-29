@@ -12,6 +12,7 @@ export default function ClientLayout({ children }: { children: React.ReactNode }
   const pathname = usePathname();
 
   const isAuthPage = pathname === "/login" || pathname === "/signup";
+  const isCreateInvoicePage = pathname === "/invoices/create-invoice";
   const isFullWidthPage = pathname === "/invoices/create-invoice";
 
   // ✅ Fire topbar-stop on route/path change (simulate navigation complete)
@@ -67,7 +68,10 @@ export default function ClientLayout({ children }: { children: React.ReactNode }
 
       {/* 🌟 Main Content */}
       <div className="bg-gray-100 flex-1 flex flex-col">
-        {!isAuthPage && <Navbar toggleSidebar={() => setIsSidebarOpen(!isSidebarOpen)} />}
+        {!isCreateInvoicePage && !isAuthPage && (
+          <Navbar toggleSidebar={() => setIsSidebarOpen(!isSidebarOpen)} />
+        )}
+
 
         <div
           className={`flex-1 overflow-y-auto p-4 ${isFullWidthPage ? "w-full max-w-none" : "md:mt-2"

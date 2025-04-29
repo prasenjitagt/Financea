@@ -2,7 +2,7 @@
 
 import connectDB from "@/lib/database/db_connection";
 import { getServerSession } from "next-auth";
-import { FinanceaAuthOptions } from "../auth/[...nextauth]/options";
+import { FinanceaAuthOptions } from "@/app/api/auth/[...nextauth]/options";
 import InvoiceModel from "@/lib/models/Invoice.model";
 import { NextResponse } from "next/server";
 

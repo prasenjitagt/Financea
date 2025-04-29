@@ -5,7 +5,7 @@ import { NextRequest, NextResponse } from "next/server";
 import connectDB from "@/lib/database/db_connection";
 import { expenseSchema } from "@/lib/helpers/validations";
 import { getServerSession } from "next-auth";
-import { FinanceaAuthOptions } from "../auth/[...nextauth]/options";
+import { FinanceaAuthOptions } from "@/app/api/auth/[...nextauth]/options";
 import ExpenseModel from "@/lib/models/Expenses.model";
 import { Types } from "mongoose";
 import { formatAmountToCurrency } from "@/lib/helpers/invoices/format_amount_to_currency";

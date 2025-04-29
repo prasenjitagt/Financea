@@ -13,11 +13,13 @@ export async function POST(req: NextRequest) {
     try {
         await connectDB("api/invoices/create_invoice/route.ts");
 
+        //get UserID from session
         const session = await getServerSession(FinanceaAuthOptions);
-
         if (!session) {
-            return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
+            console.log("Unauthorized");
+            throw new Error("Unauthorized");
         }
+        const userId = session.user._id;
 
         const body: createInvoiceFormType = await req.json();
 
@@ -39,7 +41,6 @@ export async function POST(req: NextRequest) {
             );
         }
 
-        const userId = session.user._id;
 
         const rzpCreds = await getRzpCreds(userId);
 

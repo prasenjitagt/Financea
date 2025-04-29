@@ -62,8 +62,7 @@ export async function GET() {
     const session = await getServerSession(FinanceaAuthOptions);
     if (!session) {
       console.log("Unauthorized");
-
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+      throw new Error("Unauthorized");
     }
     const userId = session.user._id;
 

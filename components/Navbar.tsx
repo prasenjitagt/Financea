@@ -6,32 +6,30 @@ import { FiMenu } from "react-icons/fi";
 import { Button } from "@/components/ui/button";
 import { FaCirclePlus } from "react-icons/fa6";
 import Link from "next/link";
+import { useSession } from "next-auth/react";
 
-const getUsernameFromToken = () => {
-  if (typeof window === "undefined") return "Guest";
-
-  const token = localStorage.getItem("token");
-  if (!token) return "Guest";
-
-  try {
-    const base64Url = token.split(".")[1];
-    const base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
-    const payload = JSON.parse(atob(base64));
-    return payload.username || "Guest";
-  } catch (error) {
-    return "Guest";
-    console.log(error);
-  }
-};
 
 const Navbar = ({ toggleSidebar }: { toggleSidebar: () => void }) => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
   const [username, setUsername] = useState("Guest");
 
+  const { data: session, status } = useSession();
+
+
+  //Setting User Name
   useEffect(() => {
-    setUsername(getUsernameFromToken());
-  }, []);
+    if (status === "loading") {
+      setUsername("Name Loading...");
+    } else if (status === "unauthenticated" || !session) {
+      setUsername("Guest");
+    } else {
+      // session is guaranteed to be non-null here
+      setUsername(session.user?.username ?? "Guest");
+    }
+  }, [session, status]);
+
+
 
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {

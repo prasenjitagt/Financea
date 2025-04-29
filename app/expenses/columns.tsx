@@ -2,7 +2,7 @@
 
 
 import { ColumnDef } from "@tanstack/react-table";
-import CopyIcon from "@/assets/icons/copy_clients_table_icon.svg";
+// import CopyIcon from "@/assets/icons/copy_clients_table_icon.svg";
 import { MoreHorizontal } from "lucide-react";
 import { ArrowUpDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -15,7 +15,6 @@ import {
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Checkbox } from "@/components/ui/checkbox";
-import Image from "next/image";
 import { showToast } from "@/lib/helpers/clients_table/copied_to_clipboard_toast";
 import { useRouter } from "next/navigation";
 import Swal from "sweetalert2";
