@@ -3,8 +3,10 @@ import { getServerSession } from "next-auth";
 import { FinanceaAuthOptions } from "@/app/api/auth/[...nextauth]/options";
 import { NextRequest, NextResponse } from "next/server";
 import InvoiceModel from "@/lib/models/Invoice.model";
-import { FinancialMetricsResponseType, IndividualInvoiceFromDataBaseType } from "@/lib/types";
+import { FinancialMetricsResponseType, IndividualExpenseFromDataBaseType, IndividualInvoiceFromDataBaseType } from "@/lib/types";
 import { getConvertedInvoiceTotal } from "@/lib/helpers/financial_metrics_route/getConvertedInvoiceTotal";
+import ExpenseModel from "@/lib/models/Expenses.model";
+import { getConvertedExpenseTotal } from "@/lib/helpers/financial_metrics_route/getConvertedExpenseTotal";
 
 export async function GET(request: NextRequest) {
     try {
@@ -12,15 +14,15 @@ export async function GET(request: NextRequest) {
         const { searchParams } = new URL(request.url);
 
 
-        //get UserID from session
-        // const session = await getServerSession(FinanceaAuthOptions);
-        // if (!session) {
-        //     console.log("Unauthorized");
-        //     throw new Error("Unauthorized");
-        // }
-        // const userId = session.user._id;
+        // get UserID from session
+        const session = await getServerSession(FinanceaAuthOptions);
+        if (!session) {
+            console.log("Unauthorized");
+            throw new Error("Unauthorized");
+        }
+        const userId = session.user._id;
 
-        const userId = searchParams.get('userId');
+        // const userId = searchParams.get('userId');
         const toCurrencyParam = searchParams.get("toCurrency");
         const intervalParam = searchParams.get("interval") || "monthly"; // Default to monthly
 
@@ -118,7 +120,7 @@ export async function GET(request: NextRequest) {
             issueDate: { $gte: startDatePrevPeriod, $lte: endDatePrevPeriod },
         });
 
-        // console.log("Paid Inv:", paidInvoices);
+
 
         // Calculate total revenue for both periods
         const totalRevenue = await getConvertedInvoiceTotal(paidInvoices as IndividualInvoiceFromDataBaseType[], toCurrency);
@@ -140,8 +142,27 @@ export async function GET(request: NextRequest) {
         const isProfit = totalProfitOrLoss > 0;
         const isProfitPrevPeriod = totalProfitOrLossPrevPeriod > 0;
 
-        console.log("Current Period Revenue:", totalRevenue, "Previous Period Revenue:", totalRevenuePrevPeriod);
-        console.log("Current Period Profit:", totalProfitOrLoss, "Previous Period Profit:", totalProfitOrLossPrevPeriod);
+
+        //Fetch Expenses for the selected time interval 
+        const expenses = await ExpenseModel.find({
+            userId: userId,
+            date: { $gte: startDate, $lte: endDate },
+        });
+
+        const expensesPrevPeriod = await ExpenseModel.find({
+            userId: userId,
+            date: { $gte: startDatePrevPeriod, $lte: endDatePrevPeriod },
+        });
+
+
+        // Calculate total expenses for both periods
+        const totalExpenses = await getConvertedExpenseTotal(expenses as IndividualExpenseFromDataBaseType[], toCurrency);
+        const totalExpensesPrevPeriod = await getConvertedExpenseTotal(expensesPrevPeriod as IndividualExpenseFromDataBaseType[], toCurrency);
+
+
+
+        // console.log("Current Period Revenue:", totalRevenue, "Previous Period Revenue:", totalRevenuePrevPeriod);
+        // console.log("Current Period Profit:", totalProfitOrLoss, "Previous Period Profit:", totalProfitOrLossPrevPeriod);
 
 
 
@@ -152,6 +173,9 @@ export async function GET(request: NextRequest) {
                 totalDues,
                 isProfit,
                 profitPercentage,
+                totalExpenses,
+                outstandingInvoiceAmount: totalDues,
+                outstandingInvoiceCount: unpaidInvoices.length
             },
             previousPeriod: {
                 totalRevenue: totalRevenuePrevPeriod,
@@ -159,6 +183,7 @@ export async function GET(request: NextRequest) {
                 totalDues: totalDuesPrevPeriod,
                 isProfit: isProfitPrevPeriod,
                 profitPercentage: profitPercentagePrevPeriod,
+                totalExpenses: totalExpensesPrevPeriod
             },
             interval: intervalParam,
         };

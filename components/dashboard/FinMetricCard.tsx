@@ -33,14 +33,17 @@ const FinMetricCard = ({ title, amount, incDecPercentage, isIncreased, text }: P
             <div className="flex flex-col justify-center items-end">
                 {/* Percentage Change Box */}
                 <div
-                    className={`w-[71px] h-[30px] flex justify-center items-center gap-1 rounded-md px-2 
+                    className={`w-fit h-[30px] flex justify-center items-center gap-1 rounded-md px-2 
                         ${isIncreased ? "text-[#19C13A] bg-[#19C13A0D]" : "text-[#C11919] bg-[#C119190D]"}`}
                 >
                     {/* Arrow Icon - Rotates downward if isIncreased is false */}
                     <IoIosArrowRoundUp size={24} className={isIncreased ? "" : "rotate-180"} />
 
                     {/* Percentage Value */}
-                    <p className="text-[14px] font-[500]">{incDecPercentage}%</p>
+                    {/* <p className="text-[14px] font-[500]">{incDecPercentage}%</p> */}
+
+                    {/* Not using percent for now */}
+                    <p className="text-[14px] font-[500]">${incDecPercentage}</p>
                 </div>
 
                 {/* Additional Descriptive Text */}

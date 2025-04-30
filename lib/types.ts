@@ -225,17 +225,29 @@ export interface IndividualExpenseFromDataBaseType {
 }
 
 //financial metrics periods type
-interface FinancialMetricsPeriod {
+interface FinancialMetricsCurrentPeriod {
     totalRevenue: number;
     totalProfitOrLoss: number;
     totalDues: number;
     isProfit: boolean;
     profitPercentage: number;
+    totalExpenses: number;
+    outstandingInvoiceAmount: number;
+    outstandingInvoiceCount: number;
 }
 
+
+interface FinancialMetricsPrevPeriod {
+    totalRevenue: number;
+    totalProfitOrLoss: number;
+    totalDues: number;
+    isProfit: boolean;
+    profitPercentage: number;
+    totalExpenses: number;
+}
 //financial metrics respose to frontend type
 export interface FinancialMetricsResponseType {
-    currentPeriod: FinancialMetricsPeriod;
-    previousPeriod: FinancialMetricsPeriod;
+    currentPeriod: FinancialMetricsCurrentPeriod;
+    previousPeriod: FinancialMetricsPrevPeriod;
     interval: 'daily' | 'monthly' | 'quarterly' | 'yearly';
 }

@@ -1,31 +1,31 @@
-import { IndividualInvoiceFromDataBaseType } from "@/lib/types";
+import { IndividualExpenseFromDataBaseType } from "@/lib/types";
 import axios from "axios";
 import { currency_conversion_api_route } from "../api-endpoints";
 
-export async function getConvertedInvoiceTotal(
-    invoices: IndividualInvoiceFromDataBaseType[],
+export async function getConvertedExpenseTotal(
+    expenses: IndividualExpenseFromDataBaseType[],
     toCurrency: "USD" | "INR"
 ): Promise<number> {
 
-    if (invoices.length === 0) {
-        console.log("Got No invoice to convert currency");
+    if (expenses.length === 0) {
+        console.log("Got No expenses to convert currency");
 
         return 0;
 
     }
 
+    const INRexpenses = expenses.filter(exp => exp.currency === "INR");
+    const USDexpenses = expenses.filter(exp => exp.currency === "USD");
 
-    const INRinvoices = invoices.filter(inv => inv.currency === "INR");
-    const USDinvoices = invoices.filter(inv => inv.currency === "USD");
-
-    const totalINR = INRinvoices.reduce((sum, inv) => sum + inv.totalAmount, 0);
-    const totalUSD = USDinvoices.reduce((sum, inv) => sum + inv.totalAmount, 0);
+    const totalINR = INRexpenses.reduce((sum, exp) => sum + exp.amount, 0);
+    const totalUSD = USDexpenses.reduce((sum, exp) => sum + exp.amount, 0);
 
     // Determine which part to convert
     if (toCurrency === "USD") {
         if (totalINR === 0) {
             return totalUSD;
         }
+
         try {
             const response = await axios.get(currency_conversion_api_route, {
                 params: {
@@ -47,6 +47,7 @@ export async function getConvertedInvoiceTotal(
         if (totalUSD === 0) {
             return totalINR;
         }
+
         try {
             const response = await axios.get(currency_conversion_api_route, {
                 params: {
