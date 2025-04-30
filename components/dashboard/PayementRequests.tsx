@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import PaymentRequestsLoading from "@/components/loading_ui/PaymentRequestsLoading";
 import { payments_request_route } from "@/lib/helpers/api-endpoints";
 import axios from "axios";
-import { InvoiceType } from "@/app/invoices/columns";
+import { InvoiceType } from "@/lib/types";
 import PaymentRequestsTable from "./payment_requests_table";
 import Image from "next/image";
 import ReceiptIcon from "@/assets/icons/receipt_icon.svg";

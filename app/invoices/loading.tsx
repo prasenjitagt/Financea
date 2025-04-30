@@ -3,12 +3,22 @@
 import React, { useState, useEffect } from "react";
 
 const Loading = ({ delay = 3000 }) => {
+
+
+
+
   const [loading, setLoading] = useState(() => {
     if (typeof window !== "undefined") {
       return localStorage.getItem("hasLoaded") ? false : true;
     }
     return true; // Default to true during SSR
   });
+
+
+
+
+
+
 
   useEffect(() => {
     if (!loading || typeof window === "undefined") return;
