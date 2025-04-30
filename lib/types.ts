@@ -224,4 +224,18 @@ export interface IndividualExpenseFromDataBaseType {
     __v: number;
 }
 
+//financial metrics periods type
+interface FinancialMetricsPeriod {
+    totalRevenue: number;
+    totalProfitOrLoss: number;
+    totalDues: number;
+    isProfit: boolean;
+    profitPercentage: number;
+}
 
+//financial metrics respose to frontend type
+export interface FinancialMetricsResponseType {
+    currentPeriod: FinancialMetricsPeriod;
+    previousPeriod: FinancialMetricsPeriod;
+    interval: 'daily' | 'monthly' | 'quarterly' | 'yearly';
+}

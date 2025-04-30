@@ -1,23 +1,35 @@
 
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Separator } from "../ui/separator";
 import { FinancialAnalyticsProps } from "./FinancialAnalytics";
 import FinMetricCard from "./FinMetricCard";
 import { financial_metrics_route } from "@/lib/helpers/api-endpoints";
 import axios from "axios";
+import { FinancialMetricsResponseType } from "@/lib/types";
 
 
 const FinancialMetrics = ({ frequency }: FinancialAnalyticsProps) => {
-
+    const [financialMetrics, setFinancialMetrics] = useState<FinancialMetricsResponseType>();
 
     // useEffect(() => {
     //     const fetchFinancialMetrics = async () => {
     //         try {
-    //             await axios.get(financial_metrics_route); // Replace with actual API URL
+    //             const result = await axios.get<FinancialMetricsResponseType>(
+    //                 `${financial_metrics_route}`,
+    //                 {
+    //                     params: {
+    //                         interval: frequency.toLowerCase(),        // replace with actual userId
+    //                         toCurrency: "USD",           // or "INR"
+    //                     },
+    //                 }
+    //             );
 
 
+
+
+    //             console.log(result.data); //debuglog
 
     //         } catch (error) {
 
@@ -27,7 +39,7 @@ const FinancialMetrics = ({ frequency }: FinancialAnalyticsProps) => {
     //     };
 
     //     fetchFinancialMetrics();
-    // }, []);
+    // }, [frequency]);
 
     return (
         <div className=" bg-white px-[31px] py-[26px] rounded-[16px] border border-[#e8e8e8]   w-full h-full flex flex-col justify-between">

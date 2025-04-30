@@ -6,6 +6,15 @@ export async function getConvertedInvoiceTotal(
     invoices: IndividualInvoiceFromDataBaseType[],
     toCurrency: "USD" | "INR"
 ): Promise<number> {
+
+    if (invoices.length === 0) {
+        console.log("Got No invoice to convert currency");
+
+        return 0;
+
+    }
+
+
     const INRinvoices = invoices.filter(inv => inv.currency === "INR");
     const USDinvoices = invoices.filter(inv => inv.currency === "USD");
 
