@@ -3,7 +3,7 @@
 import axios, { AxiosError } from "axios";
 import { IoAddCircle } from "react-icons/io5";
 import { GoX } from "react-icons/go";
-import { useForm } from "react-hook-form";
+import { useForm, UseFormReturn } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { createInvoiceZodSchema, createInvoiceFormType } from "@/lib/zod/create_invoice_zod_schema";
 import { Button } from "../ui/button";
@@ -73,7 +73,7 @@ type DuplicateCheckResponse = {
 
 
 
-const CreateInvoiceForm = () => {
+const CreateInvoiceForm = ({ form }: { form: UseFormReturn<createInvoiceFormType> }) => {
     const [isClientSelectOpen, setIsClientSelectOpen] = useState(false);
     const [issueDatePopoverOpen, setIssueDatePopoverOpen] = useState(false);
     const [dueDatePopoverOpen, setDueDatePopoverOpen] = useState(false);
@@ -82,36 +82,7 @@ const CreateInvoiceForm = () => {
     const [clients, setClients] = useState<Client[]>([]);
     const [selectedClient, setSelectedClient] = useState<Client | null>(null);
 
-    const form = useForm<createInvoiceFormType>({
-        resolver: zodResolver(createInvoiceZodSchema),
-        defaultValues: {
-            invoiceNumber: "",
-            issueDate: new Date(),
-            dueDate: undefined,
-            clientId: "",
-            clientEmail: "",
-            isRecurring: false,
-            recurringFrequency: RecurringFrequency.Monthly,
-            recurringIssueDate: new Date(),
-            recurringDueDate: undefined,
-            items: [
-                {
-                    ishourly: false,
-                    name: "",
-                    quantity: 0,
-                    rate: 0,
-                },
-            ],
-            discountPercent: 0,
-            taxPercent: 0,
-            note: "",
-            terms: "",
-            subTotal: 0,
-            discountAmount: 0,
-            taxAmount: 0,
-            totalAmount: 0,
-        },
-    });
+
 
     const { fields, append, remove } = useFieldArray({
         control: form.control,
