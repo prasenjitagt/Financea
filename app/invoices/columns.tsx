@@ -69,6 +69,7 @@ export const columns: ColumnDef<InvoiceType>[] = [
         },
 
     },
+
     //name
     {
         accessorKey: "clientName",
@@ -239,6 +240,34 @@ function InvoiceActions({ invoice }: { invoice: InvoiceType }) {
         }
     };
 
+
+    const handleMarkAsPaid = async () => {
+        const confirmResult = await Swal.fire({
+            title: "Are you sure?",
+            text: "You want to Mark the Invoice as Paid?",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#d33",
+            confirmButtonText: "Yes, Mark as Paid!",
+        });
+
+        if (confirmResult.isConfirmed) {
+            try {
+                // Send the invoiceId in the URL as a query parameter
+                const res = await axios.put(`${invoices_route}?invoiceId=${invoice._id}`);
+
+                if (res.status === 200) {
+                    showToast("Invoice Marked as Paid successfully");
+
+                    router.refresh();
+                }
+            } catch (error) {
+                console.error("Error Marking as Paid:", error);
+                showToast("Error Marking as Paid");
+            }
+        }
+    };
+
     return (
         <DropdownMenu>
             <DropdownMenuTrigger asChild>
@@ -250,16 +279,24 @@ function InvoiceActions({ invoice }: { invoice: InvoiceType }) {
             <DropdownMenuContent align="end">
                 <DropdownMenuLabel>Actions</DropdownMenuLabel>
                 <DropdownMenuSeparator />
+
                 <DropdownMenuItem
                     className="cursor-pointer"
                     onClick={() => {
-                        showToast("Invoice ID Copied");
+                        navigator.clipboard.writeText(invoice.invoiceNumber);
 
-                        navigator.clipboard.writeText(invoice._id);
+                        showToast("Invoice ID Copied");
                     }}
                 >
-                    Copy Invoice ID
+                    Copy Invoice No.
                 </DropdownMenuItem>
+
+                {!invoice.isPaid && (<DropdownMenuItem
+                    className="cursor-pointer"
+                    onClick={handleMarkAsPaid}
+                >
+                    Mark As Paid
+                </DropdownMenuItem>)}
 
                 <DropdownMenuItem
                     variant="destructive"

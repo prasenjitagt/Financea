@@ -3,11 +3,10 @@
 import axios, { AxiosError } from "axios";
 import { IoAddCircle } from "react-icons/io5";
 import { GoX } from "react-icons/go";
-import { useForm, UseFormReturn } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { createInvoiceZodSchema, createInvoiceFormType } from "@/lib/zod/create_invoice_zod_schema";
+import { UseFormReturn } from "react-hook-form";
+import { createInvoiceFormType } from "@/lib/zod/create_invoice_zod_schema";
 import { Button } from "../ui/button";
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "../ui/form";
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "../ui/input";
 import { Calendar } from "@/components/ui/calendar";
 import { format } from "date-fns";
@@ -31,13 +30,15 @@ import { cn } from "@/lib/utils";
 import { useEffect, useState } from "react";
 import { fetchClients } from "@/lib/helpers/create_invoice/fetchClients";
 import BilledToClientDetails from "./billed_to_client_details";
-import { Checkbox } from "../ui/checkbox";
+import { Checkbox } from "@/components/ui/checkbox";
 import { useFieldArray } from "react-hook-form";
-import { Separator } from "../ui/separator";
+import { Separator } from "@/components/ui/separator";
 import { uptoTwoDecimalPlaces } from "@/lib/helpers/create_invoice/uptoTwoDecimalPlaces";
 import { useWatch } from "react-hook-form";
 import Swal from "sweetalert2";
 import { check_invoice_number_route, create_new_invoice_route } from "@/lib/helpers/api-endpoints";
+import { useRouter } from "next/navigation";
+import CreateClientDialogBox from "@/components/create_client_dialog_box";
 
 
 //RecurringFrequency Should Match With Zod
@@ -82,7 +83,7 @@ const CreateInvoiceForm = ({ form }: { form: UseFormReturn<createInvoiceFormType
     const [clients, setClients] = useState<Client[]>([]);
     const [selectedClient, setSelectedClient] = useState<Client | null>(null);
 
-
+    const router = useRouter();
 
     const { fields, append, remove } = useFieldArray({
         control: form.control,
@@ -124,6 +125,29 @@ const CreateInvoiceForm = ({ form }: { form: UseFormReturn<createInvoiceFormType
     const taxAmount = form.watch("taxAmount");
     const totalAmount = form.watch("totalAmount");
     const isRecurring = form.watch("isRecurring");
+    const currency = form.watch("currency");
+    const currencySymbol = currency === "USD" ? "$" : "₹";
+
+    function handleNumberInputFocus(
+        e: React.FocusEvent<HTMLInputElement>,
+        defaultValue: number
+    ) {
+        if (e.target.value === `${defaultValue}`) {
+            e.target.value = "";
+        }
+    }
+
+    function handleNumberInputBlur(
+        e: React.FocusEvent<HTMLInputElement>,
+        onChange: (value: number) => void,
+        defaultValue: number
+    ) {
+        if (e.target.value === "") {
+            e.target.value = "0";
+            onChange(defaultValue);
+        }
+    }
+
 
 
 
@@ -295,9 +319,21 @@ const CreateInvoiceForm = ({ form }: { form: UseFormReturn<createInvoiceFormType
                                                 <CommandInput placeholder="Search client..." />
                                                 <CommandEmpty>No client found.</CommandEmpty>
                                                 <CommandList className="h-[250px]">
-                                                    <CommandGroup>
+                                                    <CommandGroup >
+                                                        <CommandItem
+
+
+                                                        >
+
+
+
+
+
+                                                            <CreateClientDialogBox />
+                                                        </CommandItem>
                                                         {clients.map((client) => (
                                                             <CommandItem
+                                                                className="cursor-pointer"
                                                                 key={client._id}
                                                                 value={client.clientName}
                                                                 onSelect={() => {
@@ -631,7 +667,14 @@ const CreateInvoiceForm = ({ form }: { form: UseFormReturn<createInvoiceFormType
                                         <FormItem>
                                             <FormLabel>{isHourly ? "Hours" : "Qty"}</FormLabel>
                                             <FormControl>
-                                                <Input className="w-[140px]" type="number" {...field} min={1} />
+                                                <Input
+                                                    type="number"
+                                                    min={1}
+                                                    placeholder="E.g 10"
+                                                    {...field}
+                                                    onFocus={e => handleNumberInputFocus(e, 0)}
+                                                    onBlur={e => handleNumberInputBlur(e, field.onChange, 0)}
+                                                />
                                             </FormControl>
                                             <FormMessage />
                                         </FormItem>
@@ -646,7 +689,14 @@ const CreateInvoiceForm = ({ form }: { form: UseFormReturn<createInvoiceFormType
                                         <FormItem>
                                             <FormLabel>Rate</FormLabel>
                                             <FormControl>
-                                                <Input className="w-[140px]" type="number" {...field} min={0} />
+                                                <Input
+                                                    type="number"
+                                                    min={1}
+                                                    placeholder="E.g 10"
+                                                    {...field}
+                                                    onFocus={e => handleNumberInputFocus(e, 0)}
+                                                    onBlur={e => handleNumberInputBlur(e, field.onChange, 0)}
+                                                />
                                             </FormControl>
                                             <FormMessage />
                                         </FormItem>
@@ -725,53 +775,67 @@ const CreateInvoiceForm = ({ form }: { form: UseFormReturn<createInvoiceFormType
                     </div>
 
                     {/* Total */}
-                    <div className="flex flex-col justify-between">
+                    <div className="w-full flex flex-col justify-between">
                         {/* Sub total */}
                         <div className="flex justify-between items-center">
                             <p className="text-[14px] text-[#747474]">Sub Total</p>
-                            <p>{`₹ ${subTotal}`}</p>
+                            <p>{`${currencySymbol} ${subTotal}`}</p>
                         </div>
 
-                        {/* Discount */}
-                        <div className=" flex justify-between items-center">
+                        {/* Discount % */}
+                        <div className=" flex justify-between items-baseline-last ">
                             <FormField
                                 control={form.control}
                                 name="discountPercent"
                                 render={({ field }) => (
                                     <FormItem>
-                                        <div className="flex justify-between items-center space-x-[80px]">
-                                            <FormLabel className="text-[14px] text-[#747474]">Discount</FormLabel>
-                                            <FormControl>
-                                                <Input className="w-[40px]" placeholder="E.g 10%" {...field} />
-                                            </FormControl>
-                                        </div>
+                                        <FormLabel className=" text-[14px] text-[#747474]">Discount (%)</FormLabel>
+                                        <FormControl>
+                                            <Input
+                                                type="number"
+                                                min={0}
+                                                max={100}
+                                                placeholder="E.g 10"
+                                                {...field}
+                                                onFocus={e => handleNumberInputFocus(e, 0)}
+                                                onBlur={(e) => handleNumberInputBlur(e, field.onChange, 0)}
+
+                                            />
+                                        </FormControl>
                                         <FormMessage />
                                     </FormItem>
                                 )}
                             />
+                            <p >{`${currencySymbol} ${discountAmount}`}</p>
 
-                            <p >{`₹ ${discountAmount}`}</p>
                         </div>
 
-                        {/* Tax */}
-                        <div className=" flex justify-between items-center">
+                        {/* Tax % */}
+                        <div className=" flex justify-between items-baseline-last">
                             <FormField
                                 control={form.control}
                                 name="taxPercent"
                                 render={({ field }) => (
                                     <FormItem>
-                                        <div className="flex justify-between items-center space-x-[80px]">
-                                            <FormLabel className="text-[14px] text-[#747474]">Tax</FormLabel>
-                                            <FormControl>
-                                                <Input className="w-[40px]" placeholder="E.g 10%" {...field} />
-                                            </FormControl>
-                                        </div>
+                                        <FormLabel className="text-[14px] text-[#747474]">Tax (%)</FormLabel>
+                                        <FormControl>
+                                            <Input
+                                                type="number"
+                                                min={0}
+                                                max={100}
+                                                placeholder="E.g 10"
+                                                {...field}
+                                                onFocus={e => handleNumberInputFocus(e, 0)}
+                                                onBlur={(e) => handleNumberInputBlur(e, field.onChange, 0)}
+
+                                            />
+                                        </FormControl>
                                         <FormMessage />
                                     </FormItem>
                                 )}
                             />
 
-                            <p >{`₹ ${taxAmount}`}</p>
+                            <p >{`${currencySymbol} ${taxAmount}`}</p>
                         </div>
 
 
@@ -780,7 +844,7 @@ const CreateInvoiceForm = ({ form }: { form: UseFormReturn<createInvoiceFormType
                         {/* Total Amount*/}
                         <div className=" flex justify-between items-center">
                             <p className="text-[14px] text-[#363C45] font-bold">Total Amount</p>
-                            <h3 className="scroll-m-20 text-2xl font-semibold tracking-tight">{`₹ ${totalAmount}`}</h3>
+                            <h3 className="scroll-m-20 text-2xl font-semibold tracking-tight">{`${currencySymbol} ${totalAmount}`}</h3>
                         </div>
 
                     </div>

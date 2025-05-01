@@ -42,6 +42,45 @@ export async function GET() {
 }
 
 
+// PUT Handler
+export async function PUT(req: NextRequest) {
+  try {
+    await connectDB("api/invoices/route.ts");
+
+    const session = await getServerSession(FinanceaAuthOptions);
+    if (!session) {
+      console.log("Unauthorized");
+      throw new Error("Unauthorized");
+    }
+
+    const { searchParams } = new URL(req.url);
+    const invoiceId = searchParams.get("invoiceId");
+
+    if (!invoiceId) {
+      return NextResponse.json({ error: "Invoice ID is required" }, { status: 400 });
+    }
+
+    const updatedResult = await InvoiceModel.findByIdAndUpdate(invoiceId, { isPaid: true });
+
+    if (!updatedResult) {
+      return NextResponse.json({ error: "Invoice not found" }, { status: 404 });
+    }
+
+    return NextResponse.json(
+      { message: "Invoice Marked as Paid successfully" },
+      { status: 200 }
+    );
+
+  } catch (error) {
+    console.log("Error Error Marking as Paid", error);
+
+    return NextResponse.json({
+      message: "Error Error Marking as Paid",
+      error: error instanceof Error ? error.message : String(error)
+    }, { status: 500 }) // 500 is more appropriate for server errors
+  }
+}
+
 
 // DELETE Handler
 export async function DELETE(req: NextRequest) {

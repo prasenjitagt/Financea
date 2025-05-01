@@ -35,7 +35,7 @@ const frequencyValues = {
 
 const Dashboard = () => {
 
-  const [frequency, setFrequency] = useState<DashboardFrequency>(DashboardFrequency.Daily);
+  const [frequency, setFrequency] = useState<DashboardFrequency>(DashboardFrequency.Quarterly);
 
 
   return (

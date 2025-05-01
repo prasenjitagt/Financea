@@ -59,7 +59,7 @@ export const createInvoiceZodSchema = z.object({
                 rate: z
                     .coerce
                     .number({ required_error: "Rate is required" })
-                    .min(0, "Rate cannot be negative"),
+                    .min(1, "Rate must be at least 1"),
             })
         )
         .min(1, "At least one invoice item is required"),
@@ -67,14 +67,14 @@ export const createInvoiceZodSchema = z.object({
     discountPercent: z
         .coerce
         .number({ required_error: "Discount is required" })
-        .min(0)
-        .max(100),
+        .min(0, { message: "Minimum Value is 0%" })
+        .max(100, { message: "Maximum Value is 100%" }),
 
     taxPercent: z
         .coerce
         .number({ required_error: "Tax is required" })
-        .min(0)
-        .max(100),
+        .min(0, { message: "Minimum Value is 0%" })
+        .max(100, { message: "Maximum Value is 100%" }),
 
     note: z
         .string()
