@@ -1,102 +1,87 @@
 "use client";
 
-import { useState, useRef, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { FaBell } from "react-icons/fa";
 import { FiMenu } from "react-icons/fi";
 import { Button } from "@/components/ui/button";
 import { FaCirclePlus } from "react-icons/fa6";
 import Link from "next/link";
 import { useSession } from "next-auth/react";
+import { DropdownMenu, DropdownMenuItem, DropdownMenuTrigger } from "./ui/dropdown-menu";
+import { DropdownMenuContent } from "@radix-ui/react-dropdown-menu";
+import { useRouter } from "next/navigation";
+
+interface NavLinksType {
+  title: string,
+  url: string,
+}
+const navLinks: NavLinksType[] = [
+  { title: "Create Invoice", url: "/invoices/create-invoice" },
+  { title: "Create Client", url: "/clients/create-client" },
+  { title: "Create Expense", url: "/expenses/create-expense" },
+];
 
 
-const Navbar = ({ toggleSidebar }: { toggleSidebar: () => void }) => {
-  const [dropdownOpen, setDropdownOpen] = useState(false);
-  const dropdownRef = useRef<HTMLDivElement>(null);
+export default function Navbar() {
   const [username, setUsername] = useState("Guest");
-
   const { data: session, status } = useSession();
+  const router = useRouter();
 
-
-  //Setting User Name
   useEffect(() => {
     if (status === "loading") {
       setUsername("Name Loading...");
     } else if (status === "unauthenticated" || !session) {
       setUsername("Guest");
     } else {
-      // session is guaranteed to be non-null here
       setUsername(session.user?.username ?? "Guest");
     }
   }, [session, status]);
 
-
-
-  useEffect(() => {
-    function handleClickOutside(event: MouseEvent) {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
-        setDropdownOpen(false);
-      }
-    }
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, []);
-
   return (
-    <div className="flex items-center justify-between bg-white px-6 py-2 shadow-md">
-      <div className="flex items-center gap-3">
-        <button onClick={toggleSidebar} className="md:hidden text-gray-700">
-          <FiMenu size={24} />
-        </button>
-        <div>
-          <p className="text-sm font-semibold text-gray-500">Hey 😊😊,</p>
-          <h2 className="text-lg font-bold text-gray-800">{username}</h2>
-        </div>
-      </div>
+    <div className="sticky top-0 z-50 h-[64px] px-6 py-2 flex items-center justify-between bg-white/80 backdrop-blur-md shadow-md">
+      {/* Greeting and Username */}
+      <section>
+        <p className="text-sm font-semibold text-gray-500">Hey 😊😊,</p>
+        <h2 className="text-lg font-bold text-gray-800">{username}</h2>
+      </section>
 
-      <div className="flex items-center space-x-6 relative" ref={dropdownRef}>
+      {/* Notification and triggerbutton */}
+      <section className="flex items-center gap-4">
+        {/* Notification */}
         <div className="relative">
           <FaBell className="text-gray-600 text-lg cursor-pointer" />
           <span className="absolute top-[-2px] right-[-3px] w-2.5 h-2.5 bg-red-500 rounded-full"></span>
         </div>
 
-        <div className="relative">
-          <Button
-            variant="outline"
-            className="flex items-center gap-2 px-3 py-1.5 text-sm font-medium text-purple-600"
-            onClick={() => setDropdownOpen(!dropdownOpen)}
-          >
-            <FaCirclePlus />
-          </Button>
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button
+              variant="ghost"
+              size="icon"
+              className="w-[25px] h-[25px] text-purple-600 hover:bg-transparent"
+            >
+              <FaCirclePlus className="w-5 h-5" />
+            </Button>
+          </DropdownMenuTrigger>
 
-          {dropdownOpen && (
-            <div className="absolute right-0 mt-2 w-44 bg-white border border-gray-200 rounded-md shadow-md z-50">
-              <Link
-                href="/clients/create-client"
-                className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                onClick={() => setDropdownOpen(false)}
+          <DropdownMenuContent
+            align="end"
+            className="w-[200px] bg-white border border-gray-200 rounded-md shadow-lg z-10"
+          >
+            {navLinks.map((linkItem) => (
+              <DropdownMenuItem
+                key={linkItem.url}
+                onClick={() => router.push(linkItem.url)}
+                className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
               >
-                Create Client
-              </Link>
-              <Link
-                href="/expenses/create-expense"
-                className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                onClick={() => setDropdownOpen(false)}
-              >
-                Create Expense
-              </Link>
-              <Link
-                href="/invoices/create-invoice"
-                className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                onClick={() => setDropdownOpen(false)}
-              >
-                Create Invoice
-              </Link>
-            </div>
-          )}
-        </div>
-      </div>
+                {linkItem.title}
+              </DropdownMenuItem>
+            ))}
+          </DropdownMenuContent>
+        </DropdownMenu>
+      </section>
     </div>
   );
 };
 
-export default Navbar;
+

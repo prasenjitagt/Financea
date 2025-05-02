@@ -8,21 +8,8 @@ import PaymentsIcon from "@/assets/icons/payemnts_sidebar_icon.svg";
 import ExpensesIcon from "@/assets/icons/expenses_sidebar_icon.svg";
 import ClientsIcon from "@/assets/icons/clients_sidebar_icon.svg";
 import SettingsIcon from "@/assets/icons/settings_sidebar_icon.svg";
-import {
-    AudioWaveform,
-    BookOpen,
-    Bot,
-    Command,
-    Frame,
-    GalleryVerticalEnd,
-    Map,
-    PieChart,
-    Settings2,
-    SquareTerminal,
-} from "lucide-react";
-
 import { NavMain } from "@/components/sidebar/nav-main";
-import { NavProjects } from "@/components/sidebar/nav-projects";
+// import { NavProjects } from "@/components/sidebar/nav-projects";
 import { NavUser } from "@/components/sidebar/nav-user";
 import { TeamSwitcher } from "@/components/sidebar/team-switcher";
 import {
@@ -69,7 +56,7 @@ const menuItems: SideBarMenuItemType[] = [
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
     return (
         <Sidebar
-            collapsible="icon"
+            collapsible="none"
             {...props}
             className="bg-white dark:bg-white" /* Force white even in dark mode */
         >

@@ -11,6 +11,8 @@ import { Toaster } from "@/components/ui/sonner";
 import { AppSidebar } from "@/components/sidebar/app-sidebar";
 import { usePathname } from "next/navigation";
 import { ThemeProvider } from "@/components/theme-provider";
+import Navbar from "@/components/Navbar";
+import { Separator } from "@/components/ui/separator";
 
 export default function RootLayout({
   children,
@@ -27,7 +29,7 @@ export default function RootLayout({
   return (
     <Provider store={store}>
       <SidebarProvider>
-        <html lang="en" suppressHydrationWarning>
+        <html lang="en" suppressHydrationWarning className="h-screen">
           <Head>
             <meta charSet="UTF-8" />
             <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -36,30 +38,43 @@ export default function RootLayout({
             <link rel="shortcut icon" href="/favicon.ico" />
           </Head>
           <AuthProvider>
-            <body>
+            <body className="h-full" >
 
               <ThemeProvider
                 attribute="class"
-                defaultTheme="system"
+                defaultTheme="light"
                 enableSystem
                 disableTransitionOnChange
               >
 
                 {hideSidebar ? (
                   // No Sidebar Layout (Login/Signup)
-                  <main className="w-full p-6">
+                  <main className="w-full">
                     {children}
                   </main>
                 ) : (
                   // Layout with Sidebar
-                  <>
-                    <AppSidebar />
-                    <SidebarTrigger />
-                    <main className="w-full p-6">
-                      {children}
+                  <main className="w-full flex ">
+
+                    {/* Sidebar */}
+                    <section className="flex" >
+                      <AppSidebar />
+                      {/* <SidebarTrigger /> */}
+                    </section>
+
+                    <Separator orientation="vertical" />
+
+
+                    <div className="w-full h-screen overflow-auto bg-[#F7F6F6]">
+                      <Navbar />
+                      <div className="p-6  ">
+                        {children}
+                      </div>
                       <Toaster />
-                    </main>
-                  </>
+                    </div>
+
+
+                  </main>
                 )}
 
 
