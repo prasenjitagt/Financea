@@ -23,7 +23,6 @@ export default function CreateClientDialogBox() {
             <AlertDialogTrigger asChild>
                 <Button
                     className="w-full"
-                // onClick={() => { router.push("/clients/create-client"); }}
                 >
                     Add New Client
                 </Button>
@@ -38,7 +37,9 @@ export default function CreateClientDialogBox() {
                 </AlertDialogHeader>
                 <AlertDialogFooter>
                     <AlertDialogCancel>Cancel</AlertDialogCancel>
-                    <AlertDialogAction>Continue</AlertDialogAction>
+                    <AlertDialogAction
+                        onClick={() => { router.push("/clients/create-client"); }}
+                    >Add Client</AlertDialogAction>
                 </AlertDialogFooter>
             </AlertDialogContent>
         </AlertDialog>

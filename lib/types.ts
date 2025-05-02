@@ -1,6 +1,7 @@
 //lib/types.ts
 
 import { ObjectId } from 'mongodb';
+import { StaticImageData } from 'next/image';
 
 //resposne from razorpay after generating invoice and sending payment link
 export interface RazorpayPaymentLinkResponseType {
@@ -250,4 +251,19 @@ export interface FinancialMetricsResponseType {
     currentPeriod: FinancialMetricsCurrentPeriod;
     previousPeriod: FinancialMetricsPrevPeriod;
     interval: 'daily' | 'monthly' | 'quarterly' | 'yearly';
+}
+
+interface SideBarSubMenuItemType {
+    title: string,
+    path: string,
+}
+
+
+//sidebar menu item type
+export interface SideBarMenuItemType {
+    title: string,
+    icon: StaticImageData,
+    path: string,
+    isActive?: boolean
+    subMenuItems?: SideBarSubMenuItemType[]
 }
