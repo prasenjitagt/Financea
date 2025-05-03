@@ -7,7 +7,8 @@ export async function middleware(request: NextRequest) {
 
     // Define public and auth routes
     const publicRoutes = ["/login", "/signup", "/"];
-    const isPublicRoute = publicRoutes.some(route => pathname.startsWith(route));
+    const isPublicRoute = publicRoutes.includes(pathname);
+
 
     // 1. Redirect logged-in users from auth pages to homepage
     if (token && isPublicRoute) {

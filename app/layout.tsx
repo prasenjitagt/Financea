@@ -55,25 +55,23 @@ export default function RootLayout({
                 ) : (
                   // Layout with Sidebar
                   <main className="w-full flex ">
-
                     {/* Sidebar */}
                     <section className="flex" >
                       <AppSidebar />
-                      {/* <SidebarTrigger /> */}
                     </section>
 
                     <Separator orientation="vertical" />
 
-
-                    <div className="w-full h-screen overflow-auto bg-[#F7F6F6]">
+                    <div className="w-full h-screen overflow-auto bg-[#F7F6F6] dark:bg-[#171717]">
                       <Navbar />
-                      <div className="p-6  ">
+                      <section className="px-6 pb-4">
+                        <div className="my-2 ">
+                          <SidebarTrigger />
+                        </div>
                         {children}
-                      </div>
+                      </section>
                       <Toaster />
                     </div>
-
-
                   </main>
                 )}
 

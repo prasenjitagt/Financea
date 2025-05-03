@@ -1,13 +1,12 @@
 "use client"
 
 import { usePathname, useRouter } from "next/navigation";
-import { ChevronRight } from "lucide-react"
-import Image from "next/image";
+import { ChevronRight } from "lucide-react";
 import {
     Collapsible,
     CollapsibleContent,
     CollapsibleTrigger,
-} from "@/components/ui/collapsible"
+} from "@/components/ui/collapsible";
 import {
     SidebarGroup,
     SidebarMenu,
@@ -16,10 +15,36 @@ import {
     SidebarMenuSub,
     SidebarMenuSubButton,
     SidebarMenuSubItem,
-} from "@/components/ui/sidebar"
-import { SideBarMenuItemType } from "@/lib/types"
+} from "@/components/ui/sidebar";
+import { SideBarMenuItemType } from "@/lib/types";
+import Image from "next/image";
+import DashboardIcon from "@/assets/icons/dashboard_sidebar_icon.svg";
+import InvoicesIcon from "@/assets/icons/invoices_sidebar_icon.svg";
+import ExpensesIcon from "@/assets/icons/expenses_sidebar_icon.svg";
+import ClientsIcon from "@/assets/icons/clients_sidebar_icon.svg";
+import SettingsIcon from "@/assets/icons/settings_sidebar_icon.svg";
 
-export function NavMain({ menuItems }: { menuItems: SideBarMenuItemType[] }) {
+const menuItems: SideBarMenuItemType[] = [
+    { title: "Dashboard", icon: DashboardIcon, path: "/", isActive: true },
+    { title: "Invoices", icon: InvoicesIcon, path: "/invoices" },
+    // { title: "Payments", icon: PaymentsIcon, path: "/payments" },
+    { title: "Expenses", icon: ExpensesIcon, path: "/expenses" },
+    { title: "Clients", icon: ClientsIcon, path: "/clients" },
+    // { title: "Reports", icon: ReportsIcon, path: "/reports" },
+    {
+        title: "Settings",
+        icon: SettingsIcon,
+        path: "/settings",
+        subMenuItems: [
+            {
+                title: "Account",
+                path: "/settings/account"
+            }
+        ]
+    },
+];
+
+export function NavMain() {
     const pathname = usePathname();
     const router = useRouter();
 
