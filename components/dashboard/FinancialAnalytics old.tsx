@@ -4,7 +4,7 @@ import React from 'react';
 
 import { AreaChart, Area, XAxis, YAxis, Tooltip, CartesianGrid, ResponsiveContainer } from 'recharts';
 import { Archivo } from 'next/font/google';
-import { DashboardFrequency } from '@/app/page';
+import { DashboardFrequency } from '@/app/dashboard/page';
 
 // Import Archivo font from Google Fonts
 const archivo = Archivo({

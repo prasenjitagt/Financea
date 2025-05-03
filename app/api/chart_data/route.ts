@@ -1,6 +1,6 @@
 
 import { NextResponse } from 'next/server';
-import { DashboardFrequency } from '@/app/page';
+import { DashboardFrequency } from '@/app/dashboard/page';
 
 export async function GET(request: Request) {
     const { searchParams } = new URL(request.url);

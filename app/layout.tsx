@@ -24,7 +24,7 @@ export default function RootLayout({
   }, []);
 
   // List of routes without sidebar
-  const hideSidebar = ["/login", "/signup"].includes(pathname);
+  const hideSidebar = ["/login", "/signup", "/"].includes(pathname);
 
   return (
     <Provider store={store}>

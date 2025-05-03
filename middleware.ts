@@ -6,12 +6,12 @@ export async function middleware(request: NextRequest) {
     const token = await getToken({ req: request });
 
     // Define public and auth routes
-    const publicRoutes = ["/login", "/signup"];
+    const publicRoutes = ["/login", "/signup", "/"];
     const isPublicRoute = publicRoutes.some(route => pathname.startsWith(route));
 
     // 1. Redirect logged-in users from auth pages to homepage
     if (token && isPublicRoute) {
-        return NextResponse.redirect(new URL("/", request.url));
+        return NextResponse.redirect(new URL("/dashboard", request.url));
     }
 
     // 2. Allow public routes to be accessed without token
