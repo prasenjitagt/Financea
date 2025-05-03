@@ -38,11 +38,11 @@ const PaymentRequests = () => {
   if (error) return <p className="text-center text-red-500">{error}</p>;
 
   return (
-    <div className="bg-white p-5 rounded-xl shadow-md mt-6 md:h-[34.3rem]">
+    <div className="border p-5 rounded-xl shadow-md mt-6 md:h-[34.3rem]">
 
       {/* Header Section */}
       <div className=" items-center mb-4">
-        <h2 className="text-lg font-semibold text-black">Payment Requests</h2>
+        <h2 className="text-lg font-semibold">Payment Requests</h2>
       </div>
 
       {

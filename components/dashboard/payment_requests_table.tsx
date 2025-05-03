@@ -1,5 +1,5 @@
 
-import { InvoiceType } from "@/app/invoices/columns";
+import { InvoiceType } from "@/lib/types";
 import {
     Table,
     TableBody,

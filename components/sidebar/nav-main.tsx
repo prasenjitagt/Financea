@@ -25,7 +25,7 @@ import ClientsIcon from "@/assets/icons/clients_sidebar_icon.svg";
 import SettingsIcon from "@/assets/icons/settings_sidebar_icon.svg";
 
 const menuItems: SideBarMenuItemType[] = [
-    { title: "Dashboard", icon: DashboardIcon, path: "/", isActive: true },
+    { title: "Dashboard", icon: DashboardIcon, path: "/dashboard", isActive: true },
     { title: "Invoices", icon: InvoicesIcon, path: "/invoices" },
     // { title: "Payments", icon: PaymentsIcon, path: "/payments" },
     { title: "Expenses", icon: ExpensesIcon, path: "/expenses" },
@@ -74,10 +74,10 @@ export function NavMain() {
                                     <>
                                         <CollapsibleTrigger asChild>
                                             <SidebarMenuButton
-                                                className={`rounded-none h-10 cursor-pointer ${pathname.startsWith(item.path) ? "bg-[#e8eeff]" : ""}`}
+                                                className={`rounded-none h-10  ${pathname.startsWith(item.path) ? "bg-[#e8eeff] dark:bg-[#212121]" : ""}`}
                                                 tooltip={item.title}
                                             >
-                                                {item.icon && <Image src={item.icon} alt={`${item.title} icon`} width={20} />}
+                                                {item.icon && <Image className="dark:invert" src={item.icon} alt={`${item.title} icon`} width={20} />}
                                                 <span>{item.title}</span>
                                                 <ChevronRight className="ml-auto transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90" />
                                             </SidebarMenuButton>
@@ -87,7 +87,7 @@ export function NavMain() {
                                                 {item.subMenuItems?.map((subItem) => (
                                                     <SidebarMenuSubItem key={subItem.title}>
                                                         <SidebarMenuSubButton
-                                                            className={`rounded-none h-7 cursor-pointer ${pathname === subItem.path ? "bg-[#e8eeff] border-r-[3px] border-[#5E84EC]" : ""}`}
+                                                            className={`rounded-none h-7 cursor-pointer ${pathname === subItem.path ? "bg-[#e8eeff] dark:bg-[#212121] border-r-[3px] border-[#5E84EC]" : ""}`}
 
                                                             onClick={() => handleNavigation(subItem.path)}
                                                         >
@@ -100,12 +100,12 @@ export function NavMain() {
                                     </>
                                 ) : (
                                     <SidebarMenuButton
-                                        className={`rounded-none h-10  ${pathname === item.path ? "bg-[#e8eeff] border-r-[3px] border-[#5E84EC]" : ""}`}
+                                        className={`rounded-none h-10  ${pathname === item.path ? "bg-[#e8eeff] dark:bg-[#212121] border-r-[3px] border-[#5E84EC]" : ""}`}
                                         tooltip={item.title}
                                         onClick={() => handleNavigation(item.path)}
                                     >
 
-                                        {item.icon && <Image src={item.icon} alt={`${item.title} icon`} width={20} />}
+                                        {item.icon && <Image className="dark:invert" src={item.icon} alt={`${item.title} icon`} width={20} />}
                                         <span>{item.title}</span>
                                     </SidebarMenuButton>
                                 )}

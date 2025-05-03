@@ -42,7 +42,7 @@ const Dashboard = () => {
     <div>
       {/* ✅ Financial Analytics Header */}
       <div className={`${archivo.className} flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4`}>
-        <h1 className="md:text-3xl text-2xl text-gray-800 md:py-1">Financial Analytics</h1>
+        <h1 className="md:text-3xl text-2xl text-gray-800 dark:text-white md:py-1">Financial Analytics</h1>
         <Select
           value={frequency}
           onValueChange={(value) => setFrequency(value as DashboardFrequency)}
@@ -75,7 +75,7 @@ const Dashboard = () => {
 
       {/* ✅ Your Overview Section */}
       <div className="mt-[22px]">
-        <h2 className="md:text-3xl text-2xl text-gray-800 font-medium md:py-1">Your Overview</h2>
+        <h2 className="md:text-3xl text-2xl text-gray-800 dark:text-white font-medium md:py-1">Your Overview</h2>
       </div>
 
       {/* ✅ Payment Requests, Recent Expenses, New Customers & Expenses Chart */}

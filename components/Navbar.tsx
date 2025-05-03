@@ -38,18 +38,18 @@ export default function Navbar() {
   }, [session, status]);
 
   return (
-    <div className="sticky top-0 z-50 h-[64px] px-6 py-2 flex items-center justify-between bg-white/80 backdrop-blur-md shadow-md">
+    <div className="sticky top-0 z-50 h-[64px] px-6 py-2 flex items-center justify-between border opacity-80 backdrop-blur-md shadow-md">
       {/* Greeting and Username */}
       <section>
-        <p className="text-sm font-semibold text-gray-500">Hey 😊😊,</p>
-        <h2 className="text-lg font-bold text-gray-800">{username}</h2>
+        <p className="text-sm font-semibold text-gray-500 dark:text-white">Hey 😊😊,</p>
+        <h2 className="text-lg font-bold text-gray-800 dark:text-white">{username}</h2>
       </section>
 
       {/* Notification and triggerbutton */}
       <section className="flex items-center gap-4">
         {/* Notification */}
         <div className="relative">
-          <FaBell className="text-gray-600 text-lg cursor-pointer" />
+          <FaBell className="text-gray-600 dark:text-white text-lg cursor-pointer" />
           <span className="absolute top-[-2px] right-[-3px] w-2.5 h-2.5 bg-red-500 rounded-full"></span>
         </div>
 

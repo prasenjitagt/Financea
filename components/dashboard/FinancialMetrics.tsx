@@ -116,7 +116,7 @@ const FinancialMetrics = ({ frequency }: FinancialAnalyticsProps) => {
     }, [frequency]);
 
     return (
-        <div className=" bg-white px-[31px] py-[26px] rounded-[16px] border border-[#e8e8e8]   w-full h-full flex flex-col justify-between">
+        <div className=" border px-[31px] py-[26px] rounded-[16px] shadow-lg  w-full h-full flex flex-col justify-between">
             <FinMetricCard
                 title="Total Revenue"
                 amount={financialMetrics?.totalRevenue ?? 0}

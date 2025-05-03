@@ -62,7 +62,8 @@ export default function RootLayout({
 
                     <Separator orientation="vertical" />
 
-                    <div className="w-full h-screen overflow-auto bg-[#F7F6F6] dark:bg-[#171717]">
+                    {/* <div className="w-full h-screen overflow-auto bg-[#F7F6F6] dark:bg-[#171717]"> */}
+                    <div className="w-full h-screen overflow-auto ">
                       <Navbar />
                       <section className="px-6 pb-4">
                         <div className="my-2 ">

@@ -40,7 +40,7 @@ export default function FinancialAnalytics({ frequency }: FinancialAnalyticsProp
 
 
     return (
-        <div className="bg-white py-6 px-[15px] mt-[-0.15rem] rounded-[16px] border border-[#e8e8e8] h-[410px] md:h-[440px] flex flex-col justify-between">
+        <div className="border py-6 px-[15px] mt-[-0.15rem] rounded-[16px] shadow-lg  h-[410px] md:h-[440px] flex flex-col justify-between">
             <div className={`${archivo.className} flex-grow flex items-center text-[14px]`}>
                 <ResponsiveContainer width="100%" height="100%">
                     <AreaChart

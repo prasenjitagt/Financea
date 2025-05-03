@@ -12,8 +12,8 @@ const totalExpense = 3500
 
 const ExpensesChart = () => {
   return (
-    <div className="bg-white p-5 rounded-lg shadow-md w-full max-w-2xl">
-      <h3 className="text-gray-600 font-semibold text-lg mb-3">Expense</h3>
+    <div className="border p-5 rounded-lg shadow-md w-full max-w-2xl">
+      <h3 className=" font-semibold text-lg mb-3">Expense</h3>
 
       <div className="flex items-center">
         {/* Chart Container */}
@@ -31,8 +31,8 @@ const ExpensesChart = () => {
           {data.map((item, index) => (
             <div key={index} className="flex items-center gap-2">
               <span className="w-3 h-3 rounded-full" style={{ background: item.fill }}></span>
-              <p className="text-lg text-gray-700">{item.name}</p>
-              <p className="text-lg font-bold text-gray-900">${item.value}</p>
+              <p className="text-lg text-gray-700 dark:text-white">{item.name}</p>
+              <p className="text-lg font-bold ">${item.value}</p>
             </div>
           ))}
         </div>
@@ -40,7 +40,7 @@ const ExpensesChart = () => {
 
       {/* Total Expense Info */}
       <div className="text-center mt-4">
-        <h2 className="text-2xl font-bold text-gray-900">${totalExpense}</h2>
+        <h2 className="text-2xl font-bold ">${totalExpense}</h2>
         <p className="text-xl text-gray-500">6% low from previous month</p>
       </div>
     </div>
