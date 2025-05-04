@@ -58,7 +58,7 @@ export default async function ExpensesDesktopView() {
   const totalPayments = expensesData.reduce((sum, expense) => sum + expense.amount, 0);
 
   return (
-    <div className="h-full flex flex-col bg-white p-5 rounded-lg container mx-auto">
+    <div className="h-full flex flex-col border p-5 rounded-lg container mx-auto">
       {/* Top Cards Section */}
       <section className="flex space-x-[12px] mb-[38px]">
         <ClientsPageTotalClientsCards

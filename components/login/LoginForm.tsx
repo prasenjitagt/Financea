@@ -74,7 +74,7 @@ export default function LoginForm() {
   }
 
   return (
-    <div className="bg-white rounded-lg shadow-lg w-full max-w-md relative md:mt-10 mt-8">
+    <div className="border rounded-lg shadow-lg w-full max-w-md relative md:mt-10 mt-8">
       <div className="p-6">
         <button className="absolute top-5 right-4">
           <svg
@@ -102,11 +102,11 @@ export default function LoginForm() {
         </button>
 
         <div className="flex justify-center mb-6 py-2">
-          <Image src="/FinanceaLogo.png" alt="Financea Logo" width={170} height={60} />
+          <Image className="dark:invert" src="/FinanceaLogo.png" alt="Financea Logo" width={170} height={60} />
         </div>
 
         <h2 className="text-2xl font-semibold mb-1">Log in</h2>
-        <p className="text-lg text-gray-600 mb-4">
+        <p className="text-lg text-gray-600 dark:text-white mb-4">
           Create an account?{" "}
           <Link href="/signup" className="text-[#5C2FA8] font-medium text-lg">
             Sign up

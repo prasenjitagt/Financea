@@ -129,7 +129,7 @@ export function InvoiceDataTable<TData, TValue>({
 
 
             {/* Top Table Utilities */}
-            <div className="flex items-center justify-between py-4 space-x-4 sticky top-0 bg-white z-20">
+            <div className="rounded-t-md flex items-center justify-between py-4 px-3 space-x-4 sticky top-0 border z-20">
                 {/* Left: Search */}
                 <Input
                     placeholder="Filter names..."
@@ -180,7 +180,7 @@ export function InvoiceDataTable<TData, TValue>({
             </div>
 
 
-            <div className="rounded-md border">
+            <div className="rounded-b-md border">
                 <Table>
                     <TableHeader>
                         {table.getHeaderGroups().map((headerGroup) => (

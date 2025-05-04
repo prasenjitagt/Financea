@@ -46,7 +46,7 @@ export function NavUser() {
 
 
     const { data: session, status } = useSession();
-    const username = status === "authenticated" ? session.user.username : "Guest";
+    const username = status === "authenticated" ? session.user.username : "Loading...";
     const email = status === "authenticated" ? session.user.email : "";
     const userInitial = username.charAt(0).toUpperCase();
 

@@ -81,7 +81,7 @@ export default function SignupPage() {
 
   return (
     <div className="flex justify-center items-center md:mt-[3rem] font-['Archivo']">
-      <div className="bg-white rounded-lg shadow-lg w-full max-w-md p-6 relative">
+      <div className="border rounded-lg shadow-lg w-full max-w-md p-6 relative">
         <button className="absolute top-5 right-4">
           <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path d="M12 4L4 12" stroke="#000" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
@@ -90,11 +90,11 @@ export default function SignupPage() {
         </button>
 
         <div className="flex justify-center mb-6 py-2">
-          <Image src="/FinanceaLogo.png" alt="Financea Logo" width={170} height={60} />
+          <Image className="dark:invert" src="/FinanceaLogo.png" alt="Financea Logo" width={170} height={60} />
         </div>
 
         <h2 className="text-2xl font-semibold mb-1">Sign up</h2>
-        <p className="text-lg text-gray-600 mb-4">
+        <p className="text-lg text-gray-600  dark:text-white mb-4">
           Already have an account?{" "}
           <Link href="/login" className="text-[#5C2FA8] font-medium text-lg">
             Log in

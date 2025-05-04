@@ -12,7 +12,7 @@ import { useSession } from "next-auth/react";
 const Navbar = ({ toggleSidebar }: { toggleSidebar: () => void }) => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
-  const [username, setUsername] = useState("Guest");
+  const [username, setUsername] = useState("Loading...");
 
   const { data: session, status } = useSession();
 
@@ -22,10 +22,10 @@ const Navbar = ({ toggleSidebar }: { toggleSidebar: () => void }) => {
     if (status === "loading") {
       setUsername("Name Loading...");
     } else if (status === "unauthenticated" || !session) {
-      setUsername("Guest");
+      setUsername("Loading...");
     } else {
       // session is guaranteed to be non-null here
-      setUsername(session.user?.username ?? "Guest");
+      setUsername(session.user?.username ?? "Loading...");
     }
   }, [session, status]);
 

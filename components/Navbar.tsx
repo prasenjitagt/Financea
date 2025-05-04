@@ -21,7 +21,7 @@ const navLinks: NavLinksType[] = [
 
 
 export default function Navbar() {
-  const [username, setUsername] = useState("Guest");
+  const [username, setUsername] = useState("Loading...");
   const { data: session, status } = useSession();
   const router = useRouter();
 
@@ -29,9 +29,9 @@ export default function Navbar() {
     if (status === "loading") {
       setUsername("Name Loading...");
     } else if (status === "unauthenticated" || !session) {
-      setUsername("Guest");
+      setUsername("Loading...");
     } else {
-      setUsername(session.user?.username ?? "Guest");
+      setUsername(session.user?.username ?? "Loading...");
     }
   }, [session, status]);
 

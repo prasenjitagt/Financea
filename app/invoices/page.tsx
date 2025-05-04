@@ -79,11 +79,11 @@ export default async function InvoicesDesktopView() {
 
 
   return (
-    <div className="h-full flex flex-col bg-white p-5 rounded-lg container mx-auto">
+    <div className="h-full flex flex-col border p-5 rounded-lg container mx-auto">
       {/* Top Cards Section */}
       <section className="flex space-x-[12px] mb-[38px]">
 
-        <Card className="flex justify-center w-[273px] h-[106px] bg-[#FCFDFF]">
+        <Card className="flex justify-center w-[273px] h-[106px] border">
           <CardContent className="flex justify-between">
 
             <HeaderInfoCard mainText={"Total Invoices"} count={`${totalInvoices}`} />
@@ -100,7 +100,7 @@ export default async function InvoicesDesktopView() {
           </CardContent>
         </Card>
 
-        <Card className="flex justify-center w-[273px] h-[106px] bg-[#FCFDFF]">
+        <Card className="flex justify-center w-[273px] h-[106px] border">
           <CardContent className="flex justify-between">
 
             <HeaderInfoCardInvoices
@@ -121,7 +121,7 @@ export default async function InvoicesDesktopView() {
           </CardContent>
         </Card>
 
-        <Card className="flex justify-center w-[273px] h-[106px] bg-[#FCFDFF]">
+        <Card className="flex justify-center w-[273px] h-[106px] border">
           <CardContent className="flex justify-between">
 
             <HeaderInfoCard mainText={"Outstanding Invs."} count={`${totalOutstandingInvoices}`} />
@@ -131,7 +131,7 @@ export default async function InvoicesDesktopView() {
           </CardContent>
         </Card>
 
-        <Card className="flex justify-center w-[273px] h-[106px] bg-[#FCFDFF]">
+        <Card className="flex justify-center w-[273px] h-[106px] border">
           <CardContent className="flex justify-between">
 
 

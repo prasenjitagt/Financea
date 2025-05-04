@@ -102,7 +102,7 @@ export const columns: ColumnDef<ExpenseType>[] = [
                         className="inline-block w-3 h-3 rounded-full"
                         style={{ backgroundColor: ExpenseCategoryColor[category] }}
                     />
-                    <div className="text-gray-800 text-sm">{category}</div>
+                    <div className="text-sm">{category}</div>
                 </div>
             );
         },
