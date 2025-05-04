@@ -5,29 +5,15 @@ import { ExpenseDataTable } from "@/app/expenses/data-table";
 import { getServerSession } from "next-auth";
 import { FinanceaAuthOptions } from "../api/auth/[...nextauth]/options";
 import ClientsPageTotalClientsCards from "@/components/clients/clients_page_total_clients_card";
-import ClientsPageTotalPaymentsCards from "@/components/clients/clients_page_total_payments_card";
-import { ExpenseType, IndividualExpenseFromDataBaseType } from "@/lib/types";
+import { IndividualExpenseFromDataBaseType } from "@/lib/types";
 import ExpenseModel from "@/lib/models/Expenses.model";
 import connectDB from "@/lib/database/db_connection";
-import { stringToDate } from "@/lib/helpers/payment_requests/stringToDate";
+import { sanitizeExpenses } from "@/components/expenses/sanitized_expenses";
+import ExpensesPageTotalPaymentsCards from "@/components/expenses/expenses_page_total_payments_card";
 
 
 
 
-function sanitizeExpenses(expense: IndividualExpenseFromDataBaseType): ExpenseType {
-  return {
-    _id: expense._id.toString(),
-    userId: expense.userId.toString(),
-    amount: expense.amount,
-    category: expense.category,
-    currency: expense.currency,
-    date: stringToDate(expense.date.toString()),
-    description: expense.description,
-    createdAt: expense.createdAt.toString(),
-    updatedAt: expense.updatedAt.toString(),
-    __v: expense.__v
-  };
-}
 
 async function getData() {
   try {
@@ -80,10 +66,9 @@ export default async function ExpensesDesktopView() {
           description="Last 30 Days"
           totalClients={numberOfExpenses}
         />
-        <ClientsPageTotalPaymentsCards
+        <ExpensesPageTotalPaymentsCards
           title="Total Amount"
           description="Last 30 Days"
-          clients={expensesData}
           totalPayments={totalPayments}
         />
       </section>

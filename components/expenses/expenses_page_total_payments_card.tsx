@@ -1,15 +1,13 @@
-import { ClientType } from "@/lib/types";
 import { Card, CardContent } from "../ui/card";
 
-interface ClientsPageCardPropType {
+interface ExpensesPageCardPropType {
     title: string,
     description: string,
     totalPayments: number,
-    clients: ClientType[]
 }
 
 
-export default function ClientsPageTotalPaymentsCards({ title, totalPayments, description }: ClientsPageCardPropType) {
+export default function ExpensesPageTotalPaymentsCards({ title, totalPayments, description }: ExpensesPageCardPropType) {
     return (
         <Card className="w-[273px]">
             <CardContent >

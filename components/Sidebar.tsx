@@ -1,7 +1,7 @@
 // Sidebar.tsx
 "use client";
 
-import Image, { StaticImageData } from "next/image";
+import Image from "next/image";
 import DashboardIcon from "@/assets/icons/dashboard_sidebar_icon.svg";
 import InvoicesIcon from "@/assets/icons/invoices_sidebar_icon.svg";
 import PaymentsIcon from "@/assets/icons/payemnts_sidebar_icon.svg";

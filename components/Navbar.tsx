@@ -2,10 +2,8 @@
 
 import { useState, useEffect } from "react";
 import { FaBell } from "react-icons/fa";
-import { FiMenu } from "react-icons/fi";
 import { Button } from "@/components/ui/button";
 import { FaCirclePlus } from "react-icons/fa6";
-import Link from "next/link";
 import { useSession } from "next-auth/react";
 import { DropdownMenu, DropdownMenuItem, DropdownMenuTrigger } from "./ui/dropdown-menu";
 import { DropdownMenuContent } from "@radix-ui/react-dropdown-menu";

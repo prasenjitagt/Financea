@@ -37,7 +37,6 @@ import { uptoTwoDecimalPlaces } from "@/lib/helpers/create_invoice/uptoTwoDecima
 import { useWatch } from "react-hook-form";
 import Swal from "sweetalert2";
 import { check_invoice_number_route, create_new_invoice_route } from "@/lib/helpers/api-endpoints";
-import { useRouter } from "next/navigation";
 import CreateClientDialogBox from "@/components/create_client_dialog_box";
 
 
@@ -83,7 +82,6 @@ const CreateInvoiceForm = ({ form }: { form: UseFormReturn<createInvoiceFormType
     const [clients, setClients] = useState<Client[]>([]);
     const [selectedClient, setSelectedClient] = useState<Client | null>(null);
 
-    const router = useRouter();
 
     const { fields, append, remove } = useFieldArray({
         control: form.control,

@@ -13,7 +13,7 @@ import { useRouter } from "next/navigation";
 import { Card, CardContent } from "@/components/ui/card";
 import HeaderInfoCard from "@/components/profile/header-info-card";
 import HeaderStats from "@/components/profile/header-stats";
-import { clients_route } from "@/lib/helpers/api-endpoints";
+import { clients_route, each_client_route } from "@/lib/helpers/api-endpoints";
 import { ClientType } from "@/lib/types";
 
 
@@ -49,7 +49,7 @@ const ClientPage = () => {
     if (!clientId) return;
     const fetchClient = async () => {
       try {
-        const res = await axios.get(`/api/clients/${clientId}`, {
+        const res = await axios.get(`${each_client_route}${clientId}`, {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,
           },
@@ -140,13 +140,7 @@ const ClientPage = () => {
     if (!confirmResult.isConfirmed) return;
 
     try {
-      const token = localStorage.getItem("token");
-      const res = await axios.delete<ClientType[]>("/api/clients", {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-        data: { clientIds: selectedClients },
-      } as any);
+      const res = await axios.delete<ClientType[]>(`${clients_route}`);
 
       console.log(res);
       setClients(clients.filter((client) => !selectedClients.includes(client._id)));
@@ -159,11 +153,11 @@ const ClientPage = () => {
         icon: "success",
         confirmButtonText: "OK",
       });
-    } catch (err: any) {
+    } catch (err) {
       console.error("Error deleting clients", err);
       Swal.fire({
         title: "Error!",
-        text: err?.response?.data?.error,
+        text: `${err}`,
         icon: "error",
       });
 

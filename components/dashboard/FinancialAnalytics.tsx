@@ -35,6 +35,7 @@ export interface FinancialAnalyticsProps {
 export default function FinancialAnalytics({ frequency }: FinancialAnalyticsProps) {
 
 
+    console.log("Current Frequency:", frequency);
 
 
 

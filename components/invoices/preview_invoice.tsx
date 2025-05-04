@@ -24,8 +24,6 @@ export default function PreviewInvoice({ formData }: PreviewInvoiceProps) {
         clientName,
         clientEmail,
         items,
-        taxPercent,
-        discountPercent,
         totalAmount,
         currency
     } = formData;
