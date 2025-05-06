@@ -86,7 +86,6 @@ export function TeamSwitcher() {
                                 {linkItem.title}
                             </DropdownMenuItem>
                         ))}
-                        <DropdownMenuSeparator />
 
                     </DropdownMenuContent>
                 </DropdownMenu>

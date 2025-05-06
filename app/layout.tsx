@@ -13,6 +13,7 @@ import { usePathname } from "next/navigation";
 import { ThemeProvider } from "@/components/theme-provider";
 import Navbar from "@/components/Navbar";
 import { Separator } from "@/components/ui/separator";
+import TopProgressBar from "@/components/top_progress_bar";
 
 export default function RootLayout({
   children,
@@ -53,26 +54,38 @@ export default function RootLayout({
                     {children}
                   </main>
                 ) : (
+
                   // Layout with Sidebar
-                  <main className="w-full flex ">
-                    {/* Sidebar */}
-                    <section className="flex" >
-                      <AppSidebar />
-                    </section>
+                  <main className="w-full">
 
-                    <Separator orientation="vertical" />
+                    {/* Top Progress Bar */}
+                    {false && <TopProgressBar />}
 
-                    {/* <div className="w-full h-screen overflow-auto bg-[#F7F6F6] dark:bg-[#171717]"> */}
-                    <div className="w-full h-screen overflow-auto ">
-                      <Navbar />
-                      <section className="px-6 pb-4">
-                        <div className="my-2 ">
-                          <SidebarTrigger />
-                        </div>
-                        {children}
+                    <div className="w-full flex ">
+
+
+                      {/* Sidebar */}
+                      <section className="flex" >
+                        <AppSidebar />
                       </section>
-                      <Toaster />
+
+                      <Separator orientation="vertical" />
+
+                      {/* <div className="w-full h-screen overflow-auto bg-[#F7F6F6] dark:bg-[#171717]"> */}
+                      <div className="w-full h-screen overflow-auto ">
+                        <Navbar />
+                        <section className="px-6 pb-4">
+                          <div className="my-2 ">
+                            <SidebarTrigger />
+                          </div>
+                          {children}
+                        </section>
+                        <Toaster />
+                      </div>
+
+
                     </div>
+
                   </main>
                 )}
 
