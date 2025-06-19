@@ -27,10 +27,8 @@ import SettingsIcon from "@/assets/icons/settings_sidebar_icon.svg";
 const menuItems: SideBarMenuItemType[] = [
     { title: "Dashboard", icon: DashboardIcon, path: "/dashboard", isActive: true },
     { title: "Invoices", icon: InvoicesIcon, path: "/invoices" },
-    // { title: "Payments", icon: PaymentsIcon, path: "/payments" },
     { title: "Expenses", icon: ExpensesIcon, path: "/expenses" },
     { title: "Clients", icon: ClientsIcon, path: "/clients" },
-    // { title: "Reports", icon: ReportsIcon, path: "/reports" },
     {
         title: "Settings",
         icon: SettingsIcon,
@@ -39,6 +37,18 @@ const menuItems: SideBarMenuItemType[] = [
             {
                 title: "Account",
                 path: "/settings/account"
+            },
+            {
+                title: "Payment Methods",
+                path: "/settings/payment_methods"
+            },
+            {
+                title: "Notifications",
+                path: "/settings/notifications"
+            },
+            {
+                title: "Security",
+                path: "/settings/security"
             }
         ]
     },
