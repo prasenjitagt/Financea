@@ -14,13 +14,9 @@ export async function GET(request: NextRequest) {
         const { searchParams } = new URL(request.url);
 
 
-        // get UserID from session
-        const session = await getServerSession(FinanceaAuthOptions);
-        if (!session) {
-            console.log("Unauthorized");
-            throw new Error("Unauthorized");
-        }
-        const userId = session.user._id;
+
+        const userId = "680b97b93bdccea043db3c81";
+
 
         // const userId = searchParams.get('userId');
         const toCurrencyParam = searchParams.get("toCurrency");
