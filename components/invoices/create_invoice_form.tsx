@@ -623,7 +623,7 @@ const CreateInvoiceForm = ({ form }: { form: UseFormReturn<createInvoiceFormType
                         const isHourly = form.watch(`items.${index}.ishourly`);
 
                         return (
-                            <div key={item.id} className="flex flex-wrap gap-4 items-end">
+                            <div key={item.id} className="flex items-center gap-4 items-end">
                                 {/* isHourly Checkbox */}
                                 <FormField
                                     control={form.control}

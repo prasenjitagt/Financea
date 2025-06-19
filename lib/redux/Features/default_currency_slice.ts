@@ -1,15 +1,15 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 interface CurrencyInfoState {
-    currency: "inr" | "usd";
+    currency: "INR" | "USD";
 }
 
-const getInitialCurrency = (): "inr" | "usd" => {
+const getInitialCurrency = (): "INR" | "USD" => {
     if (typeof window !== "undefined") {
         const stored = localStorage.getItem("currency");
-        if (stored === "inr" || stored === "usd") return stored;
+        if (stored === "INR" || stored === "USD") return stored;
     }
-    return "inr";
+    return "INR";
 };
 
 const initialState: CurrencyInfoState = {
@@ -18,7 +18,7 @@ const initialState: CurrencyInfoState = {
 
 function setCurrency(
     state: CurrencyInfoState,
-    action: PayloadAction<"inr" | "usd">
+    action: PayloadAction<"INR" | "USD">
 ) {
     state.currency = action.payload;
     if (typeof window !== "undefined") {

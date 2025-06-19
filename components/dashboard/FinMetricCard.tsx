@@ -1,12 +1,13 @@
 import { IoIosArrowRoundUp } from "react-icons/io";
 import { Archivo } from 'next/font/google';
+import { useSelector } from "react-redux";
+import { RootState } from "@/lib/redux/store";
+import { useEffect, useState } from "react";
 
-// Import Archivo font from Google Fonts
 const archivo = Archivo({
     subsets: ['latin'],
 });
 
-// Define the prop types for the component
 type Proptype = {
     title: string;
     amount: number;
@@ -16,37 +17,33 @@ type Proptype = {
 };
 
 const FinMetricCard = ({ title, amount, incDecPercentage, isIncreased, text }: Proptype) => {
-    return (
-        <div
-            className={`${archivo.className} flex justify-between  rounded-lg`}
-        >
-            {/* Left Section - Title and Amount */}
-            <div className="flex flex-col justify-between items-start">
-                {/* Title */}
-                <p className="text-[17px] opacity-60 font-[400]">{title}</p>
+    const [hasMounted, setHasMounted] = useState(false);
 
-                {/* Amount */}
-                <p className="text-[40px] font-[700]">${amount}</p>
+    useEffect(() => {
+        setHasMounted(true);
+    }, []);
+
+    const selectedCurrency = useSelector((state: RootState) => state.currencyInfo.currency);
+    const currencySymbol = selectedCurrency === "INR" ? "₹" : "$";
+
+    if (!hasMounted) return null; // Avoid SSR/CSR mismatch
+
+    return (
+        <div className={`${archivo.className} flex justify-between rounded-lg`}>
+            <div className="flex flex-col justify-between items-start">
+                <p className="text-[17px] opacity-60 font-[400]">{title}</p>
+                <p className="text-[40px] font-[700]">{`${currencySymbol}${amount}`}</p>
             </div>
 
-            {/* Right Section - Percentage Change and Additional Text */}
             <div className="flex flex-col justify-center items-end">
-                {/* Percentage Change Box */}
                 <div
                     className={`w-fit h-[30px] flex justify-center items-center gap-1 rounded-md px-2 
                         ${isIncreased ? "text-[#19C13A] bg-[#19C13A0D]" : "text-[#C11919] bg-[#C119190D]"}`}
                 >
-                    {/* Arrow Icon - Rotates downward if isIncreased is false */}
                     <IoIosArrowRoundUp size={24} className={isIncreased ? "" : "rotate-180"} />
-
-                    {/* Percentage Value */}
-                    {/* <p className="text-[14px] font-[500]">{incDecPercentage}%</p> */}
-
-                    {/* Not using percent for now */}
                     <p className="text-[14px] font-[500]">${incDecPercentage}</p>
                 </div>
 
-                {/* Additional Descriptive Text */}
                 <p className="opacity-60 font-[400] text-right">{text}</p>
             </div>
         </div>

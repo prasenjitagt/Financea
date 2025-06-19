@@ -26,13 +26,13 @@ import { RootState } from "@/lib/redux/store"; // Adjust path as per your projec
 
 const AccountSettings = () => {
     const [isLoggingOut, setIsLoggingOut] = useState(false);
-    // const [inrCurrency, setInrCurrency] = React.useState<Checked>(true);
-    // const [usdCurrency, setUsdCurrency] = React.useState<Checked>(false);
+    // const [INRCurrency, setINRCurrency] = React.useState<Checked>(true);
+    // const [USDCurrency, setUSDCurrency] = React.useState<Checked>(false);
 
     const dispatch = useDispatch();
     const currency = useSelector((state: RootState) => state.currencyInfo.currency);
 
-    const handleCurrencyChange = (selectedCurrency: "inr" | "usd") => {
+    const handleCurrencyChange = (selectedCurrency: "INR" | "USD") => {
         dispatch(setDefaultCurrency(selectedCurrency));
     };
 
@@ -61,14 +61,14 @@ const AccountSettings = () => {
                     <DropdownMenuLabel>Currency</DropdownMenuLabel>
                     <DropdownMenuSeparator />
                     <DropdownMenuCheckboxItem
-                        checked={currency === "inr"}
-                        onCheckedChange={() => handleCurrencyChange("inr")}
+                        checked={currency === "INR"}
+                        onCheckedChange={() => handleCurrencyChange("INR")}
                     >
                         INR
                     </DropdownMenuCheckboxItem>
                     <DropdownMenuCheckboxItem
-                        checked={currency === "usd"}
-                        onCheckedChange={() => handleCurrencyChange("usd")}
+                        checked={currency === "USD"}
+                        onCheckedChange={() => handleCurrencyChange("USD")}
                     >
                         USD
                     </DropdownMenuCheckboxItem>

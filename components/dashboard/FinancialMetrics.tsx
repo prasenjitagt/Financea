@@ -8,6 +8,8 @@ import FinMetricCard from "./FinMetricCard";
 import { financial_metrics_route } from "@/lib/helpers/api-endpoints";
 import axios from "axios";
 import { FinancialMetricsResponseType } from "@/lib/types";
+import { useSelector } from "react-redux";
+import { RootState } from "@/lib/redux/store";
 
 interface MetricsType {
     totalRevenue: number,
@@ -26,6 +28,7 @@ interface MetricsType {
 
 const FinancialMetrics = ({ frequency }: FinancialAnalyticsProps) => {
     const [financialMetrics, setFinancialMetrics] = useState<MetricsType>();
+    const selectedCurrency = useSelector((state: RootState) => state.currencyInfo.currency);
 
     let frequencyToDisplay: "Day" | "Month" | "Quarter" | "Year";
 
@@ -49,7 +52,7 @@ const FinancialMetrics = ({ frequency }: FinancialAnalyticsProps) => {
                     {
                         params: {
                             interval: frequency.toLowerCase(),        // replace with actual userId
-                            toCurrency: "USD",           // or "INR"
+                            toCurrency: selectedCurrency,           // or "INR"
                         },
                     }
                 );
@@ -113,7 +116,7 @@ const FinancialMetrics = ({ frequency }: FinancialAnalyticsProps) => {
         };
 
         fetchFinancialMetrics();
-    }, [frequency]);
+    }, [frequency, selectedCurrency]);
 
     return (
         <div className=" border px-[31px] py-[26px] rounded-[16px] shadow-lg  w-full h-full flex flex-col justify-between">
