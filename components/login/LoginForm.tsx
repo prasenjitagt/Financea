@@ -19,6 +19,7 @@ import { signIn } from "next-auth/react";
 import { useState } from "react";
 import { loginSchema, LoginSchemaType } from "@/lib/helpers/validations";
 import Link from "next/link";
+import { Card } from "../ui/card";
 
 export default function LoginForm() {
   const router = useRouter();
@@ -74,7 +75,7 @@ export default function LoginForm() {
   }
 
   return (
-    <div className="bg-white rounded-lg shadow-lg w-full max-w-md relative md:mt-10 mt-8">
+    <Card className=" rounded-lg shadow-lg w-full max-w-md relative md:mt-10 mt-8">
       <div className="p-6">
         <button className="absolute top-5 right-4">
           <svg
@@ -101,14 +102,14 @@ export default function LoginForm() {
           </svg>
         </button>
 
-        <div className="flex justify-center mb-6 py-2">
+        <div className="flex justify-center dark:invert mb-6 py-2">
           <Image src="/FinanceaLogo.png" alt="Financea Logo" width={170} height={60} />
         </div>
 
         <h2 className="text-2xl font-semibold mb-1">Log in</h2>
-        <p className="text-lg text-gray-600 mb-4">
+        <p className="text-lg text-gray-600 dark:text-gray-100  mb-4">
           Create an account?{" "}
-          <Link href="/signup" className="text-[#5C2FA8] font-medium text-lg">
+          <Link href="/signup" className="text-[#5C2FA8] dark:text-purple-700 font-medium text-lg">
             Sign up
           </Link>
         </p>
@@ -127,7 +128,7 @@ export default function LoginForm() {
                       placeholder="example@gmail.com"
                       type="email"
                       {...field}
-                      className="w-full p-2.5 border rounded-md focus:outline-none focus:ring-1 focus:ring-[#5C2FA8]"
+                      className="w-full p-2.5 border rounded-md focus:outline-none focus:ring-1 focus:ring-[#5C2FA8] dark:focus:ring-purple-700"
                     />
                   </FormControl>
                   <FormMessage />
@@ -147,7 +148,7 @@ export default function LoginForm() {
                         type={showPassword ? "text" : "password"}
                         placeholder="••••••"
                         {...field}
-                        className="w-full p-2.5 border rounded-md focus:outline-none focus:ring-1 focus:ring-[#5C2FA8] pr-10"
+                        className="w-full p-2.5 border rounded-md focus:outline-none focus:ring-1 focus:ring-[#5C2FA8] dark:focus:ring-purple-700 pr-10"
                       />
                       <button
                         type="button"
@@ -185,6 +186,6 @@ export default function LoginForm() {
           </form>
         </Form>
       </div>
-    </div>
+    </Card>
   );
 }

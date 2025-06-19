@@ -2,11 +2,13 @@
 import { configureStore } from "@reduxjs/toolkit";
 import clientReducer from "@/lib/redux/Features/clientSlice";
 import expenseReducer from "@/lib/redux/Features/expenseSlice";
+import currencyInfoReducer from "@/lib/redux/Features/default_currency_slice";
 import { invoiceApi } from "@/lib/redux/Features/invoiceSlice";
 
 // Configure Redux store with reducers and middleware
 export const store = configureStore({
   reducer: {
+    currencyInfo: currencyInfoReducer,
     client: clientReducer,
     expense: expenseReducer,
     [invoiceApi.reducerPath]: invoiceApi.reducer,
