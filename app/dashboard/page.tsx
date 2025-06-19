@@ -1,4 +1,3 @@
-
 "use client";
 
 import PaymentRequests from "@/components/dashboard/PayementRequests";
@@ -7,7 +6,15 @@ import FinancialAnalytics from "@/components/dashboard/FinancialAnalytics";
 import NewCustomer from "@/components/dashboard/NewCustomer";
 import ExpensesChart from "@/components/dashboard/ExpensesChart";
 import FinancialMetrics from "@/components/dashboard/FinancialMetrics";
-import { Select, SelectTrigger, SelectValue, SelectItem, SelectGroup, SelectContent, SelectLabel } from "@/components/ui/select";
+import {
+  Select,
+  SelectTrigger,
+  SelectValue,
+  SelectItem,
+  SelectGroup,
+  SelectContent,
+  SelectLabel,
+} from "@/components/ui/select";
 import { Archivo } from "next/font/google";
 import { useState } from "react";
 
@@ -20,29 +27,30 @@ export enum DashboardFrequency {
   Daily = "Daily",
   Monthly = "Monthly",
   Quarterly = "Quarterly",
-  Yearly = "Yearly"
+  Yearly = "Yearly",
 }
-
-
 
 const frequencyValues = {
   [DashboardFrequency.Daily]: "Daily",
   [DashboardFrequency.Monthly]: "Monthly",
   [DashboardFrequency.Quarterly]: "Quarterly",
-  [DashboardFrequency.Yearly]: "Yearly"
+  [DashboardFrequency.Yearly]: "Yearly",
 };
 
-
 const Dashboard = () => {
-
-  const [frequency, setFrequency] = useState<DashboardFrequency>(DashboardFrequency.Quarterly);
-
+  const [frequency, setFrequency] = useState<DashboardFrequency>(
+    DashboardFrequency.Quarterly
+  );
 
   return (
     <div>
       {/* ✅ Financial Analytics Header */}
-      <div className={`${archivo.className} flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4`}>
-        <h1 className="md:text-3xl text-2xl text-gray-800 dark:text-white md:py-1">Financial Analytics</h1>
+      <div
+        className={`${archivo.className} flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4`}
+      >
+        <h1 className="md:text-3xl text-2xl text-gray-800 dark:text-white md:py-1">
+          Financia Analytics
+        </h1>
         <Select
           value={frequency}
           onValueChange={(value) => setFrequency(value as DashboardFrequency)}
@@ -75,7 +83,9 @@ const Dashboard = () => {
 
       {/* ✅ Your Overview Section */}
       <div className="mt-[22px]">
-        <h2 className="md:text-3xl text-2xl text-gray-800 dark:text-white font-medium md:py-1">Your Overview</h2>
+        <h2 className="md:text-3xl text-2xl text-gray-800 dark:text-white font-medium md:py-1">
+          Your Overview
+        </h2>
       </div>
 
       {/* ✅ Payment Requests, Recent Expenses, New Customers & Expenses Chart */}
