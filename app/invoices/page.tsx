@@ -9,8 +9,10 @@ import { Card, CardContent } from "@/components/ui/card";
 import InvoiceModel from "@/lib/models/Invoice.model";
 import HeaderInfoCard from "@/components/profile/header-info-card";
 import { getInvoiceStats } from "@/lib/helpers/invoices/getInvoiceStats";
-import { IndividualInvoiceFromDataBaseType, InvoiceType } from "@/lib/types";
+import { IndividualInvoiceFromDataBaseType, InvoicePageAmountAndCurrency, InvoiceType } from "@/lib/types";
 import connectDB from "@/lib/database/db_connection";
+import { convertCurrency } from "@/lib/helpers/invoices/convertCurrency";
+
 
 
 export function sanitizeInvoice(invoice: IndividualInvoiceFromDataBaseType): InvoiceType {
@@ -104,6 +106,7 @@ function filterInvoicesForLast30Days(invoices: InvoiceType[]): InvoiceType[] {
 
 
 
+
 export default async function InvoicesDesktopView() {
   const invoiceData = await getData();
 
@@ -117,6 +120,7 @@ export default async function InvoicesDesktopView() {
     totalOutstandingAmountUSDClients,
   } = getInvoiceStats(last30DaysInvoiceData);
 
+  // const AmountDetails: InvoicePageAmountAndCurrency = await convertCurrency(totalAmountINRClients, totalAmountUSDClients);
 
   return (
     <div className="h-full flex flex-col bg-white p-5 rounded-lg container mx-auto">
@@ -128,11 +132,6 @@ export default async function InvoicesDesktopView() {
 
             <HeaderInfoCard mainText={"Total Invoices"} count={`${totalInvoices}`} />
 
-            {/* <HeaderStats
-              percentageChange={23}
-              isIncreased={true}
-              bottomText={"from last month"}
-            /> */}
             <div className="flex items-center">
               <p className="text-muted-foreground text-[14px]">Last 30 Days</p>
             </div>
@@ -149,11 +148,8 @@ export default async function InvoicesDesktopView() {
               usdAmount={totalAmountUSDClients}
             />
 
-            {/* <HeaderStats
-              percentageChange={23}
-              isIncreased={true}
-              bottomText={"from last month"}
-            /> */}
+            {/* <HeaderInfoCard mainText="a" count={`${AmountDetails.currencySymbol} ${AmountDetails.totalAmount}`} /> */}
+
             <div className="flex items-center">
               <p className="text-muted-foreground text-[14px]">Last 30 Days</p>
             </div>

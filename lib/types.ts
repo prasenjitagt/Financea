@@ -267,3 +267,12 @@ export interface SideBarMenuItemType {
     isActive?: boolean
     subMenuItems?: SideBarSubMenuItemType[]
 }
+
+
+
+
+//Amount and currency pages for top cards in invoices page
+export interface InvoicePageAmountAndCurrency {
+    totalAmount: number,
+    currencySymbol: "₹" | "$",
+}
