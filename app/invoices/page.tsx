@@ -4,14 +4,12 @@ import { columns } from "./columns";
 import { InvoiceDataTable } from "@/app/invoices/data-table";
 import { getServerSession } from "next-auth";
 import { FinanceaAuthOptions } from "../api/auth/[...nextauth]/options";
-import HeaderInfoCardInvoices from "@/components/invoices/header-info-card-invoices";
-import { Card, CardContent } from "@/components/ui/card";
+
 import InvoiceModel from "@/lib/models/Invoice.model";
-import HeaderInfoCard from "@/components/profile/header-info-card";
 import { getInvoiceStats } from "@/lib/helpers/invoices/getInvoiceStats";
 import { IndividualInvoiceFromDataBaseType, InvoicePageAmountAndCurrency, InvoiceType } from "@/lib/types";
 import connectDB from "@/lib/database/db_connection";
-import { convertCurrency } from "@/lib/helpers/invoices/convertCurrency";
+import InvoicesTopCardsSection from "@/components/invoices/invoices_top_card_section";
 
 
 
@@ -112,77 +110,13 @@ export default async function InvoicesDesktopView() {
 
   const last30DaysInvoiceData = filterInvoicesForLast30Days(invoiceData);
 
-  const { totalInvoices,
-    totalAmountINRClients,
-    totalAmountUSDClients,
-    totalOutstandingInvoices,
-    totalOutstandingAmountINRClients,
-    totalOutstandingAmountUSDClients,
-  } = getInvoiceStats(last30DaysInvoiceData);
+  const invoiceStats = getInvoiceStats(last30DaysInvoiceData);
 
-  // const AmountDetails: InvoicePageAmountAndCurrency = await convertCurrency(totalAmountINRClients, totalAmountUSDClients);
 
   return (
     <div className="h-full flex flex-col bg-white p-5 rounded-lg container mx-auto">
       {/* Top Cards Section */}
-      <section className="flex space-x-[12px] mb-[38px]">
-
-        <Card className="flex justify-center w-[273px] h-[106px] bg-[#FCFDFF]">
-          <CardContent className="flex justify-between">
-
-            <HeaderInfoCard mainText={"Total Invoices"} count={`${totalInvoices}`} />
-
-            <div className="flex items-center">
-              <p className="text-muted-foreground text-[14px]">Last 30 Days</p>
-            </div>
-
-          </CardContent>
-        </Card>
-
-        <Card className="flex justify-center w-[273px] h-[106px] bg-[#FCFDFF]">
-          <CardContent className="flex justify-between">
-
-            <HeaderInfoCardInvoices
-              mainText={"Total Amount"}
-              inrAmount={totalAmountINRClients}
-              usdAmount={totalAmountUSDClients}
-            />
-
-            {/* <HeaderInfoCard mainText="a" count={`${AmountDetails.currencySymbol} ${AmountDetails.totalAmount}`} /> */}
-
-            <div className="flex items-center">
-              <p className="text-muted-foreground text-[14px]">Last 30 Days</p>
-            </div>
-
-          </CardContent>
-        </Card>
-
-        <Card className="flex justify-center w-[273px] h-[106px] bg-[#FCFDFF]">
-          <CardContent className="flex justify-between">
-
-            <HeaderInfoCard mainText={"Outstanding Invs."} count={`${totalOutstandingInvoices}`} />
-            <div className="flex items-center">
-              <p className="text-muted-foreground text-[14px]">Last 30 Days</p>
-            </div>
-          </CardContent>
-        </Card>
-
-        <Card className="flex justify-center w-[273px] h-[106px] bg-[#FCFDFF]">
-          <CardContent className="flex justify-between">
-
-
-            <HeaderInfoCardInvoices
-              mainText={"Outstanding"}
-              inrAmount={totalOutstandingAmountINRClients}
-              usdAmount={totalOutstandingAmountUSDClients}
-            />
-
-            <div className="flex items-center">
-              <p className="text-muted-foreground text-[14px]">Last 30 Days</p>
-            </div>
-          </CardContent>
-        </Card>
-      </section>
+      <InvoicesTopCardsSection invoiceStats={invoiceStats} />
 
       {/* Desktop and Tablet View Table Section */}
       <section className="hidden md:block w-full flex-1 overflow-scroll">

@@ -100,12 +100,15 @@ export function NavUser() {
                             </DropdownMenuItem>
                             <DropdownMenuItem
                                 className="cursor-pointer"
-                                onClick={() => router.push("/payments")}
+                                onClick={() => router.push("/settings/payment_methods")}
                             >
                                 <CreditCard />
-                                Payments
+                                Payment Methods
                             </DropdownMenuItem>
-                            <DropdownMenuItem>
+                            <DropdownMenuItem
+                                className="cursor-pointer"
+                                onClick={() => router.push("/settings/notifications")}
+                            >
                                 <Bell />
                                 Notifications
                             </DropdownMenuItem>

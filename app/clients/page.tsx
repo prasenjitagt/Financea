@@ -81,10 +81,9 @@ export default async function ClientsDesktopView() {
           totalClients={totalClients}
         />
         <ClientsPageTotalPaymentsCards
-          title="Total Payments"
+          title="Total Service Charge"
           description="Outstanding Balance"
           clients={clientsData}
-          totalPayments={totalPayments}
         />
       </section>
 

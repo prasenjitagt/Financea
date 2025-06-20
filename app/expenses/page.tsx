@@ -4,12 +4,12 @@ import { columns } from "@/app/expenses/columns";
 import { ExpenseDataTable } from "@/app/expenses/data-table";
 import { getServerSession } from "next-auth";
 import { FinanceaAuthOptions } from "../api/auth/[...nextauth]/options";
-import ClientsPageTotalClientsCards from "@/components/clients/clients_page_total_clients_card";
-import ClientsPageTotalPaymentsCards from "@/components/clients/clients_page_total_payments_card";
 import { ExpenseType, IndividualExpenseFromDataBaseType } from "@/lib/types";
 import ExpenseModel from "@/lib/models/Expenses.model";
 import connectDB from "@/lib/database/db_connection";
 import { stringToDate } from "@/lib/helpers/payment_requests/stringToDate";
+import ExpensesPageTotalPaymentsCards from "@/components/expenses/expenses_page_total_payments_card";
+import ExpensesPageTotalExpensesCards from "@/components/expenses/expenses_page_total_expenses_card";
 
 
 
@@ -75,16 +75,15 @@ export default async function ExpensesDesktopView() {
     <div className="h-full flex flex-col bg-white p-5 rounded-lg container mx-auto">
       {/* Top Cards Section */}
       <section className="flex space-x-[12px] mb-[38px]">
-        <ClientsPageTotalClientsCards
+        <ExpensesPageTotalExpensesCards
           title="Total Expenses"
           description="Last 30 Days"
-          totalClients={numberOfExpenses}
+          totalExpenses={numberOfExpenses}
         />
-        <ClientsPageTotalPaymentsCards
+        <ExpensesPageTotalPaymentsCards
           title="Total Amount"
           description="Last 30 Days"
-          clients={expensesData}
-          totalPayments={totalPayments}
+          expenses={expensesData}
         />
       </section>
 

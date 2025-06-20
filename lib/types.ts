@@ -272,7 +272,7 @@ export interface SideBarMenuItemType {
 
 
 //Amount and currency pages for top cards in invoices page
-export interface InvoicePageAmountAndCurrency {
+export interface AmountAndCurrencyType {
     totalAmount: number,
     currencySymbol: "₹" | "$",
 }

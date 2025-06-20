@@ -1,15 +1,13 @@
 import axios from "axios";
-import { currency_conversion_api_route } from "../api-endpoints";
-import { useSelector } from "react-redux";
-import { RootState } from "@/lib/redux/store";
-import { InvoicePageAmountAndCurrency } from "@/lib/types";
+import { currency_conversion_api_route } from "@/lib/helpers/api-endpoints";
+import { AmountAndCurrencyType } from "@/lib/types";
 
 export async function convertCurrency(
     totalINR: number,
     totalUSD: number,
-): Promise<InvoicePageAmountAndCurrency> {
+    toCurrency: "INR" | "USD"
+): Promise<AmountAndCurrencyType> {
 
-    const toCurrency = useSelector((state: RootState) => state.currencyInfo.currency);
     const currencySymbol = toCurrency === "INR" ? "₹" : "$";
 
 
