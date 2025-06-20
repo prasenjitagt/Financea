@@ -41,15 +41,13 @@ export default function Navbar() {
   }, [session, status]);
 
   return (
-    <div className="sticky top-0 z-50 h-[64px] px-6 py-2 flex items-center justify-between border opacity-80 backdrop-blur-md shadow-md">
+    <div className="sticky top-0 z-50 h-[64px] px-6 py-2 flex items-center justify-between border  bg-white dark:bg-gray-800 ">
       {/* Greeting and Username */}
       <section>
-        <p className="text-sm font-semibold text-gray-500 dark:text-white">
-          Hey 😊😊,
+        <p className="text-sm font-medium text-gray-500 dark:text-white">
+          Hey,
         </p>
-        <h2 className="text-lg font-bold text-gray-800 dark:text-white">
-          {username}
-        </h2>
+        <h2 className="text-[20] font-medium dark:text-white">{username}</h2>
       </section>
 
       {/* Notification and triggerbutton */}
