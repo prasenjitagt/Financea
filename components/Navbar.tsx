@@ -42,7 +42,7 @@ export default function Navbar() {
   }, [session, status]);
 
   return (
-    <div className="sticky top-0 z-50 h-[64px] px-6 py-2 flex items-center justify-between border  bg-white dark:bg-gray-800 ">
+    <div className="sticky top-0 z-50 h-[64px] px-6 py-2 mb-4 flex items-center justify-between border  bg-white dark:bg-gray-800  ">
       {/* Greeting and Username */}
 
       <section className="flex items-center gap-4">
