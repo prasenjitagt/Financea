@@ -1,5 +1,3 @@
-
-
 import { columns } from "@/app/expenses/columns";
 import { ExpenseDataTable } from "@/app/expenses/data-table";
 import { getServerSession } from "next-auth";
@@ -11,10 +9,9 @@ import { stringToDate } from "@/lib/helpers/payment_requests/stringToDate";
 import ExpensesPageTotalPaymentsCards from "@/components/expenses/expenses_page_total_payments_card";
 import ExpensesPageTotalExpensesCards from "@/components/expenses/expenses_page_total_expenses_card";
 
-
-
-
-function sanitizeExpenses(expense: IndividualExpenseFromDataBaseType): ExpenseType {
+function sanitizeExpenses(
+  expense: IndividualExpenseFromDataBaseType
+): ExpenseType {
   return {
     _id: expense._id.toString(),
     userId: expense.userId.toString(),
@@ -25,13 +22,12 @@ function sanitizeExpenses(expense: IndividualExpenseFromDataBaseType): ExpenseTy
     description: expense.description,
     createdAt: expense.createdAt.toString(),
     updatedAt: expense.updatedAt.toString(),
-    __v: expense.__v
+    __v: expense.__v,
   };
 }
 
 async function getData() {
   try {
-
     await connectDB("app/expenses/page.tsx");
 
     const session = await getServerSession(FinanceaAuthOptions);
@@ -44,8 +40,15 @@ async function getData() {
 
     const now = new Date();
     const startDate = new Date(now.getFullYear(), now.getMonth(), 1);
-    const endDate = new Date(now.getFullYear(), now.getMonth() + 1, 0, 23, 59, 59, 999);
-
+    const endDate = new Date(
+      now.getFullYear(),
+      now.getMonth() + 1,
+      0,
+      23,
+      59,
+      59,
+      999
+    );
 
     const expenses = await ExpenseModel.find({
       userId,
@@ -55,8 +58,6 @@ async function getData() {
       .lean<IndividualExpenseFromDataBaseType[]>();
 
     // console.log("Get your expense type:", expenses[0]);
-
-
 
     if (!expenses) {
       console.log("No Expenses Found");
@@ -70,15 +71,15 @@ async function getData() {
   }
 }
 
-
-
-
 export default async function ExpensesDesktopView() {
   const expensesData = await getData();
 
   const numberOfExpenses = expensesData.length;
 
-  const totalPayments = expensesData.reduce((sum, expense) => sum + expense.amount, 0);
+  const totalPayments = expensesData.reduce(
+    (sum, expense) => sum + expense.amount,
+    0
+  );
 
   return (
     <div className="h-full flex flex-col bg-white p-5 rounded-lg container mx-auto">
@@ -97,14 +98,9 @@ export default async function ExpensesDesktopView() {
       </section>
 
       {/* Desktop and Tablet View Table Section */}
-      <section className="hidden md:block w-full flex-1 overflow-scroll">
-        <ExpenseDataTable
-          columns={columns}
-          data={expensesData}
-        />
+      <section className="hidden md:block w-full flex-1 overflow-visible">
+        <ExpenseDataTable columns={columns} data={expensesData} />
       </section>
     </div>
-
-
   );
 }
