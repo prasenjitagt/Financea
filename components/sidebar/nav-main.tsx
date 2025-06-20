@@ -119,7 +119,7 @@ export function NavMain() {
                   </>
                 ) : (
                   <SidebarMenuButton
-                    className={`rounded-none h-10  ${pathname === item.path ? "bg-[#e8eeff] dark:bg-[#212121] border-r-[3px] border-[#5E84EC]" : ""}`}
+                    className={`rounded-none h-10 w-62  ${pathname === item.path ? "bg-[#e8eeff] dark:bg-[#6789e723] border-r-[3px] border-[#5E84EC]" : ""}`}
                     tooltip={item.title}
                     onClick={() => handleNavigation(item.path)}
                   >
@@ -128,7 +128,7 @@ export function NavMain() {
                         className="dark:invert"
                         src={item.icon}
                         alt={`${item.title} icon`}
-                        width={20}
+                        width={22}
                       />
                     )}
                     <span>{item.title}</span>
