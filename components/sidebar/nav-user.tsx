@@ -1,6 +1,7 @@
 "use client"
 
 import { ImSpinner2 } from "react-icons/im";
+import { MdOutlineSecurity } from "react-icons/md";
 import { useState } from "react";
 import { signOut, useSession } from "next-auth/react";
 import {
@@ -110,6 +111,13 @@ export function NavUser() {
                             >
                                 <Bell />
                                 Notifications
+                            </DropdownMenuItem>
+                            <DropdownMenuItem
+                                className="cursor-pointer"
+                                onClick={() => router.push("/settings/security")}
+                            >
+                                <MdOutlineSecurity />
+                                Security
                             </DropdownMenuItem>
                         </DropdownMenuGroup>
                         <DropdownMenuSeparator />
