@@ -1,5 +1,3 @@
-
-
 import { columns } from "@/app/clients/columns";
 import { ClientDataTable } from "@/app/clients/data-table";
 import { getServerSession } from "next-auth";
@@ -9,9 +7,6 @@ import ClientsPageTotalClientsCards from "@/components/clients/clients_page_tota
 import ClientsPageTotalPaymentsCards from "@/components/clients/clients_page_total_payments_card";
 import { IndividualClientFromDataBaseType, ClientType } from "@/lib/types";
 import connectDB from "@/lib/database/db_connection";
-
-
-
 
 function sanitizeClient(client: IndividualClientFromDataBaseType): ClientType {
   return {
@@ -61,15 +56,15 @@ async function getData(): Promise<ClientType[]> {
   }
 }
 
-
-
-
 export default async function ClientsDesktopView() {
   const clientsData = await getData();
 
   const totalClients = clientsData.length;
 
-  const totalPayments = clientsData.reduce((sum, client) => sum + client.serviceCharge, 0);
+  const totalPayments = clientsData.reduce(
+    (sum, client) => sum + client.serviceCharge,
+    0
+  );
 
   return (
     <div className="h-full flex flex-col bg-white p-5 rounded-lg container mx-auto">
@@ -88,11 +83,8 @@ export default async function ClientsDesktopView() {
       </section>
 
       {/* Desktop and Tablet View Table Section */}
-      <section className="hidden md:block w-full flex-1 overflow-scroll">
-        <ClientDataTable
-          columns={columns}
-          data={clientsData}
-        />
+      <section className="hidden md:block w-full flex-1 overflow-visible">
+        <ClientDataTable columns={columns} data={clientsData} />
       </section>
     </div>
   );
