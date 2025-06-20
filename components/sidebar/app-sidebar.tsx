@@ -29,7 +29,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       {...props}
       className="bg-white dark:bg-white" /* Force white even in dark mode */
     >
-      <SidebarHeader className="mb-1">
+      <SidebarHeader className="mb-3">
         <TeamSwitcher />
       </SidebarHeader>
 

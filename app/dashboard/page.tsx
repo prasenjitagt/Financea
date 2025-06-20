@@ -48,7 +48,7 @@ const Dashboard = () => {
       <div
         className={`${archivo.className} flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4`}
       >
-        <h1 className="md:text-xl text-2xl text-gray-800 dark:text-white md:py-1">
+        <h1 className="md:text-[26] font-normal text-xl text-gray-800 dark:text-white md:py-1">
           Financia Analytics
         </h1>
         <Select
@@ -72,7 +72,7 @@ const Dashboard = () => {
       </div>
 
       {/* ✅ Analytics & Metrics Section */}
-      <section className="mt-[22px] h-[440px] grid grid-cols-1 lg:grid-cols-3 gap-[14px]">
+      <section className="mt-[16px] h-[440px] grid grid-cols-1 lg:grid-cols-3 gap-[14px]">
         <div className=" col-span-1 lg:col-span-2">
           <FinancialAnalytics frequency={frequency} />
         </div>
@@ -83,13 +83,13 @@ const Dashboard = () => {
 
       {/* ✅ Your Overview Section */}
       <div className="mt-[22px]">
-        <h2 className="md:text-3xl text-2xl text-gray-800 dark:text-white font-medium md:py-1">
+        <h2 className="md:text-[26] text-xl text-gray-800 dark:text-white font-normal md:py-1">
           Your Overview
         </h2>
       </div>
 
       {/* ✅ Payment Requests, Recent Expenses, New Customers & Expenses Chart */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 mb-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 ">
         <div className="flex flex-col w-full lg:col-span-1">
           <PaymentRequests />
         </div>

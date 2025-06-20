@@ -42,11 +42,12 @@ export default function Navbar() {
   }, [session, status]);
 
   return (
-    <div className="sticky top-0 z-50 h-[64px] px-6 py-2 mb-4 flex items-center justify-between border  bg-white dark:bg-gray-800  ">
+    <div className="sticky top-0 z-50 h-[64px] px-6 py-2 mb-[24] flex items-center justify-between border-b  bg-white dark:bg-gray-800  ">
       {/* Greeting and Username */}
 
-      <section className="flex items-center gap-4">
+      <section className="flex items-center gap-2">
         <SidebarTrigger />
+        <div className="w-[1px] h-10 bg-gray-300 mx-4" />
         <div>
           <p className="text-sm font-medium text-gray-500 dark:text-white">
             Hey,
