@@ -41,7 +41,16 @@ async function getData() {
     }
 
     const userId = session.user._id;
-    const expenses = await ExpenseModel.find({ userId })
+
+    const now = new Date();
+    const startDate = new Date(now.getFullYear(), now.getMonth(), 1);
+    const endDate = new Date(now.getFullYear(), now.getMonth() + 1, 0, 23, 59, 59, 999);
+
+
+    const expenses = await ExpenseModel.find({
+      userId,
+      date: { $gte: startDate, $lte: endDate },
+    })
       .sort({ createdAt: -1 })
       .lean<IndividualExpenseFromDataBaseType[]>();
 
