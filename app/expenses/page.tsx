@@ -82,9 +82,9 @@ export default async function ExpensesDesktopView() {
   );
 
   return (
-    <div className="h-full flex flex-col bg-white p-5 rounded-lg container mx-auto">
+    <div className="h-full flex flex-col bg-white dark:bg-black p-5 rounded-lg container mx-auto">
       {/* Top Cards Section */}
-      <section className="flex space-x-[12px] mb-[38px]">
+      <section className="flex space-x-[12px]   mb-[38px]">
         <ExpensesPageTotalExpensesCards
           title="Total Expenses"
           description="Last 30 Days"
