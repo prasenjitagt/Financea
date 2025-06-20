@@ -127,7 +127,7 @@ export function InvoiceDataTable<TData, TValue>({
   return (
     <div className="flex flex-col h-full">
       {/* Top Table Utilities */}
-      <div className="flex items-center justify-between py-4 space-x-4 sticky top-0 bg-white z-20">
+      <div className="flex items-center justify-between py-4 space-x-4 sticky top-0 bg-white dark:bg-black z-20">
         {/* Left: Search */}
         <Input
           placeholder="Filter names..."
