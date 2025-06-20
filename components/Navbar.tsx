@@ -2,25 +2,28 @@
 
 import { useState, useEffect } from "react";
 import { FaBell } from "react-icons/fa";
-import { FiMenu } from "react-icons/fi";
+
 import { Button } from "@/components/ui/button";
 import { FaCirclePlus } from "react-icons/fa6";
-import Link from "next/link";
+
 import { useSession } from "next-auth/react";
-import { DropdownMenu, DropdownMenuItem, DropdownMenuTrigger } from "./ui/dropdown-menu";
+import {
+  DropdownMenu,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "./ui/dropdown-menu";
 import { DropdownMenuContent } from "@radix-ui/react-dropdown-menu";
 import { useRouter } from "next/navigation";
 
 interface NavLinksType {
-  title: string,
-  url: string,
+  title: string;
+  url: string;
 }
 const navLinks: NavLinksType[] = [
   { title: "Create Invoice", url: "/invoices/create-invoice" },
   { title: "Create Client", url: "/clients/create-client" },
   { title: "Create Expense", url: "/expenses/create-expense" },
 ];
-
 
 export default function Navbar() {
   const [username, setUsername] = useState("Guest");
@@ -41,8 +44,12 @@ export default function Navbar() {
     <div className="sticky top-0 z-50 h-[64px] px-6 py-2 flex items-center justify-between border opacity-80 backdrop-blur-md shadow-md">
       {/* Greeting and Username */}
       <section>
-        <p className="text-sm font-semibold text-gray-500 dark:text-white">Hey 😊😊,</p>
-        <h2 className="text-lg font-bold text-gray-800 dark:text-white">{username}</h2>
+        <p className="text-sm font-semibold text-gray-500 dark:text-white">
+          Hey 😊😊,
+        </p>
+        <h2 className="text-lg font-bold text-gray-800 dark:text-white">
+          {username}
+        </h2>
       </section>
 
       {/* Notification and triggerbutton */}
@@ -82,6 +89,4 @@ export default function Navbar() {
       </section>
     </div>
   );
-};
-
-
+}

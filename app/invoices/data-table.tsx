@@ -117,6 +117,11 @@ export function InvoiceDataTable<TData, TValue>({
       columnVisibility,
       rowSelection,
     },
+    initialState: {
+      pagination: {
+        pageSize: 10,
+      },
+    },
   });
 
   return (
