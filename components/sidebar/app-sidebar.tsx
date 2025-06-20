@@ -39,7 +39,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         {/* <NavProjects projects={projects} /> */}
         <DarkModeToggle />
       </SidebarContent>
-      <SidebarFooter>
+      <SidebarFooter className="mb-5 ">
         <NavUser />
       </SidebarFooter>
       <SidebarRail />
