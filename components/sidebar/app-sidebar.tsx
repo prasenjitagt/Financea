@@ -12,7 +12,6 @@ import {
   SidebarFooter,
   SidebarHeader,
   SidebarRail,
-  SidebarSeparator,
 } from "@/components/ui/sidebar";
 import { DarkModeToggle } from "../theme/dark_mode_togggle";
 
@@ -30,10 +29,10 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       {...props}
       className="bg-white dark:bg-white" /* Force white even in dark mode */
     >
-      <SidebarHeader>
+      <SidebarHeader className="mb-1">
         <TeamSwitcher />
       </SidebarHeader>
-      <SidebarSeparator />
+
       <SidebarContent>
         <NavMain />
         {/* <NavProjects projects={projects} /> */}
