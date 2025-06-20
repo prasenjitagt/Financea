@@ -28,7 +28,7 @@ export default function LoginForm() {
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
-  const togglePasswordVisibility = () => setShowPassword(prev => !prev);
+  const togglePasswordVisibility = () => setShowPassword((prev) => !prev);
   const form = useForm<LoginSchemaType>({
     resolver: zodResolver(loginSchema),
     defaultValues: {
@@ -41,7 +41,6 @@ export default function LoginForm() {
     setIsLoading(true);
     setError(null);
 
-
     try {
       const result = await signIn("credentials", {
         email: data.email,
@@ -50,24 +49,21 @@ export default function LoginForm() {
         callbackUrl,
       });
 
-
-      console.log('SignIn result:', result); // Debug log
+      console.log("SignIn result:", result); // Debug log
 
       if (result?.error) {
         // More specific error handling
         if (result.error === "CredentialsSignin") {
           setError("Invalid email or password");
-
-
         } else {
           setError(result.error);
         }
       } else {
-        console.log('Login successful, redirecting to:', callbackUrl);
+        console.log("Login successful, redirecting to:", callbackUrl);
         router.push(callbackUrl);
       }
     } catch (error) {
-      console.error('Login error:', error); // Debug log
+      console.error("Login error:", error); // Debug log
       setError("An unexpected error occurred");
     } finally {
       setIsLoading(false);
@@ -103,32 +99,40 @@ export default function LoginForm() {
         </button>
 
         <div className="flex justify-center dark:invert mb-6 py-2">
-          <Image src="/FinanceaLogo.png" alt="Financea Logo" width={170} height={60} />
+          <Image
+            src="/FinanceaLogo.png"
+            alt="Financea Logo"
+            width={170}
+            height={60}
+          />
         </div>
 
-        <h2 className="text-2xl font-semibold mb-1">Log in</h2>
-        <p className="text-lg text-gray-600 dark:text-gray-100  mb-4">
+        <h2 className="text-xl font-medium ">Log in</h2>
+        <p className="text-m text-gray-600 dark:text-gray-100  mb-4">
           Create an account?{" "}
-          <Link href="/signup" className="text-[#5C2FA8] dark:text-purple-700 font-medium text-lg">
+          <Link
+            href="/signup"
+            className="text-[#5C2FA8] dark:text-purple-700 font-regular text-m"
+          >
             Sign up
           </Link>
         </p>
         <Form {...form}>
-
-          <form onSubmit={form.handleSubmit(onSubmit)} >
-
+          <form onSubmit={form.handleSubmit(onSubmit)}>
             <FormField
               control={form.control}
               name="email"
               render={({ field }) => (
                 <FormItem className="mb-5">
-                  <FormLabel className="block text-xl mb-1 md:py-2">Email address</FormLabel>
+                  <FormLabel className="block text-xl mb-1 md:py-2">
+                    Email address
+                  </FormLabel>
                   <FormControl>
                     <input
                       placeholder="example@gmail.com"
                       type="email"
                       {...field}
-                      className="w-full p-2.5 border rounded-md focus:outline-none focus:ring-1 focus:ring-[#5C2FA8] dark:focus:ring-purple-700"
+                      className="w-full p-2.5 border rounded-md focus:outline-none focus:ring-1 focus:ring-[#d66648] dark:focus:ring-blue-700"
                     />
                   </FormControl>
                   <FormMessage />
@@ -141,7 +145,9 @@ export default function LoginForm() {
               name="password"
               render={({ field }) => (
                 <FormItem className="mb-10">
-                  <FormLabel className="block text-xl mb-1 md:py-2">Password</FormLabel>
+                  <FormLabel className="block text-xl mb-1 md:py-2">
+                    Password
+                  </FormLabel>
                   <FormControl>
                     <div className="relative">
                       <input
@@ -156,7 +162,11 @@ export default function LoginForm() {
                         className="absolute inset-y-0 right-0 flex items-center pr-3 text-gray-500 cursor-pointer"
                         tabIndex={-1}
                       >
-                        {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                        {showPassword ? (
+                          <EyeOff size={18} />
+                        ) : (
+                          <Eye size={18} />
+                        )}
                       </button>
                     </div>
                   </FormControl>
@@ -165,23 +175,23 @@ export default function LoginForm() {
               )}
             />
 
-
             {error && (
-              <p className="text-sm font-medium text-destructive">
-                {error}
-              </p>
+              <p className="text-sm font-medium text-destructive">{error}</p>
             )}
 
             <Button
               type="submit"
               variant="default"
-              className="w-full h-[45px] bg-[#5C2FA8] text-xl font-semibold text-white py-4 rounded-md hover:bg-purple-700 transition-colors"
-              disabled={isLoading}>
+              className="w-full h-[45px] bg-[#5E84EC]  font-regular text-white py-4 rounded-md hover:bg-purple-700 transition-colors"
+              disabled={isLoading}
+            >
               {isLoading ? (
                 <div className="flex justify-center items-center">
                   <ImSpinner2 className="w-6 h-6 animate-spin text-center text-gray-50" />
                 </div>
-              ) : "Log In"}
+              ) : (
+                "Log In"
+              )}
             </Button>
           </form>
         </Form>

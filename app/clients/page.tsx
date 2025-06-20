@@ -61,10 +61,10 @@ export default async function ClientsDesktopView() {
 
   const totalClients = clientsData.length;
 
-  const totalPayments = clientsData.reduce(
-    (sum, client) => sum + client.serviceCharge,
-    0
-  );
+  // const totalPayments = clientsData.reduce(
+  //   (sum, client) => sum + client.serviceCharge,
+  //   0
+  // );
 
   return (
     <div className="h-full flex flex-col bg-white dark:bg-black p-5 rounded-lg container mx-auto">

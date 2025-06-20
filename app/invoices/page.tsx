@@ -7,11 +7,7 @@ import { FinanceaAuthOptions } from "../api/auth/[...nextauth]/options";
 
 import InvoiceModel from "@/lib/models/Invoice.model";
 import { getInvoiceStats } from "@/lib/helpers/invoices/getInvoiceStats";
-import {
-  IndividualInvoiceFromDataBaseType,
-  InvoicePageAmountAndCurrency,
-  InvoiceType,
-} from "@/lib/types";
+import { IndividualInvoiceFromDataBaseType, InvoiceType } from "@/lib/types";
 import connectDB from "@/lib/database/db_connection";
 import InvoicesTopCardsSection from "@/components/invoices/invoices_top_card_section";
 

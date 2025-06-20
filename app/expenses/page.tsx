@@ -76,11 +76,6 @@ export default async function ExpensesDesktopView() {
 
   const numberOfExpenses = expensesData.length;
 
-  const totalPayments = expensesData.reduce(
-    (sum, expense) => sum + expense.amount,
-    0
-  );
-
   return (
     <div className="h-full flex flex-col bg-white dark:bg-black p-5 rounded-lg container mx-auto">
       {/* Top Cards Section */}

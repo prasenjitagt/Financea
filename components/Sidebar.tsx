@@ -19,7 +19,6 @@ const Sidebar: React.FC<SidebarProps> = ({ onLinkClick }) => {
   const pathname = usePathname();
   const router = useRouter();
 
-
   const menuItems: SideBarMenuItemType[] = [
     { title: "Dashboard", icon: DashboardIcon, path: "/" },
     { title: "Invoices", icon: InvoicesIcon, path: "/invoices" },
@@ -47,7 +46,7 @@ const Sidebar: React.FC<SidebarProps> = ({ onLinkClick }) => {
       <div>
         <h2 className=" text-xl font-bold text-gray-800 ml-5 mb-8">Financea</h2>
         <nav className=" flex flex-col ">
-          {menuItems.map(item => (
+          {menuItems.map((item) => (
             <div
               key={item.path}
               role="link"
@@ -56,14 +55,15 @@ const Sidebar: React.FC<SidebarProps> = ({ onLinkClick }) => {
               className={` cursor-pointer pl-5 flex justify-between text-gray-700 h-[50px]
                 ${pathname === item.path ? "bg-[#7a9dfe2c]" : "hover:bg-gray-50"}`}
             >
-
               <div className="flex items-center space-x-4">
                 <Image src={item.icon} alt={`${item.title} icon`} width={20} />
                 <span className="text-base font-medium">{item.title}</span>
               </div>
 
               {/* To show the current tab */}
-              <div className={`w-[3px]  ${pathname === item.path ? "bg-[#5E84EC]" : ""} `} />
+              <div
+                className={`w-[3px]  ${pathname === item.path ? "bg-[#5E84EC]" : ""} `}
+              />
             </div>
           ))}
         </nav>
