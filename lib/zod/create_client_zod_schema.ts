@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-export const createInvoiceZodSchema = z.object({
+export const createClientZodSchema = z.object({
     invoiceNumber: z
         .string({ required_error: "Invoice number is required" })
         .min(1, "Invoice number is required"),
@@ -92,4 +92,4 @@ export const createInvoiceZodSchema = z.object({
         .enum(["INR", "USD"])
 });
 
-export type createInvoiceFormType = z.infer<typeof createInvoiceZodSchema>;
+export type createClientFormType = z.infer<typeof createClientZodSchema>;
