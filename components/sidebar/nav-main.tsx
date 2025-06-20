@@ -29,29 +29,29 @@ const menuItems: SideBarMenuItemType[] = [
     { title: "Invoices", icon: InvoicesIcon, path: "/invoices" },
     { title: "Expenses", icon: ExpensesIcon, path: "/expenses" },
     { title: "Clients", icon: ClientsIcon, path: "/clients" },
-    {
-        title: "Settings",
-        icon: SettingsIcon,
-        path: "/settings",
-        subMenuItems: [
-            {
-                title: "Account",
-                path: "/settings/account"
-            },
-            {
-                title: "Payment Methods",
-                path: "/settings/payment_methods"
-            },
-            {
-                title: "Notifications",
-                path: "/settings/notifications"
-            },
-            {
-                title: "Security",
-                path: "/settings/security"
-            }
-        ]
-    },
+    // {
+    //     title: "Settings",
+    //     icon: SettingsIcon,
+    //     path: "/settings",
+    //     subMenuItems: [
+    //         {
+    //             title: "Account",
+    //             path: "/settings/account"
+    //         },
+    //         {
+    //             title: "Payment Methods",
+    //             path: "/settings/payment_methods"
+    //         },
+    //         {
+    //             title: "Notifications",
+    //             path: "/settings/notifications"
+    //         },
+    //         {
+    //             title: "Security",
+    //             path: "/settings/security"
+    //         }
+    //     ]
+    // },
 ];
 
 export function NavMain() {
@@ -70,6 +70,7 @@ export function NavMain() {
 
                 {menuItems.map((item) => {
                     const hasSubItems = item.subMenuItems && item.subMenuItems.length > 0;
+                    // const hasSubItems = false;
 
                     return (
                         <Collapsible

@@ -32,7 +32,6 @@ import {
     useSidebar,
 } from "@/components/ui/sidebar"
 import { useRouter } from "next/navigation";
-import { DarkModeToggle } from "../theme/dark_mode_togggle";
 
 export function NavUser() {
     const { isMobile } = useSidebar()
