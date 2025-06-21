@@ -326,8 +326,8 @@ const CreateInvoiceForm = ({
                         >
                           {field.value
                             ? clients.find(
-                                (client) => client._id === field.value
-                              )?.clientName
+                              (client) => client._id === field.value
+                            )?.clientName
                             : "Select a client"}
                           <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                         </Button>

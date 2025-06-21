@@ -120,7 +120,7 @@ export function ExpenseDataTable<TData, TValue>({
   return (
     <div className="flex flex-col h-full">
       {/* Top Table Utilities */}
-      <div className="flex items-center dark:bg-black justify-between py-4 space-x-4 sticky top-0 bg-white z-20">
+      <div className="flex items-center dark:bg-black justify-between py-4 space-x-4 sticky top-0 bg-white z-10">
         {/* Left: Search */}
         <Input
           placeholder="Filter Categories..."
@@ -180,9 +180,9 @@ export function ExpenseDataTable<TData, TValue>({
                       {header.isPlaceholder
                         ? null
                         : flexRender(
-                            header.column.columnDef.header,
-                            header.getContext()
-                          )}
+                          header.column.columnDef.header,
+                          header.getContext()
+                        )}
                     </TableHead>
                   );
                 })}
