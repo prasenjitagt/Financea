@@ -326,8 +326,8 @@ const CreateInvoiceForm = ({
                         >
                           {field.value
                             ? clients.find(
-                                (client) => client._id === field.value
-                              )?.clientName
+                              (client) => client._id === field.value
+                            )?.clientName
                             : "Select a client"}
                           <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                         </Button>
@@ -649,16 +649,18 @@ const CreateInvoiceForm = ({
             const isHourly = form.watch(`items.${index}.ishourly`);
 
             return (
-              <div key={item.id} className="flex items-center  gap-4 ">
+              <div key={item.id} className="flex justify items-center  gap-4 ">
                 {/* isHourly Checkbox */}
                 <FormField
                   control={form.control}
                   name={`items.${index}.ishourly`}
                   render={({ field }) => (
-                    <FormItem className="h-[55px] flex flex-col items-center justify-center ">
+                    // <FormItem className=" h-[55px] flex flex-col items-center justify-center ">
+                    <FormItem className=" hidden">
                       {/* <FormLabel className="!mt-0">Hourly Charges?</FormLabel> */}
                       <FormControl>
                         <Checkbox
+                          disabled
                           className="cursor-pointer"
                           checked={field.value}
                           onCheckedChange={(checked) =>
@@ -694,14 +696,35 @@ const CreateInvoiceForm = ({
                       <FormLabel>{isHourly ? "Hours" : "Qty"}</FormLabel>
                       <FormControl>
                         <Input
-                          type="number"
-                          min={1}
+                          type="text" // Use "text" to fully control input
+                          inputMode="decimal" // Shows numeric keyboard on mobile
                           {...field}
                           onFocus={(e) => handleNumberInputFocus(e, 0)}
-                          onBlur={(e) =>
-                            handleNumberInputBlur(e, field.onChange, 0)
-                          }
+                          onBlur={(e) => handleNumberInputBlur(e, field.onChange, 0)}
+                          onKeyDown={(e) => {
+                            const allowedKeys = [
+                              "Backspace", "Tab", "Delete", "ArrowLeft", "ArrowRight", "Home", "End"
+                            ];
+
+                            if (allowedKeys.includes(e.key) || e.ctrlKey || e.metaKey) {
+                              return;
+                            }
+
+                            const isDigit = /^[0-9]$/.test(e.key);
+                            const isDot = e.key === ".";
+
+                            if (!isDigit && !isDot) {
+                              e.preventDefault();
+                            }
+
+                            // Only one dot allowed
+                            if (isDot && e.currentTarget.value.includes(".")) {
+                              e.preventDefault();
+                            }
+                          }}
                         />
+
+
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -717,14 +740,36 @@ const CreateInvoiceForm = ({
                       <FormLabel>Rate</FormLabel>
                       <FormControl>
                         <Input
-                          type="number"
-                          min={1}
+                          type="text" // Use "text" to fully control input
+                          inputMode="decimal" // Shows numeric keyboard on mobile
                           {...field}
                           onFocus={(e) => handleNumberInputFocus(e, 0)}
-                          onBlur={(e) =>
-                            handleNumberInputBlur(e, field.onChange, 0)
-                          }
+                          onBlur={(e) => handleNumberInputBlur(e, field.onChange, 0)}
+                          onKeyDown={(e) => {
+                            const allowedKeys = [
+                              "Backspace", "Tab", "Delete", "ArrowLeft", "ArrowRight", "Home", "End"
+                            ];
+
+                            if (allowedKeys.includes(e.key) || e.ctrlKey || e.metaKey) {
+                              return;
+                            }
+
+                            const isDigit = /^[0-9]$/.test(e.key);
+                            const isDot = e.key === ".";
+
+                            if (!isDigit && !isDot) {
+                              e.preventDefault();
+                            }
+
+                            // Only one dot allowed
+                            if (isDot && e.currentTarget.value.includes(".")) {
+                              e.preventDefault();
+                            }
+                          }}
                         />
+
+
+
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -732,15 +777,16 @@ const CreateInvoiceForm = ({
                 />
 
                 {/* Remove Item */}
-                <Button
-                  variant="ghost"
-                  className=""
-                  size="icon"
+                <div
+                  className={`relative ${index === 0 ? "invisible" : ""}`}
                   onClick={() => remove(index)}
-                  disabled={index === 0}
                 >
-                  <RxCross2 />
-                </Button>
+                  <RxCross2
+                    className="absolute top-[3px] cursor-pointer"
+                  />
+                </div>
+
+
               </div>
             );
           })}
