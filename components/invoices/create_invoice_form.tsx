@@ -326,8 +326,8 @@ const CreateInvoiceForm = ({
                         >
                           {field.value
                             ? clients.find(
-                              (client) => client._id === field.value
-                            )?.clientName
+                                (client) => client._id === field.value
+                              )?.clientName
                             : "Select a client"}
                           <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                         </Button>
@@ -452,7 +452,18 @@ const CreateInvoiceForm = ({
                 <FormLabel>Currency</FormLabel>
 
                 <Select
-                  onValueChange={field.onChange}
+                  onValueChange={(value) => {
+                    const currentValues = form.getValues();
+
+                    form.reset({
+                      ...currentValues,
+                      currency: value as CurrencyEnum,
+                      items: currentValues.items.map((item) => ({
+                        ...item,
+                        rate: 0,
+                      })),
+                    });
+                  }}
                   defaultValue={field.value}
                 >
                   <FormControl>
