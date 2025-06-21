@@ -1,5 +1,20 @@
 "use client";
 
+
+
+import {
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog"
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
+
 import { useState, useEffect } from "react";
 import { FaBell } from "react-icons/fa";
 
@@ -22,7 +37,6 @@ interface NavLinksType {
 }
 const navLinks: NavLinksType[] = [
   { title: "Create Invoice", url: "/invoices/create-invoice" },
-  { title: "Create Client", url: "/clients/create-client" },
   { title: "Create Expense", url: "/expenses/create-expense" },
 ];
 
@@ -64,32 +78,73 @@ export default function Navbar() {
           <span className="absolute top-[-2px] right-[-3px] w-2.5 h-2.5 bg-red-500 rounded-full"></span>
         </div>
 
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button
-              variant="ghost"
-              size="icon"
-              className="w-[25px] h-[25px] text-purple-600 hover:bg-transparent"
-            >
-              <FaCirclePlus className="w-5 h-5" />
-            </Button>
-          </DropdownMenuTrigger>
 
-          <DropdownMenuContent
-            align="end"
-            className="w-[200px] bg-white border border-gray-200 rounded-md shadow-lg z-10"
-          >
-            {navLinks.map((linkItem) => (
-              <DropdownMenuItem
-                key={linkItem.url}
-                onClick={() => router.push(linkItem.url)}
-                className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
-              >
-                {linkItem.title}
-              </DropdownMenuItem>
-            ))}
-          </DropdownMenuContent>
-        </DropdownMenu>
+        <Dialog>
+
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <FaCirclePlus className=" w-5 h-5 cursor-pointer text-purple-600" />
+            </DropdownMenuTrigger>
+
+            <DropdownMenuContent
+              align="end"
+              className="w-[200px] bg-white border border-gray-200 rounded-md shadow-lg z-10"
+            >
+
+              {navLinks.map((linkItem) => (
+                <DropdownMenuItem
+                  key={linkItem.url}
+                  onClick={() => router.push(linkItem.url)}
+                  className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
+                >
+                  {linkItem.title}
+
+                </DropdownMenuItem>
+              ))}
+
+              <DialogTrigger className="w-full">
+                <DropdownMenuItem
+                  className="border border-red-500  px-4 py-2 hover:bg-gray-100 cursor-pointer"
+                >
+                  Create Client
+                </DropdownMenuItem>
+              </DialogTrigger>
+
+            </DropdownMenuContent>
+          </DropdownMenu>
+
+
+          <DialogContent className="sm:max-w-md">
+            <DialogHeader>
+              <DialogTitle>Share link</DialogTitle>
+              <DialogDescription>
+                Anyone who has this link will be able to view this.
+              </DialogDescription>
+            </DialogHeader>
+            <div className="flex items-center gap-2">
+              <div className="grid flex-1 gap-2">
+                <Label htmlFor="link" className="sr-only">
+                  Link
+                </Label>
+                <Input
+                  id="link"
+                  defaultValue="https://ui.shadcn.com/docs/installation"
+                  readOnly
+                />
+              </div>
+            </div>
+            <DialogFooter className="sm:justify-start">
+              <DialogClose asChild>
+                <Button type="button" variant="secondary">
+                  Close
+                </Button>
+              </DialogClose>
+            </DialogFooter>
+          </DialogContent>
+
+
+        </Dialog>
+
       </section>
     </div>
   );
