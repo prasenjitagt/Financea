@@ -83,38 +83,42 @@ export default function PreviewInvoice({ formData }: PreviewInvoiceProps) {
               {/* Invoice Number */}
               <div className="flex gap-1">
                 <p className="font-normal text-sm">Invoice Number:</p>
-                <p className="text-muted-foreground">{`#${invoiceNumber}`}</p>
+                <p className="text-muted-foreground font-normal text-sm">{`#${invoiceNumber}`}</p>
               </div>
 
               {/* Issue Date */}
               <div className="flex gap-1">
-                <p className="font-bold">Date:</p>
-                <p className="text-muted-foreground">{formattedIssueDate}</p>
+                <p className="font-normal text-sm">Date:</p>
+                <p className=" font-normal text-sm">{formattedIssueDate}</p>
               </div>
             </section>
 
-            <div className="h-16" />
+            <div className="h-8" />
 
             {/* Billed From and Billed To */}
-            <section className="flex gap-32 ">
+            <section className="flex gap-24 ">
               {/* Billed From*/}
               <div>
-                <p className="font-bold">Billed From</p>
-                <p className="text-muted-foreground">{`${username}`}</p>
+                <p className="text-muted-foreground font-normal text-sm">
+                  Billed From
+                </p>
+                <p className="font-normal text-sm">{`${username}`}</p>
               </div>
 
               {/* Billed To */}
               <div>
-                <p className="font-bold">Billed To</p>
-                <p className="text-muted-foreground">{`${clientName === undefined ? "" : clientName}`}</p>
-                <p className="text-muted-foreground">{`${clientEmail === undefined ? "" : clientEmail}`}</p>
+                <p className="text-muted-foreground font-normal text-sm">
+                  Billed To
+                </p>
+                <p className="font-normal text-sm">{`${clientName === undefined ? "" : clientName}`}</p>
+                {/* <p className="text-muted-foreground font-normal text-sm">{`${clientEmail === undefined ? "" : clientEmail}`}</p> */}
               </div>
             </section>
 
-            <div className="h-16" />
+            <div className="h-8" />
 
             {/*Total Amount and Due Date  */}
-            <h3 className="text-xl font-bold">
+            <h3 className="font-medium text-base">
               {`${currencySymbol || "₹"} ${(totalAmount ?? 0).toFixed(2)} Due on ${formattedDueDate || "(SELECT DUE DATE)"}`}
             </h3>
 
@@ -124,10 +128,18 @@ export default function PreviewInvoice({ formData }: PreviewInvoiceProps) {
             <Table className="w-full text-sm">
               <TableHeader className=" border-b-2 border-slate-600">
                 <TableRow>
-                  <TableHead className="font-bold">Description</TableHead>
-                  <TableHead className="font-bold">Quantity</TableHead>
-                  <TableHead className="font-bold">Rate</TableHead>
-                  <TableHead className="font-bold">Amount</TableHead>
+                  <TableHead className="text-muted-foreground font-normal text-sm">
+                    Description
+                  </TableHead>
+                  <TableHead className="text-muted-foreground font-normal text-sm">
+                    Quantity
+                  </TableHead>
+                  <TableHead className="text-muted-foreground font-normal text-sm">
+                    Rate
+                  </TableHead>
+                  <TableHead className="text-muted-foreground font-normal text-sm">
+                    Amount
+                  </TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -135,7 +147,7 @@ export default function PreviewInvoice({ formData }: PreviewInvoiceProps) {
                   const totalItemAmount = item.quantity * item.rate;
                   const formattedRate = Number(item.rate ?? 0).toFixed(2);
                   return (
-                    <TableRow className="text-muted-foreground" key={index}>
+                    <TableRow className="font-normal text-sm " key={index}>
                       <TableCell>{item.name || "Describe item"}</TableCell>
                       <TableCell>{item.quantity}</TableCell>
                       <TableCell>{`
@@ -153,7 +165,7 @@ export default function PreviewInvoice({ formData }: PreviewInvoiceProps) {
           <CardFooter className="flex justify-end">
             <section>
               <Separator />
-              <div className="mt-3 flex gap-20 items-center  font-semibold">
+              <div className="mt-1 flex gap-20 items-center  font-medium text-base">
                 <p>Amount Due:</p>
                 <p>{`${currencySymbol || "₹"} ${(totalAmount ?? 0).toFixed(2)}`}</p>
               </div>

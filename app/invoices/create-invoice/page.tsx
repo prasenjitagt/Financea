@@ -56,7 +56,7 @@ const InvoiceCreatorPage = () => {
   return (
     <div className={`${archivo.className} w-full`}>
       {/* Top navigation */}
-      <nav className="sticky top-0 z-50 border flex lg:h-[70px] py-[11px] px-[20px] rounded-t-lg items-center gap-3 bg-white">
+      <nav className=" sticky  top-0 z-50  border flex lg:h-[70px] py-[11px] px-[20px] rounded-t-lg items-center gap-3 bg-white">
         <GoX
           className="cursor-pointer"
           onClick={() => router.back()}
