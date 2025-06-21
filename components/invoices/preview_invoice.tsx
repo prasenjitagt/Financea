@@ -33,7 +33,7 @@ export default function PreviewInvoice({ formData }: PreviewInvoiceProps) {
     issueDate,
     dueDate,
     clientName,
-    clientEmail,
+    // clientEmail,
     items,
     totalAmount,
     currency,
@@ -64,7 +64,7 @@ export default function PreviewInvoice({ formData }: PreviewInvoiceProps) {
 
       {/* Invoice Body */}
       <div className="flex justify-center px-2 sm:px-4">
-        <Card className="w-full min-w-[440px] h-[786px] px-4 overflow-auto border-y-[2px] border-y-[#001342] rounded-none">
+        <Card className="w-full sm:w-[400px] md:w-[520px] lg:w-[600px] min-h-[700px] px-1 overflow-visible border-y-[2px] border-y-[#001342] rounded-none">
           <CardHeader className="flex justify-between">
             <CardTitle className="text-xl font-medium">Invoice</CardTitle>
 
@@ -96,7 +96,7 @@ export default function PreviewInvoice({ formData }: PreviewInvoiceProps) {
             <div className="h-8" />
 
             {/* Billed From and Billed To */}
-            <section className="flex gap-24 ">
+            <section className="flex gap-26 ">
               {/* Billed From*/}
               <div>
                 <p className="text-muted-foreground font-normal text-sm">
@@ -148,7 +148,9 @@ export default function PreviewInvoice({ formData }: PreviewInvoiceProps) {
                   const formattedRate = Number(item.rate ?? 0).toFixed(2);
                   return (
                     <TableRow className="font-normal text-sm " key={index}>
-                      <TableCell>{item.name || "Describe item"}</TableCell>
+                      <TableCell className="max-w-[140px]  whitespace-normal break-words text-pretty">
+                        {item.name || "Describe item"}
+                      </TableCell>
                       <TableCell>{item.quantity}</TableCell>
                       <TableCell>{`
                                             ${currencySymbol || "₹"} ${formattedRate}
@@ -162,12 +164,12 @@ export default function PreviewInvoice({ formData }: PreviewInvoiceProps) {
             </Table>
           </CardContent>
 
-          <CardFooter className="flex justify-end">
-            <section>
+          <CardFooter className="px-6">
+            <section className="w-full">
               <Separator />
-              <div className="mt-1 flex gap-20 items-center  font-medium text-base">
+              <div className="mt-2 flex justify-between items-center font-medium text-base">
                 <p>Amount Due:</p>
-                <p>{`${currencySymbol || "₹"} ${(totalAmount ?? 0).toFixed(2)}`}</p>
+                <p className="text-right min-w-[80px]">{`${currencySymbol || "₹"} ${(totalAmount ?? 0).toFixed(2)}`}</p>
               </div>
             </section>
           </CardFooter>

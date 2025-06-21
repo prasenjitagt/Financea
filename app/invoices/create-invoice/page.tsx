@@ -56,13 +56,13 @@ const InvoiceCreatorPage = () => {
   return (
     <div className={`${archivo.className} w-full`}>
       {/* Top navigation */}
-      <nav className=" sticky  top-0 z-50  border flex lg:h-[70px] py-[11px] px-[20px] rounded-t-lg items-center gap-3 bg-white">
+      <nav className=" sticky z-50 top-0   flex lg:h-[70px] py-[11px] px-[20px] pl-10 rounded-t-lg items-center gap-3 bg-white">
         <GoX
           className="cursor-pointer"
           onClick={() => router.back()}
           size={24}
         />
-        <div className="w-px h-6 bg-[#B5B5B5]" />
+        <div className="w-px h-6  bg-[#B5B5B5] " />
         <CardTitle className="text-[16px] font-normal">
           Create Invoice
         </CardTitle>
@@ -71,14 +71,14 @@ const InvoiceCreatorPage = () => {
       {/* Form and Preview */}
       <section className="flex flex-col lg:flex-row justify-between">
         {/* Invoice Form */}
-        <Card className="w-full lg:w-7/12 bg-white p-6 rounded-none">
+        <Card className="w-full lg:w-7/12 bg-white p-6 border-r-0 rounded-none">
           <CardContent>
             <CreateInvoiceForm form={form} />
           </CardContent>
         </Card>
 
         {/* Preview */}
-        <Card className="w-full lg:w-5/12 bg-[#F7F6F6] p-6 rounded-none">
+        <Card className=" w-full lg:w-5/12 bg-[#f6f6f6] pt-5 rounded-none sticky top-16 h-fit">
           <CardContent>
             <PreviewInvoice formData={form.watch()} />
           </CardContent>

@@ -328,8 +328,8 @@ const CreateInvoiceForm = ({
                         >
                           {field.value
                             ? clients.find(
-                              (client) => client._id === field.value
-                            )?.clientName
+                                (client) => client._id === field.value
+                              )?.clientName
                             : "Select a client"}
                           <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                         </Button>
@@ -341,7 +341,7 @@ const CreateInvoiceForm = ({
                         <CommandEmpty>No client found.</CommandEmpty>
                         <CommandList className="h-[250px]">
                           <CommandGroup>
-                            <CommandItem >
+                            <CommandItem>
                               <Dialog>
                                 <DialogTrigger asChild>
                                   <Button className="w-full">
@@ -709,13 +709,25 @@ const CreateInvoiceForm = ({
                           inputMode="decimal" // Shows numeric keyboard on mobile
                           {...field}
                           onFocus={(e) => handleNumberInputFocus(e, 0)}
-                          onBlur={(e) => handleNumberInputBlur(e, field.onChange, 0)}
+                          onBlur={(e) =>
+                            handleNumberInputBlur(e, field.onChange, 0)
+                          }
                           onKeyDown={(e) => {
                             const allowedKeys = [
-                              "Backspace", "Tab", "Delete", "ArrowLeft", "ArrowRight", "Home", "End"
+                              "Backspace",
+                              "Tab",
+                              "Delete",
+                              "ArrowLeft",
+                              "ArrowRight",
+                              "Home",
+                              "End",
                             ];
 
-                            if (allowedKeys.includes(e.key) || e.ctrlKey || e.metaKey) {
+                            if (
+                              allowedKeys.includes(e.key) ||
+                              e.ctrlKey ||
+                              e.metaKey
+                            ) {
                               return;
                             }
 
@@ -732,8 +744,6 @@ const CreateInvoiceForm = ({
                             }
                           }}
                         />
-
-
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -753,13 +763,25 @@ const CreateInvoiceForm = ({
                           inputMode="decimal" // Shows numeric keyboard on mobile
                           {...field}
                           onFocus={(e) => handleNumberInputFocus(e, 0)}
-                          onBlur={(e) => handleNumberInputBlur(e, field.onChange, 0)}
+                          onBlur={(e) =>
+                            handleNumberInputBlur(e, field.onChange, 0)
+                          }
                           onKeyDown={(e) => {
                             const allowedKeys = [
-                              "Backspace", "Tab", "Delete", "ArrowLeft", "ArrowRight", "Home", "End"
+                              "Backspace",
+                              "Tab",
+                              "Delete",
+                              "ArrowLeft",
+                              "ArrowRight",
+                              "Home",
+                              "End",
                             ];
 
-                            if (allowedKeys.includes(e.key) || e.ctrlKey || e.metaKey) {
+                            if (
+                              allowedKeys.includes(e.key) ||
+                              e.ctrlKey ||
+                              e.metaKey
+                            ) {
                               return;
                             }
 
@@ -776,9 +798,6 @@ const CreateInvoiceForm = ({
                             }
                           }}
                         />
-
-
-
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -790,12 +809,8 @@ const CreateInvoiceForm = ({
                   className={`relative ${index === 0 ? "invisible" : ""}`}
                   onClick={() => remove(index)}
                 >
-                  <RxCross2
-                    className="absolute top-[3px] cursor-pointer"
-                  />
+                  <RxCross2 className="absolute top-[3px] cursor-pointer" />
                 </div>
-
-
               </div>
             );
           })}
@@ -819,22 +834,23 @@ const CreateInvoiceForm = ({
             </button>
           </div>
         </section>
+        <Separator className="mt-10 opacity-50" />
 
         {/* Note, Terms and Total */}
-        <section className="mt-[33px]   flex space-x-[80px]">
+        <section className="mt-[30px]   flex space-x-[80px]">
           {/* Notes and Terms */}
           <div>
             <FormField
               control={form.control}
               name="note"
               render={({ field }) => (
-                <FormItem>
-                  <FormLabel className="text-[14px] text-[#747474]">
+                <FormItem className="mb-4">
+                  <FormLabel className="text-sm font-light text-[#000000]">
                     Note
                   </FormLabel>
                   <FormControl>
                     <Input
-                      className="w-[335px] h-[66px]"
+                      className="w-[335px] font-light text-sm h-[66px]"
                       placeholder="Write Some Note"
                       {...field}
                     />
@@ -849,12 +865,12 @@ const CreateInvoiceForm = ({
               name="terms"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="text-[14px] text-[#747474]">
+                  <FormLabel className="text-[14px] text-[#000000]">
                     Terms & Conditions
                   </FormLabel>
                   <FormControl>
                     <Input
-                      className="w-[335px] h-[66px]"
+                      className="w-[335px] font-light text-sm h-[66px]"
                       placeholder="Write Terms & Conditions"
                       {...field}
                     />
@@ -866,21 +882,21 @@ const CreateInvoiceForm = ({
           </div>
 
           {/* Total */}
-          <div className="w-full flex flex-col justify-between">
+          <div className="w-full flex flex-col  justify-between">
             {/* Sub total */}
             <div className="flex justify-between items-center">
-              <p className="text-[14px] text-[#747474]">Sub Total</p>
+              <p className="text-base text-[#000000]">Sub Total</p>
               <p>{`${currencySymbol} ${subTotal}`}</p>
             </div>
 
             {/* Discount % */}
-            <div className=" flex justify-between items-baseline-last ">
+            <div className=" flex justify-between items-baseline-last mt-4">
               <FormField
                 control={form.control}
                 name="discountPercent"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel className=" text-[14px] text-[#747474]">
+                    <FormLabel className=" font-light text-sm text-[#747474]">
                       Discount (%)
                     </FormLabel>
                     <FormControl>
@@ -904,13 +920,13 @@ const CreateInvoiceForm = ({
             </div>
 
             {/* Tax % */}
-            <div className=" flex justify-between items-baseline-last">
+            <div className=" flex justify-between items-baseline-last mt-3">
               <FormField
                 control={form.control}
                 name="taxPercent"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel className="text-[14px] text-[#747474]">
+                    <FormLabel className="font-light text-sm   text-[#747474]">
                       Tax (%)
                     </FormLabel>
                     <FormControl>
@@ -934,19 +950,19 @@ const CreateInvoiceForm = ({
               <p>{`${currencySymbol} ${taxAmount}`}</p>
             </div>
 
-            <Separator />
+            <Separator className="mt-6" />
 
             {/* Total Amount*/}
-            <div className=" flex justify-between items-center">
-              <p className="text-[14px] text-[#363C45] font-bold">
+            <div className=" flex justify-between items-center mt-3">
+              <p className=" text-[#363C45] font-medium text-xl">
                 Total Amount
               </p>
-              <h3 className="scroll-m-20 text-2xl font-semibold tracking-tight">{`${currencySymbol} ${totalAmount}`}</h3>
+              <h3 className="scroll-m-20 font-medium text-xl tracking-tight">{`${currencySymbol} ${totalAmount}`}</h3>
             </div>
           </div>
         </section>
 
-        <Separator className="my-[33px]" />
+        <Separator className="my-[33px] opacity-50" />
 
         <footer className="flex justify-end">
           <div className="space-x-[10px]">
