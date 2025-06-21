@@ -693,7 +693,7 @@ const CreateInvoiceForm = ({
                   name={`items.${index}.quantity`}
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>{isHourly ? "Hours" : "Qty"}</FormLabel>
+                      <FormLabel>{isHourly ? "Hours" : "Quantity"}</FormLabel>
                       <FormControl>
                         <Input
                           type="text" // Use "text" to fully control input
