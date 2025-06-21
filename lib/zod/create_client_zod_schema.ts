@@ -1,95 +1,60 @@
 import { z } from "zod";
 
 export const createClientZodSchema = z.object({
-    invoiceNumber: z
-        .string({ required_error: "Invoice number is required" })
-        .min(1, "Invoice number is required"),
-
-    issueDate: z
-        .date({ required_error: "Issue date is required" }),
-
-    dueDate: z
-        .date()
-        .optional(),
-
-    clientId: z
-        .string({ required_error: "Client selection is required" })
-        .min(1, "Client selection is required"),
-    clientEmail: z
-        .string({ required_error: "Client Email is required.", })
-        .email("Please enter a valid email address."),
     clientName: z
-        .string({ required_error: "Client Name is required" }),
+        .string({ required_error: "Client Name is required" })
+        .min(1, "Client Name is required"),
 
-    clientMobile: z
+    companyName: z
+        .string({ required_error: "Company Name is required" })
+        .min(1, "Company Name is required"),
+
+    email: z
+        .string({ required_error: "Email is required" })
+        .email("Please enter a valid email address."),
+
+    mobile: z
         .coerce
-        .number({ required_error: "Mobile Number is required" })
+        .number({ required_error: "Mobile number is required" })
         .refine((val) => val.toString().length === 10, {
             message: "Mobile number must be exactly 10 digits",
         }),
 
-    isRecurring: z.boolean({ required_error: "Please specify if this is a recurring invoice" }),
+    address: z
+        .string({ required_error: "Address is required" })
+        .min(1, "Address is required"),
 
-    recurringFrequency: z
-        .enum(["Monthly", "Weekly", "Quarterly", "Yearly"])
-        .optional(),
+    postal: z
+        .string({ required_error: "Postal code is required" })
+        .min(6, "Postal code must be at least 6 characters"),
 
-    recurringIssueDate: z
-        .date()
-        .optional(),
+    state: z
+        .string({ required_error: "State is required" })
+        .min(1, "State is required"),
 
-    recurringDueDate: z
-        .date()
-        .optional(),
-
-    items: z
-        .array(
-            z.object({
-                ishourly: z.boolean({ required_error: "Please specify if Hourly Rate" }),
-
-                name: z
-                    .string({ required_error: "Item name is required" })
-                    .min(1, "Item name is required"),
-
-                quantity: z
-                    .coerce
-                    .number({ required_error: "Quantity is required" })
-                    .min(1, "Quantity must be at least 1"),
-
-                rate: z
-                    .coerce
-                    .number({ required_error: "Rate is required" })
-                    .min(1, "Rate must be at least 1"),
-            })
-        )
-        .min(1, "At least one invoice item is required"),
-
-    discountPercent: z
-        .coerce
-        .number({ required_error: "Discount is required" })
-        .min(0, { message: "Minimum Value is 0%" })
-        .max(100, { message: "Maximum Value is 100%" }),
-
-    taxPercent: z
-        .coerce
-        .number({ required_error: "Tax is required" })
-        .min(0, { message: "Minimum Value is 0%" })
-        .max(100, { message: "Maximum Value is 100%" }),
+    country: z
+        .string({ required_error: "Country is required" })
+        .min(1, "Country is required"),
 
     note: z
         .string()
         .optional(),
 
-    terms: z
-        .string()
-        .optional(),
+    website: z
+        .string({ required_error: "Website is required" })
+        .url("Website must be a valid URL"),
 
-    subTotal: z.coerce.number().optional(),
-    discountAmount: z.coerce.number().optional(),
-    taxAmount: z.coerce.number().optional(),
-    totalAmount: z.coerce.number().optional(),
+    isClientActive: z
+        .boolean({ required_error: "Client status is required" }),
+
+    userId: z
+        .string({ required_error: "User ID is required" }),
     currency: z
-        .enum(["INR", "USD"])
+        .enum(["INR", "USD"], {
+            required_error: "Currency is required",
+        }),
+
+
 });
 
 export type createClientFormType = z.infer<typeof createClientZodSchema>;
