@@ -2,7 +2,7 @@
 
 import axios, { AxiosError } from "axios";
 import { IoAddCircle } from "react-icons/io5";
-import { GoX } from "react-icons/go";
+import { RxCross2 } from "react-icons/rx";
 import { UseFormReturn } from "react-hook-form";
 import { createInvoiceFormType } from "@/lib/zod/create_invoice_zod_schema";
 import { Button } from "../ui/button";
@@ -54,7 +54,6 @@ import {
   check_invoice_number_route,
   create_new_invoice_route,
 } from "@/lib/helpers/api-endpoints";
-import { useRouter } from "next/navigation";
 import CreateClientDialogBox from "@/components/create_client_dialog_box";
 
 //RecurringFrequency Should Match With Zod
@@ -102,8 +101,6 @@ const CreateInvoiceForm = ({
     useState(false);
   const [clients, setClients] = useState<Client[]>([]);
   const [selectedClient, setSelectedClient] = useState<Client | null>(null);
-
-  const router = useRouter();
 
   const { fields, append, remove } = useFieldArray({
     control: form.control,
@@ -726,11 +723,12 @@ const CreateInvoiceForm = ({
                 {/* Remove Item */}
                 <Button
                   variant="ghost"
+                  className=""
                   size="icon"
                   onClick={() => remove(index)}
                   disabled={index === 0}
                 >
-                  <GoX />
+                  <RxCross2 />
                 </Button>
               </div>
             );
