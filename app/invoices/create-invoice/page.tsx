@@ -8,7 +8,10 @@ import CreateInvoiceForm from "@/components/invoices/create_invoice_form";
 import PreviewInvoice from "@/components/invoices/preview_invoice";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { createInvoiceZodSchema, createInvoiceFormType } from "@/lib/zod/create_invoice_zod_schema";
+import {
+  createInvoiceZodSchema,
+  createInvoiceFormType,
+} from "@/lib/zod/create_invoice_zod_schema";
 
 const archivo = Archivo({
   weight: "500",
@@ -53,10 +56,16 @@ const InvoiceCreatorPage = () => {
   return (
     <div className={`${archivo.className} w-full`}>
       {/* Top navigation */}
-      <nav className="sticky top-0 z-50 border-2 flex lg:h-[70px] py-[11px] px-[20px] rounded-t-lg items-center gap-3 bg-white">
-        <GoX className="cursor-pointer" onClick={() => router.back()} size={24} />
+      <nav className="sticky top-0 z-50 border flex lg:h-[70px] py-[11px] px-[20px] rounded-t-lg items-center gap-3 bg-white">
+        <GoX
+          className="cursor-pointer"
+          onClick={() => router.back()}
+          size={24}
+        />
         <div className="w-px h-6 bg-[#B5B5B5]" />
-        <CardTitle className="text-[17px]">Create Invoice</CardTitle>
+        <CardTitle className="text-[16px] font-normal">
+          Create Invoice
+        </CardTitle>
       </nav>
 
       {/* Form and Preview */}
