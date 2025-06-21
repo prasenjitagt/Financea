@@ -21,9 +21,7 @@ export default function CreateClientDialogBox() {
     return (
         <AlertDialog>
             <AlertDialogTrigger asChild>
-                <Button
-                    className="w-full"
-                >
+                <Button className="w-full">
                     Add New Client
                 </Button>
             </AlertDialogTrigger>
