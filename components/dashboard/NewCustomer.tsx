@@ -10,14 +10,11 @@ type ChartPoint = {
   value: number;
 };
 
-
-
 interface ApiResposeType {
-  totalClients: number,
-  totalServiceCharge: number,
-  chartData: ChartPoint[]
+  totalClients: number;
+  totalServiceCharge: number;
+  chartData: ChartPoint[];
 }
-
 
 const NewCustomer = () => {
   const [charData, setChartData] = useState<ChartPoint[]>([]);
@@ -29,27 +26,22 @@ const NewCustomer = () => {
         const response = await axios.get<ApiResposeType>(clients_stats_route); // Replace with actual API URL
 
         setChartData(response.data.chartData);
-        setTotal(response.data.totalClients)
-
-
+        setTotal(response.data.totalClients);
       } catch (error) {
         console.log("Error fetching client stats", error);
         throw new Error("Error fetching client stats", error as ErrorOptions);
       }
-    }
+    };
 
     fetchChartData();
   }, []);
   return (
-    <div className="border rounded-lg shadow p-6 h-full">
+    <div className="border rounded-lg shadow-sm p-6 h-full">
       <div className="flex flex-row items-center justify-between pb-2">
-        <h3 className="text-md font-medium">New Customer</h3>
-        <div className="inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold bg-green-50 text-green-600 border-green-100">
-          Open
-        </div>
+        <h3 className="text-base font-medium">New Customer</h3>
       </div>
       <div className="flex flex-col">
-        <div className="text-2xl font-bold">{total}</div>
+        <div className="text-xl font-medium">{total}</div>
         <div className="h-[80px] w-full pt-4">
           <ResponsiveContainer width="100%" height="100%">
             <LineChart data={charData}>

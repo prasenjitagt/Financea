@@ -1,53 +1,64 @@
 import { IoIosArrowRoundUp } from "react-icons/io";
-import { Archivo } from 'next/font/google';
+import { Archivo } from "next/font/google";
 import { useSelector } from "react-redux";
 import { RootState } from "@/lib/redux/store";
 import { useEffect, useState } from "react";
 
 const archivo = Archivo({
-    subsets: ['latin'],
+  subsets: ["latin"],
 });
 
 type Proptype = {
-    title: string;
-    amount: number;
-    incDecPercentage: number;
-    isIncreased: boolean;
-    text: string;
+  title: string;
+  amount: number;
+  incDecPercentage: number;
+  isIncreased: boolean;
+  text: string;
 };
 
-const FinMetricCard = ({ title, amount, incDecPercentage, isIncreased, text }: Proptype) => {
-    const [hasMounted, setHasMounted] = useState(false);
+const FinMetricCard = ({
+  title,
+  amount,
+  incDecPercentage,
+  isIncreased,
+  text,
+}: Proptype) => {
+  const [hasMounted, setHasMounted] = useState(false);
 
-    useEffect(() => {
-        setHasMounted(true);
-    }, []);
+  useEffect(() => {
+    setHasMounted(true);
+  }, []);
 
-    const selectedCurrency = useSelector((state: RootState) => state.currencyInfo.currency);
-    const currencySymbol = selectedCurrency === "INR" ? "₹" : "$";
+  const selectedCurrency = useSelector(
+    (state: RootState) => state.currencyInfo.currency
+  );
+  const currencySymbol = selectedCurrency === "INR" ? "₹" : "$";
 
-    if (!hasMounted) return null; // Avoid SSR/CSR mismatch
+  if (!hasMounted) return null; // Avoid SSR/CSR mismatch
 
-    return (
-        <div className={`${archivo.className} flex justify-between rounded-lg`}>
-            <div className="flex flex-col justify-between items-start">
-                <p className="text-[17px] opacity-60 font-[400]">{title}</p>
-                <p className="text-[40px] font-[700]">{`${currencySymbol}${amount}`}</p>
-            </div>
+  return (
+    <div className={`${archivo.className} flex justify-between rounded-lg`}>
+      <div className="flex flex-col justify-between items-start">
+        <p className="text-base opacity-60 font-normal">{title}</p>
+        <p className="text-[26px] font-medium">{`${currencySymbol}${amount}`}</p>
+      </div>
 
-            <div className="flex flex-col justify-center items-end">
-                <div
-                    className={`w-fit h-[30px] flex justify-center items-center gap-1 rounded-md px-2 
-                        ${isIncreased ? "text-[#19C13A] bg-[#19C13A0D]" : "text-[#C11919] bg-[#C119190D]"}`}
-                >
-                    <IoIosArrowRoundUp size={24} className={isIncreased ? "" : "rotate-180"} />
-                    <p className="text-[14px] font-[500]">${incDecPercentage}</p>
-                </div>
-
-                <p className="opacity-60 font-[400] text-right">{text}</p>
-            </div>
+      <div className="flex flex-col justify-center items-end">
+        <div
+          className={`w-fit h-[30px] flex justify-center items-center gap-1 rounded-md px-2 
+                        ${isIncreased ? "text-[#3aac51] " : "text-[#C11919] "}`}
+        >
+          <IoIosArrowRoundUp
+            size={24}
+            className={isIncreased ? "" : "rotate-180"}
+          />
+          <p className="text-[14px] font-[500]">${incDecPercentage}</p>
         </div>
-    );
+
+        <p className="text-base opacity-60 font-normal text-right">{text}</p>
+      </div>
+    </div>
+  );
 };
 
 export default FinMetricCard;
