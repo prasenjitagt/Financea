@@ -19,13 +19,7 @@ import {
     FormLabel,
     FormMessage,
 } from "@/components/ui/form";
-import {
-    Select,
-    SelectContent,
-    SelectItem,
-    SelectTrigger,
-    SelectValue,
-} from "@/components/ui/select";
+
 import { useForm } from 'react-hook-form';
 import { createClientFormType, createClientZodSchema } from '@/lib/zod/create_client_zod_schema';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -228,6 +222,11 @@ export default function CreateClientForm() {
                         <Button type="submit">Save changes</Button>
                     </DialogFooter>
                 </DialogContent>
+
+
+                <footer>
+
+                </footer>
             </form>
 
         </Form>

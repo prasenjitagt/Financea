@@ -4,6 +4,7 @@ export const rzp_link_gen_route = "/api/payments/link-gen/rzp";
 export const rpz_creds_route = "/api/payments/pay-creds/rzp";
 export const create_new_invoice_route = "/api/invoices/create_invoice";
 export const check_invoice_number_route = "/api/invoices/check_invoice_number";
+export const check_client_email_route = "/api/clients/check_client_email";
 export const expenses_route = "/api/expenses";
 export const recent_expenses_route = "/api/expenses/recent_expenses";
 export const clients_route = "/api/clients";

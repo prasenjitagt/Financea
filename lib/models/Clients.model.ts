@@ -10,10 +10,11 @@ export interface IClient extends Document {
   postal: string;
   state: string;
   country: string;
-  serviceCharge: number;
+  note: string;
   website: string;
   isClientActive: boolean;
   userId: mongoose.Types.ObjectId;
+  currency: string;
 }
 
 const ClientSchema: Schema<IClient> = new Schema(
@@ -31,6 +32,7 @@ const ClientSchema: Schema<IClient> = new Schema(
     email: {
       type: String,
       required: [true, "Email is required"],
+      unique: [true, "Email should be unique"],
       trim: true,
       lowercase: true,
       match: [/\S+@\S+\.\S+/, "Email is invalid"],
@@ -60,9 +62,8 @@ const ClientSchema: Schema<IClient> = new Schema(
       required: [true, "Country is required"],
       trim: true,
     },
-    serviceCharge: {
-      type: Number,
-      required: [true, "Service charge is required"],
+    note: {
+      type: String,
       min: [0, "Service charge must be a positive number"],
     },
     website: {
@@ -79,6 +80,10 @@ const ClientSchema: Schema<IClient> = new Schema(
       ref: "User",
       required: true,
     },
+    currency: {
+      type: String,
+      required: [true, "currency is required"],
+    }
   },
   {
     timestamps: true,

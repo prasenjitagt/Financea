@@ -4,6 +4,9 @@
 
 import {
   Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog"
 
@@ -23,6 +26,8 @@ import {
 import { DropdownMenuContent } from "@radix-ui/react-dropdown-menu";
 import { useRouter } from "next/navigation";
 import CreateClientForm from "./clients/create_client_form";
+import { AlertDialog, AlertDialogContent, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "./ui/alert-dialog";
+import { Separator } from "./ui/separator";
 
 interface NavLinksType {
   title: string;
@@ -104,7 +109,19 @@ export default function Navbar() {
 
             </DropdownMenuContent>
           </DropdownMenu>
-          <CreateClientForm />
+          <DialogContent className="w-[457px]">
+            <DialogHeader>
+              <DialogTitle className=' flex items-center justify-center h-[28px]'>New Client</DialogTitle>
+              <Separator />
+            </DialogHeader>
+            <div>
+
+              <CreateClientForm />
+            </div>
+          </DialogContent>
+
+
+
         </Dialog>
 
       </section>

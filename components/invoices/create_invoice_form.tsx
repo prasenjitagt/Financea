@@ -54,7 +54,6 @@ import {
   check_invoice_number_route,
   create_new_invoice_route,
 } from "@/lib/helpers/api-endpoints";
-import CreateClientDialogBox from "@/components/create_client_dialog_box";
 import CreateClientForm from "../clients/create_client_form";
 import { Dialog, DialogTrigger } from "../ui/dialog";
 
@@ -85,7 +84,7 @@ export interface Client {
   createdAt: string;
   updatedAt: string;
 }
-type DuplicateCheckResponse = {
+export type DuplicateCheckResponse = {
   exists: boolean;
 };
 
@@ -328,8 +327,8 @@ const CreateInvoiceForm = ({
                         >
                           {field.value
                             ? clients.find(
-                                (client) => client._id === field.value
-                              )?.clientName
+                              (client) => client._id === field.value
+                            )?.clientName
                             : "Select a client"}
                           <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                         </Button>

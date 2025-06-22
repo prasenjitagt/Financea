@@ -3,7 +3,7 @@ import { FinanceaAuthOptions } from "@/app/api/auth/[...nextauth]/options";
 import { getServerSession } from "next-auth";
 import connectDB from "@/lib/database/db_connection";
 import { Client } from "@/lib/models/Clients.model";
-import { clientSchema } from "@/lib/helpers/validations";
+import { createClientZodSchema } from "@/lib/zod/create_client_zod_schema";
 
 export async function POST(req: Request) {
   try {
@@ -22,7 +22,7 @@ export async function POST(req: Request) {
 
     const body = await req.json();
 
-    const validation = clientSchema.safeParse(body);
+    const validation = createClientZodSchema.safeParse(body);
     if (!validation.success) {
       return NextResponse.json(
         {
