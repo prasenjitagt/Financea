@@ -172,7 +172,7 @@ export default function Test() {
                                                     <Input
                                                         type='text'
                                                         placeholder='Enter Client Name'
-                                                        className="pl-10" // Add left padding to avoid overlapping the icon
+                                                        className="pl-10 text-black"
                                                         {...field}
                                                     />
                                                 </div>
@@ -189,14 +189,14 @@ export default function Test() {
                                     name="email"
                                     render={({ field }) => (
                                         <FormItem className='mb-5'>
-                                            <FormLabel className="text-[#747474]">Email Address</FormLabel>
+                                            <FormLabel >Email Address</FormLabel>
                                             <FormControl>
                                                 <div className="relative">
-                                                    <MdOutlineMarkEmailRead className="absolute left-3 top-1/2 transform -translate-y-1/2 text-[#747474] text-xl" />
+                                                    <MdOutlineMarkEmailRead className="absolute left-3 top-1/2 transform -translate-y-1/2  text-xl" />
                                                     <Input
                                                         type='email'
                                                         placeholder='Add Email'
-                                                        className="pl-10" // Add left padding to avoid overlapping the icon
+                                                        className="pl-10 text-black"
                                                         {...field}
                                                     />
                                                 </div>
@@ -211,7 +211,9 @@ export default function Test() {
                                     control={form.control}
                                     name="currency"
                                     render={({ field }) => (
-                                        <FormItem>
+                                        <FormItem
+
+                                        >
                                             <FormLabel>Currency</FormLabel>
 
                                             <Select
@@ -219,7 +221,7 @@ export default function Test() {
                                                 defaultValue={field.value}
                                             >
                                                 <FormControl>
-                                                    <SelectTrigger className="w-[163px] cursor-pointer">
+                                                    <SelectTrigger className="text-black w-[163px] cursor-pointer">
                                                         <SelectValue placeholder="Select Currency" />
                                                     </SelectTrigger>
                                                 </FormControl>
@@ -259,6 +261,7 @@ export default function Test() {
                                                     <FormLabel>Mobile Number</FormLabel>
                                                     <FormControl>
                                                         <Input
+                                                            className="pl-10 text-black"
                                                             placeholder="+91xxxxxxxxx0"
                                                             type="text" // Use "text" to fully control input
                                                             inputMode="decimal" // Shows numeric keyboard on mobile
@@ -310,7 +313,7 @@ export default function Test() {
 
 
 
-                                        <div className='flex items-center justify-center'>
+                                        <div className='mt-3 flex items-center justify-center'>
                                             <p
                                                 className="w-fit   text-blue-700 cursor-pointer text-sm "
 

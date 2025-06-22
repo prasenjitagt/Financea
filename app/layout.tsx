@@ -30,6 +30,7 @@ export default function RootLayout({
     "/",
     "/invoices/create-invoice",
     "/expenses/create-expense",
+    "/test",
   ].includes(pathname);
 
   return (
