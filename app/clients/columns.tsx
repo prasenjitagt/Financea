@@ -21,6 +21,8 @@ import Swal from "sweetalert2";
 import axios from "axios";
 import { clients_route } from "@/lib/helpers/api-endpoints";
 import { ClientType } from "@/lib/types";
+import { FaArrowRightLong } from "react-icons/fa6";
+import NotesShowToolTip from "@/components/clients/notes_show_tooltip";
 
 export const columns: ColumnDef<ClientType>[] = [
   //select
@@ -76,11 +78,10 @@ export const columns: ColumnDef<ClientType>[] = [
       return (
         <span
           className={`px-2 py-1 text-xs rounded-full font-medium
-                ${
-                  isActive
-                    ? "bg-green-100 text-green-700"
-                    : "bg-red-100 text-red-700"
-                }`}
+                ${isActive
+              ? "bg-green-100 text-green-700"
+              : "bg-red-100 text-red-700"
+            }`}
         >
           {isActive ? "Active" : "Inactive"}
         </span>
@@ -96,19 +97,22 @@ export const columns: ColumnDef<ClientType>[] = [
       const client = row.original;
       return (
         <div className="flex flex-col text-[14px]">
-          <section className="flex space-x-2">
-            <p className="">{client.mobile}</p>
-            <Image
-              className="cursor-pointer"
-              src={CopyIcon}
-              alt="Copy-Icon"
-              width={16}
-              onClick={() => {
-                showToast("Phone Number Copied");
-                navigator.clipboard.writeText(client.mobile);
-              }}
-            />
-          </section>
+          {client.mobile != "NA" && (
+            <section className="flex space-x-2 text-[14px]">
+              <p>{client.mobile}</p>
+              <Image
+                className="cursor-pointer"
+                src={CopyIcon}
+                alt="Copy-Icon"
+                width={16}
+                onClick={() => {
+                  showToast("Phone Number Copied");
+                  navigator.clipboard.writeText(client.mobile!);
+                }}
+              />
+            </section>
+          )}
+
           <section className="flex space-x-2">
             <p className="">{client.email}</p>
             <Image
@@ -133,47 +137,21 @@ export const columns: ColumnDef<ClientType>[] = [
     header: "Website",
   },
 
-  //country
-  {
-    accessorKey: "country",
-    header: "Country",
-    cell: ({ row }) => {
-      const country = row.getValue("country") as string;
-      const flagMap: { [key: string]: string } = {
-        USA: "🇺🇸",
-        India: "🇮🇳",
-        UK: "🇬🇧",
-      };
 
+
+  //Note
+  {
+    accessorKey: "note",
+    header: () => <p>Note</p>,
+    cell: ({ row }) => {
+      const originalNote = row.original.note || "NA";
+      const slicedNote = originalNote.slice(0, 30) + (originalNote.length > 30 ? '...' : '');
       return (
-        <div className="flex items-center gap-2 text-[14px]">
-          <span>{flagMap[country] || "🏳️"}</span>
-          <span>{country}</span>
-        </div>
-      );
-    },
-  },
-
-  //service charge
-  {
-    accessorKey: "serviceCharge",
-    header: () => <p>Service Charge</p>,
-    cell: ({ row }) => {
-      const amount = parseFloat(row.getValue("serviceCharge"));
-      const country = row.original.country;
-
-      const currencyMap: Record<string, string> = {
-        India: "INR",
-        USA: "USD",
-        UK: "GBP",
-      };
-
-      const formatted = new Intl.NumberFormat("en-US", {
-        style: "currency",
-        currency: currencyMap[country] || "USD",
-      }).format(amount);
-
-      return <div>{formatted}</div>;
+        <NotesShowToolTip
+          originalNote={originalNote}
+          slicedNote={slicedNote}
+        />
+      )
     },
   },
 

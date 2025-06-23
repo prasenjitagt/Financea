@@ -4,7 +4,6 @@ import { getServerSession } from "next-auth";
 import { FinanceaAuthOptions } from "../api/auth/[...nextauth]/options";
 import { Client } from "@/lib/models/Clients.model";
 import ClientsPageTotalClientsCards from "@/components/clients/clients_page_total_clients_card";
-import ClientsPageTotalPaymentsCards from "@/components/clients/clients_page_total_payments_card";
 import { IndividualClientFromDataBaseType, ClientType } from "@/lib/types";
 import connectDB from "@/lib/database/db_connection";
 
@@ -14,12 +13,13 @@ function sanitizeClient(client: IndividualClientFromDataBaseType): ClientType {
     clientName: client.clientName,
     companyName: client.companyName,
     email: client.email,
+    currency: client.currency,
     mobile: client.mobile,
     address: client.address,
     postal: client.postal,
     state: client.state,
     country: client.country,
-    serviceCharge: client.serviceCharge,
+    note: client.note,
     website: client.website,
     isClientActive: client.isClientActive,
     userId: client.userId.toString(),
@@ -75,11 +75,7 @@ export default async function ClientsDesktopView() {
           description="Last 30 Days"
           totalClients={totalClients}
         />
-        <ClientsPageTotalPaymentsCards
-          title="Total Service Charge"
-          description="Outstanding Balance"
-          clients={clientsData}
-        />
+
       </section>
 
       {/* Desktop and Tablet View Table Section */}

@@ -68,28 +68,36 @@ export function ClientDataTable<TData, TValue>({
 
       worksheet.columns = [
         { header: "Client Name", key: "clientName" },
-        { header: "Status", key: "status" },
-        { header: "Mobile", key: "mobile" },
         { header: "Email", key: "email" },
-        { header: "Website", key: "website" },
-        { header: "Country", key: "country" },
-        { header: "Service Charge", key: "serviceCharge" },
         { header: "Currency", key: "currency" },
+        { header: "Status", key: "status" },
+        { header: "Company Name", key: "companyName" },
+        { header: "Mobile", key: "mobile" },
+        { header: "Address", key: "address" },
+        { header: "Postal Code", key: "postalCode" },
+        { header: "Country", key: "country" },
+        { header: "State", key: "state" },
+        { header: "Website", key: "website" },
+        { header: "Note", key: "note" },
         { header: "Created At", key: "createdAt" },
       ];
 
       dataToBeExported.forEach((client) => {
-        const currency = client.country === "India" ? "INR" : "USD"; // Check country and set currency
+
 
         worksheet.addRow({
           clientName: client.clientName,
-          status: client.isClientActive ? "Active" : "Inactive",
-          mobile: client.mobile,
           email: client.email,
-          website: client.website,
+          currency: client.currency,
+          status: client.isClientActive ? "Active" : "Inactive",
+          companyName: client.companyName,
+          mobile: client.mobile,
+          address: client.address,
+          postalCode: client.postal,
           country: client.country,
-          serviceCharge: client.serviceCharge,
-          currency: currency,
+          state: client.state,
+          website: client.website,
+          note: client.note,
           createdAt: new Date(client.createdAt).toLocaleDateString(),
         });
       });
@@ -220,7 +228,7 @@ export function ClientDataTable<TData, TValue>({
                 <TableCell colSpan={columns.length} className="text-center">
                   <NoResultsForTables
                     IconWidth={75}
-                    MainText="No Expenses Yet!"
+                    MainText="No Clients Yet!"
                   />
                 </TableCell>
               </TableRow>

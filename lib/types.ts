@@ -71,38 +71,49 @@ export interface RazorpayPaymentLinkPayloadType {
 export interface ClientType {
     _id: string;
     clientName: string;
-    companyName: string;
     email: string;
-    mobile: string;
-    address: string;
-    postal: string;
-    state: string;
-    country: string;
-    serviceCharge: number;
-    website: string;
+    currency: "INR" | "USD"; // if fixed
     isClientActive: boolean;
     userId: string;
+
+    // Optional fields
+    companyName?: string;
+    mobile?: string;
+    address?: string;
+    postal?: string;
+    state?: string;
+    country?: string;
+    website?: string;
+    note?: string;
+
     createdAt: string;
     updatedAt: string;
-    __v: number;
+    __v?: number;
 }
+
 
 
 //Individual Client Type for Server Components
 export interface IndividualClientFromDataBaseType {
     _id: ObjectId | string;
     clientName: string;
-    companyName: string;
     email: string;
-    mobile: string;
-    address: string;
-    postal: string;
-    state: string;
-    country: string;
-    serviceCharge: number;
-    website: string;
+    currency: "INR" | "USD"; // if fixed
     isClientActive: boolean;
     userId: ObjectId;
+
+
+    // Optional fields
+    companyName?: string;
+    mobile?: string;
+    address?: string;
+    postal?: string;
+    state?: string;
+    country?: string;
+    website?: string;
+    note?: string;
+
+
     createdAt: Date;
     updatedAt: Date;
     __v: number;
