@@ -21,7 +21,6 @@ import Swal from "sweetalert2";
 import axios from "axios";
 import { clients_route } from "@/lib/helpers/api-endpoints";
 import { ClientType } from "@/lib/types";
-import { FaArrowRightLong } from "react-icons/fa6";
 import NotesShowToolTip from "@/components/clients/notes_show_tooltip";
 
 export const columns: ColumnDef<ClientType>[] = [
@@ -158,7 +157,7 @@ export const columns: ColumnDef<ClientType>[] = [
   //Date
   {
     accessorKey: "createdAt",
-    header: "Date",
+    header: "Joining Date",
     cell: ({ row }) => {
       const date = new Date(row.getValue("createdAt"));
       const formattedDate = date.toLocaleDateString("en-GB", {
@@ -214,6 +213,38 @@ function ClientActions({ client }: { client: ClientType }) {
     }
   };
 
+
+  const handleClientStatus = async () => {
+    const confirmResult = await Swal.fire({
+      title: "Are you sure?",
+      text: "You want to change client status?",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#d33",
+      confirmButtonText: "Yes, Change!",
+    });
+
+    if (confirmResult.isConfirmed) {
+      try {
+
+        const updatedClientStatus = client.isClientActive ? false : true;
+
+        const res = await axios.put(
+          `${clients_route}?clientId=${client._id}&isClientActive=${updatedClientStatus}`
+        );
+
+        if (res.status === 201) {
+          showToast("Status Updated successfully");
+
+          router.refresh();
+        }
+      } catch (error) {
+        console.error("Error Updating Client Status:", error);
+        showToast("Error Updating Client Status");
+      }
+    }
+  };
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -240,6 +271,12 @@ function ClientActions({ client }: { client: ClientType }) {
           onClick={() => router.push(`/clients/profile?id=${client._id}`)}
         >
           View Client
+        </DropdownMenuItem>
+        <DropdownMenuItem
+          className="cursor-pointer"
+          onClick={handleClientStatus}
+        >
+          {`Set Client ${client.isClientActive ? "Inactive" : "Active"}`}
         </DropdownMenuItem>
         <DropdownMenuItem
           variant="destructive"

@@ -135,3 +135,52 @@ export async function DELETE(req: NextRequest) {
     return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
   }
 }
+
+
+
+
+// PUT Handler
+export async function PUT(req: NextRequest) {
+  try {
+    await connectDB("api/clients/route.ts");
+
+    const session = await getServerSession(FinanceaAuthOptions);
+    if (!session) {
+      console.log("Unauthorized");
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+
+    const { searchParams } = new URL(req.url);
+    const clientId = searchParams.get("clientId");
+    const isClientActive = searchParams.get("isClientActive");
+
+    if (!clientId || isClientActive === null) {
+      return NextResponse.json(
+        { error: "Missing clientId or isClientActive" },
+        { status: 400 }
+      );
+    }
+
+    const updated = await Client.findByIdAndUpdate(
+      clientId,
+      { isClientActive: isClientActive === "true" },
+      { new: true }
+    );
+
+    if (!updated) {
+      return NextResponse.json({ error: "Client not found" }, { status: 404 });
+    }
+
+    return NextResponse.json(
+      { message: "Client status updated successfully" },
+      { status: 201 }
+    );
+
+  } catch (error) {
+    console.error("Error updating client status:", error);
+    return NextResponse.json(
+      { error: "Internal Server Error" },
+      { status: 500 }
+    );
+  }
+}
