@@ -54,8 +54,6 @@ import {
   check_invoice_number_route,
   create_new_invoice_route,
 } from "@/lib/helpers/api-endpoints";
-import CreateClientForm from "../clients/create_client_form";
-import { Dialog, DialogTrigger } from "../ui/dialog";
 
 //RecurringFrequency Should Match With Zod
 export enum RecurringFrequency {
@@ -341,14 +339,9 @@ const CreateInvoiceForm = ({
                         <CommandList className="h-[250px]">
                           <CommandGroup>
                             <CommandItem>
-                              <Dialog>
-                                <DialogTrigger asChild>
-                                  <Button className="w-full">
-                                    Add New Client
-                                  </Button>
-                                </DialogTrigger>
-                                <CreateClientForm />
-                              </Dialog>
+                              <Button className="w-full">
+                                Add New Client
+                              </Button>
                             </CommandItem>
                             {clients.map((client) => (
                               <CommandItem

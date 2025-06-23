@@ -2,15 +2,6 @@
 
 
 
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog"
-
-
 import { useState, useEffect } from "react";
 import { FaBell } from "react-icons/fa";
 
@@ -25,9 +16,6 @@ import {
 } from "./ui/dropdown-menu";
 import { DropdownMenuContent } from "@radix-ui/react-dropdown-menu";
 import { useRouter } from "next/navigation";
-import CreateClientForm from "./clients/create_client_form";
-import { AlertDialog, AlertDialogContent, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "./ui/alert-dialog";
-import { Separator } from "./ui/separator";
 
 interface NavLinksType {
   title: string;
@@ -36,6 +24,7 @@ interface NavLinksType {
 const navLinks: NavLinksType[] = [
   { title: "Create Invoice", url: "/invoices/create-invoice" },
   { title: "Create Expense", url: "/expenses/create-expense" },
+  { title: "Create Client", url: "/clients/create-client" },
 ];
 
 export default function Navbar() {
@@ -77,52 +66,38 @@ export default function Navbar() {
         </div>
 
 
-        <Dialog>
-          <DropdownMenu >
-            <DropdownMenuTrigger asChild>
-              <FaCirclePlus className=" w-5 h-5 cursor-pointer text-purple-600" />
-            </DropdownMenuTrigger>
+        <DropdownMenu >
+          <DropdownMenuTrigger asChild>
+            <FaCirclePlus className=" w-5 h-5 cursor-pointer text-purple-600" />
+          </DropdownMenuTrigger>
 
-            <DropdownMenuContent
-              align="end"
-              className="w-[200px] bg-white border border-gray-200 rounded-md shadow-lg z-[9999]"
-            >
+          <DropdownMenuContent
+            align="end"
+            className="w-[200px] bg-white border border-gray-200 rounded-md shadow-lg z-[9999]"
+          >
 
-              {navLinks.map((linkItem) => (
-                <DropdownMenuItem
-                  key={linkItem.url}
-                  onClick={() => router.push(linkItem.url)}
-                  className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
-                >
-                  {linkItem.title}
+            {navLinks.map((linkItem) => (
+              <DropdownMenuItem
+                key={linkItem.url}
+                onClick={() => router.push(linkItem.url)}
+                className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
+              >
+                {linkItem.title}
 
-                </DropdownMenuItem>
-              ))}
-
-              <DialogTrigger className="w-full">
-                <DropdownMenuItem
-                  className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
-                >
-                  Create Client
-                </DropdownMenuItem>
-              </DialogTrigger>
-
-            </DropdownMenuContent>
-          </DropdownMenu>
-          <DialogContent className="w-[457px]">
-            <DialogHeader>
-              <DialogTitle className=' flex items-center justify-center h-[28px]'>New Client</DialogTitle>
-              <Separator />
-            </DialogHeader>
-            <div>
-
-              <CreateClientForm />
-            </div>
-          </DialogContent>
+              </DropdownMenuItem>
+            ))}
 
 
 
-        </Dialog>
+          </DropdownMenuContent>
+        </DropdownMenu>
+
+        <div>
+
+        </div>
+
+
+
 
       </section>
     </div>
