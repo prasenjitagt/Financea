@@ -25,11 +25,14 @@ export async function GET(req: NextRequest) {
             return NextResponse.json({ error: "Missing Email ID" }, { status: 400 });
         }
 
+
         // ❗ Now check Email + userId
         const existingEmail = await Client.findOne({
             email: ClientEmail,
-            user: userId,
+            userId,
         });
+
+
 
         if (existingEmail) {
             return NextResponse.json({ exists: true }, { status: 200 });

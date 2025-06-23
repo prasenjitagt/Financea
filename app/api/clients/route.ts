@@ -24,6 +24,9 @@ export async function POST(req: Request) {
 
     const validation = createClientZodSchema.safeParse(body);
     if (!validation.success) {
+
+      console.log("ZOD VALIDATION FAILED");
+
       return NextResponse.json(
         {
           error: "Validation failed",

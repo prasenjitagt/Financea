@@ -1,9 +1,10 @@
 "use client";
 
-import { Card, CardContent, CardFooter, CardHeader } from '@/components/ui/card'
-import { Separator } from '@/components/ui/separator'
-import React, { useState } from 'react'
-import { Button } from "@/components/ui/button"
+
+import { Card, CardContent, CardFooter, CardHeader } from '@/components/ui/card';
+import { Separator } from '@/components/ui/separator';
+import React, { useState } from 'react';
+import { Button } from "@/components/ui/button";
 import {
     Form,
     FormControl,
@@ -18,6 +19,18 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { AiOutlineUser } from 'react-icons/ai';
 import { MdOutlineMarkEmailRead } from 'react-icons/md';
+import { BiBuildings } from "react-icons/bi";
+import { LuWebhook } from "react-icons/lu";
+import { IoPhonePortraitOutline } from "react-icons/io5";
+import { FaRegAddressCard } from "react-icons/fa";
+import { FiMapPin } from "react-icons/fi";
+import { GrMapLocation } from "react-icons/gr";
+
+
+
+
+
+import { Textarea } from "@/components/ui/textarea";
 import {
     Select,
     SelectContent,
@@ -28,37 +41,27 @@ import {
 import { CurrencyEnum, DuplicateCheckResponse } from '@/components/invoices/create_invoice_form';
 import Swal from 'sweetalert2';
 import axios, { AxiosError } from 'axios';
-import { check_client_email_route, check_invoice_number_route, clients_route } from '@/lib/helpers/api-endpoints';
+import { check_client_email_route, clients_route } from '@/lib/helpers/api-endpoints';
 
 
 
 
-export default function Test() {
+export default function CreateClient() {
     const [isAddtionalInfoOpen, setIsAddtionalInfoOpen] = useState<boolean>(false);
 
     const form = useForm<createClientFormType>({
         resolver: zodResolver(createClientZodSchema),
         defaultValues: {
             clientName: "",
-            companyName: "",
             email: "",
-            mobile: 0,
-            address: "",
-            country: "",
-            state: "",
-            postal: "",
-            note: "",
-            website: "",
+            currency: "INR",
             isClientActive: true,
-            userId: "",
-            currency: "INR"
+            mobile: ""
         }
     });
 
     async function onSubmit(formValues: createClientFormType) {
         try {
-            console.log("Hello");
-
             if (!formValues) {
                 console.error("Items are missing in create client form");
 
@@ -90,7 +93,7 @@ export default function Test() {
 
             const result = await axios.post(clients_route, formValues);
 
-            if (result.status === 200) {
+            if (result.status === 201) {
                 Swal.fire({
                     title: "Success!",
                     text: "Client Saved Successfully",
@@ -122,27 +125,9 @@ export default function Test() {
         }
 
 
+
     }
 
-    function handleNumberInputFocus(
-        e: React.FocusEvent<HTMLInputElement>,
-        defaultValue: number
-    ) {
-        if (e.target.value === `${defaultValue}`) {
-            e.target.value = "";
-        }
-    }
-
-    function handleNumberInputBlur(
-        e: React.FocusEvent<HTMLInputElement>,
-        onChange: (value: number) => void,
-        defaultValue: number
-    ) {
-        if (e.target.value === "") {
-            e.target.value = "0";
-            onChange(defaultValue);
-        }
-    }
 
     return (
         <div className=' h-full flex items-center justify-center'>
@@ -171,7 +156,7 @@ export default function Test() {
                                                     <AiOutlineUser className="absolute left-3 top-1/2 transform -translate-y-1/2 text-[#747474] text-xl" />
                                                     <Input
                                                         type='text'
-                                                        placeholder='Enter Client Name'
+                                                        placeholder='Prasenjit Das'
                                                         className="pl-10 text-black"
                                                         {...field}
                                                     />
@@ -195,7 +180,7 @@ export default function Test() {
                                                     <MdOutlineMarkEmailRead className="absolute left-3 top-1/2 transform -translate-y-1/2  text-xl" />
                                                     <Input
                                                         type='email'
-                                                        placeholder='Add Email'
+                                                        placeholder='abc@example.com'
                                                         className="pl-10 text-black"
                                                         {...field}
                                                     />
@@ -252,6 +237,8 @@ export default function Test() {
                                     <div className={`${isAddtionalInfoOpen ? "" : "hidden"}`}>
 
                                         <p className='text-black text-center mb-2' >Additional Information</p>
+
+
                                         {/* Mobile */}
                                         <FormField
                                             control={form.control}
@@ -260,47 +247,115 @@ export default function Test() {
                                                 <FormItem>
                                                     <FormLabel>Mobile Number</FormLabel>
                                                     <FormControl>
-                                                        <Input
-                                                            className="pl-10 text-black"
-                                                            placeholder="+91xxxxxxxxx0"
-                                                            type="text" // Use "text" to fully control input
-                                                            inputMode="decimal" // Shows numeric keyboard on mobile
+                                                        <div className="relative">
+                                                            <IoPhonePortraitOutline className="absolute left-3 top-1/2 transform -translate-y-1/2 text-xl text-[#747474]" />
+                                                            <Input
+                                                                max={10}
+                                                                className="pl-10 text-black"
+                                                                placeholder="+91xxxxxxxxx0"
+                                                                type="text"
+                                                                inputMode="tel"
+                                                                {...field}
+                                                                onKeyDown={(e) => {
+                                                                    const allowedKeys = [
+                                                                        "Backspace",
+                                                                        "Tab",
+                                                                        "Delete",
+                                                                        "ArrowLeft",
+                                                                        "ArrowRight",
+                                                                        "Home",
+                                                                        "End"
+                                                                    ];
+
+                                                                    if (
+                                                                        allowedKeys.includes(e.key) ||
+                                                                        e.ctrlKey ||
+                                                                        e.metaKey
+                                                                    ) {
+                                                                        return;
+                                                                    }
+
+                                                                    const isDigit = /^[0-9]$/.test(e.key);
+                                                                    const isPlus = e.key === "+";
+
+                                                                    // Allow "+" only at the beginning
+                                                                    if (isPlus && e.currentTarget.selectionStart === 0) {
+                                                                        return;
+                                                                    }
+
+                                                                    if (!isDigit && !isPlus) {
+                                                                        e.preventDefault();
+                                                                    }
+                                                                }}
+                                                            />
+                                                        </div>
+                                                    </FormControl>
+                                                    <FormMessage />
+                                                </FormItem>
+                                            )}
+                                        />
+
+
+
+                                        {/* Company Name */}
+                                        <FormField
+                                            control={form.control}
+                                            name="companyName"
+                                            render={({ field }) => (
+                                                <FormItem className='mb-5'>
+                                                    <FormLabel >Company Name</FormLabel>
+                                                    <FormControl>
+                                                        <div className="relative">
+                                                            <BiBuildings className="absolute left-3 top-1/2 transform -translate-y-1/2 text-[#747474] text-xl" />
+                                                            <Input
+                                                                type='text'
+                                                                placeholder='Example Pvt Ltd'
+                                                                className="pl-10 text-black"
+                                                                {...field}
+                                                            />
+                                                        </div>
+                                                    </FormControl>
+                                                    <FormMessage />
+                                                </FormItem>
+                                            )}
+                                        />
+
+                                        {/* Website Name */}
+                                        <FormField
+                                            control={form.control}
+                                            name="website"
+                                            render={({ field }) => (
+                                                <FormItem className='mb-5'>
+                                                    <FormLabel >Website</FormLabel>
+                                                    <FormControl>
+                                                        <div className="relative">
+                                                            <LuWebhook className="absolute left-3 top-1/2 transform -translate-y-1/2 text-[#747474] text-xl" />
+                                                            <Input
+                                                                type='url'
+                                                                placeholder='https://www.example.com'
+                                                                className="pl-10 text-black"
+                                                                {...field}
+                                                            />
+                                                        </div>
+                                                    </FormControl>
+                                                    <FormMessage />
+                                                </FormItem>
+                                            )}
+                                        />
+
+
+                                        {/* Note */}
+                                        <FormField
+                                            control={form.control}
+                                            name="note"
+                                            render={({ field }) => (
+                                                <FormItem className='mb-5'>
+                                                    <FormLabel>Note</FormLabel>
+                                                    <FormControl>
+                                                        <Textarea
+                                                            placeholder="Type your message here."
+                                                            className="text-black"
                                                             {...field}
-                                                            onFocus={(e) => handleNumberInputFocus(e, 0)}
-                                                            onBlur={(e) =>
-                                                                handleNumberInputBlur(e, field.onChange, 0)
-                                                            }
-                                                            onKeyDown={(e) => {
-                                                                const allowedKeys = [
-                                                                    "Backspace",
-                                                                    "Tab",
-                                                                    "Delete",
-                                                                    "ArrowLeft",
-                                                                    "ArrowRight",
-                                                                    "Home",
-                                                                    "End",
-                                                                ];
-
-                                                                if (
-                                                                    allowedKeys.includes(e.key) ||
-                                                                    e.ctrlKey ||
-                                                                    e.metaKey
-                                                                ) {
-                                                                    return;
-                                                                }
-
-                                                                const isDigit = /^[0-9]$/.test(e.key);
-                                                                const isDot = e.key === ".";
-
-                                                                if (!isDigit && !isDot) {
-                                                                    e.preventDefault();
-                                                                }
-
-                                                                // Only one dot allowed
-                                                                if (isDot && e.currentTarget.value.includes(".")) {
-                                                                    e.preventDefault();
-                                                                }
-                                                            }}
                                                         />
                                                     </FormControl>
                                                     <FormMessage />
@@ -308,6 +363,120 @@ export default function Test() {
                                             )}
                                         />
 
+
+
+                                        {/* Address Name */}
+                                        <FormField
+                                            control={form.control}
+                                            name="address"
+                                            render={({ field }) => (
+                                                <FormItem className='mb-5'>
+                                                    <FormLabel >Address</FormLabel>
+                                                    <FormControl>
+                                                        <div className="relative">
+                                                            <FiMapPin className="absolute left-3 top-1/2 transform -translate-y-1/2 text-[#747474] text-xl" />
+                                                            <Input
+                                                                type='text'
+                                                                placeholder='Address'
+                                                                className="pl-10 text-black"
+                                                                {...field}
+                                                            />
+                                                        </div>
+                                                    </FormControl>
+                                                    <FormMessage />
+                                                </FormItem>
+                                            )}
+                                        />
+
+                                        {/* State Name */}
+                                        <FormField
+                                            control={form.control}
+                                            name="state"
+                                            render={({ field }) => (
+                                                <FormItem className='mb-5'>
+                                                    <FormLabel >State/Province</FormLabel>
+                                                    <FormControl>
+                                                        <div className="relative">
+                                                            <FaRegAddressCard className="absolute left-3 top-1/2 transform -translate-y-1/2 text-[#747474] text-xl" />
+                                                            <Input
+                                                                type='text'
+                                                                placeholder='Eg.Tripura'
+                                                                className="pl-10 text-black"
+                                                                {...field}
+                                                            />
+                                                        </div>
+                                                    </FormControl>
+                                                    <FormMessage />
+                                                </FormItem>
+                                            )}
+                                        />
+
+
+
+                                        {/* Country Name */}
+                                        <FormField
+                                            control={form.control}
+                                            name="country"
+                                            render={({ field }) => (
+                                                <FormItem className='mb-5'>
+                                                    <FormLabel >Country</FormLabel>
+                                                    <FormControl>
+                                                        <div className="relative">
+                                                            <GrMapLocation className="absolute left-3 top-1/2 transform -translate-y-1/2 text-[#747474] text-xl" />
+                                                            <Input
+                                                                type='text'
+                                                                placeholder='Eg.India'
+                                                                className="pl-10 text-black"
+                                                                {...field}
+                                                            />
+                                                        </div>
+                                                    </FormControl>
+                                                    <FormMessage />
+                                                </FormItem>
+                                            )}
+                                        />
+
+
+                                        {/* Postal Code */}
+                                        <FormField
+                                            control={form.control}
+                                            name="postal"
+                                            render={({ field }) => (
+                                                <FormItem className='mb-5'>
+                                                    <FormLabel>Postal Code</FormLabel>
+                                                    <FormControl>
+                                                        <div className="relative">
+                                                            <LuWebhook className="absolute left-3 top-1/2 transform -translate-y-1/2 text-[#747474] text-xl" />
+                                                            <Input
+                                                                type='text'
+                                                                placeholder='Eg.799014'
+                                                                className="pl-10 text-black"
+                                                                {...field}
+                                                                onKeyDown={(e) => {
+                                                                    const allowedKeys = [
+                                                                        'Backspace',
+                                                                        'Tab',
+                                                                        'ArrowLeft',
+                                                                        'ArrowRight',
+                                                                        'Delete',
+                                                                    ];
+                                                                    if (
+                                                                        allowedKeys.includes(e.key) ||
+                                                                        /^[0-9]$/.test(e.key)
+                                                                    ) {
+                                                                        return;
+                                                                    } else {
+                                                                        e.preventDefault();
+                                                                    }
+                                                                }}
+                                                                inputMode="numeric" // shows numeric keyboard on mobile
+                                                            />
+                                                        </div>
+                                                    </FormControl>
+                                                    <FormMessage />
+                                                </FormItem>
+                                            )}
+                                        />
 
 
 
