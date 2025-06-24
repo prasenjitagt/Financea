@@ -11,7 +11,6 @@ import { signIn } from "next-auth/react";
 import axios from "axios";
 
 export default function SignupPage() {
-
   const [showPassword, setShowPassword] = useState(false);
   const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
@@ -20,15 +19,12 @@ export default function SignupPage() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
-
   const togglePasswordVisibility = () => setShowPassword(!showPassword);
 
   const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setEmail(e.target.value);
     setEmailError("");
   };
-
-
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -48,29 +44,23 @@ export default function SignupPage() {
         password: password,
       });
 
-
       if (response.data.user) {
         console.log(response.data.user);
-
 
         // Sign in the user using NextAuth after successful signup
         const signInResult = await signIn("credentials", {
           email: email,
           password: password,
           redirect: true,
-          callbackUrl: "/"// Do not redirect automatically
+          callbackUrl: "/", // Do not redirect automatically
         });
 
         if (signInResult?.error) {
           throw new Error("Login failed");
         }
-
-      }
-      else {
+      } else {
         throw new Error("Signup failed");
       }
-
-
     } catch (err: any) {
       setError(err.message);
     } finally {
@@ -78,19 +68,41 @@ export default function SignupPage() {
     }
   };
 
-
   return (
     <div className="flex justify-center items-center md:mt-[3rem] font-['Archivo']">
       <div className="bg-white rounded-lg shadow-lg w-full max-w-md p-6 relative">
         <button className="absolute top-5 right-4">
-          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M12 4L4 12" stroke="#000" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-            <path d="M4 4L12 12" stroke="#000" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+          <svg
+            width="16"
+            height="16"
+            viewBox="0 0 16 16"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M12 4L4 12"
+              stroke="#000"
+              strokeWidth="1.5"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
+            <path
+              d="M4 4L12 12"
+              stroke="#000"
+              strokeWidth="1.5"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
           </svg>
         </button>
 
         <div className="flex justify-center mb-6 py-2">
-          <Image src="/FinanceaLogo.png" alt="Financea Logo" width={170} height={60} />
+          <Image
+            src="/FinanceaLogo.png"
+            alt="Financea Logo"
+            width={170}
+            height={60}
+          />
         </div>
 
         <h2 className="text-2xl font-semibold mb-1">Sign up</h2>
@@ -128,12 +140,15 @@ export default function SignupPage() {
               id="email"
               value={email}
               onChange={handleEmailChange}
-              className={`w-full p-2.5 border rounded-md focus:outline-none focus:ring-1 focus:ring-[#5C2FA8] ${emailError ? "border-red-500" : "border-gray-300"
-                }`}
+              className={`w-full p-2.5 border rounded-md focus:outline-none focus:ring-1 focus:ring-[#5C2FA8] ${
+                emailError ? "border-red-500" : "border-gray-300"
+              }`}
               placeholder="example@gmail.com"
               required
             />
-            {emailError && <p className="text-red-500 text-xs mt-1">{emailError}</p>}
+            {emailError && (
+              <p className="text-red-500 text-xs mt-1">{emailError}</p>
+            )}
           </div>
 
           <div className="mb-2">

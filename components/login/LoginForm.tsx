@@ -71,131 +71,141 @@ export default function LoginForm() {
   }
 
   return (
-    <Card className=" rounded-lg shadow-lg w-full max-w-md relative md:mt-10 mt-8">
-      <div className="p-6">
-        <button className="absolute top-5 right-4">
-          <svg
-            width="16"
-            height="16"
-            viewBox="0 0 16 16"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              d="M12 4L4 12"
-              stroke="#000"
-              strokeWidth="1.5"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            />
-            <path
-              d="M4 4L12 12"
-              stroke="#000"
-              strokeWidth="1.5"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            />
-          </svg>
-        </button>
-
-        <div className="flex justify-center dark:invert mb-6 py-2">
-          <Image
-            src="/FinanceaLogo.png"
-            alt="Financea Logo"
-            width={170}
-            height={60}
-          />
-        </div>
-
-        <h2 className="text-xl font-medium ">Log in</h2>
-        <p className="text-m text-gray-600 dark:text-gray-100  mb-4">
-          Create an account?{" "}
-          <Link
-            href="/signup"
-            className="text-[#5C2FA8] dark:text-purple-700 font-regular text-m"
-          >
-            Sign up
-          </Link>
-        </p>
-        <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)}>
-            <FormField
-              control={form.control}
-              name="email"
-              render={({ field }) => (
-                <FormItem className="mb-5">
-                  <FormLabel className="block text-xl mb-1 md:py-2">
-                    Email address
-                  </FormLabel>
-                  <FormControl>
-                    <input
-                      placeholder="example@gmail.com"
-                      type="email"
-                      {...field}
-                      className="w-full p-2.5 border rounded-md focus:outline-none focus:ring-1 focus:ring-[#d66648] dark:focus:ring-blue-700"
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            <FormField
-              control={form.control}
-              name="password"
-              render={({ field }) => (
-                <FormItem className="mb-10">
-                  <FormLabel className="block text-xl mb-1 md:py-2">
-                    Password
-                  </FormLabel>
-                  <FormControl>
-                    <div className="relative">
-                      <input
-                        type={showPassword ? "text" : "password"}
-                        placeholder="••••••"
-                        {...field}
-                        className="w-full p-2.5 border rounded-md focus:outline-none focus:ring-1 focus:ring-[#5C2FA8] dark:focus:ring-purple-700 pr-10"
-                      />
-                      <button
-                        type="button"
-                        onClick={togglePasswordVisibility}
-                        className="absolute inset-y-0 right-0 flex items-center pr-3 text-gray-500 cursor-pointer"
-                        tabIndex={-1}
-                      >
-                        {showPassword ? (
-                          <EyeOff size={18} />
-                        ) : (
-                          <Eye size={18} />
-                        )}
-                      </button>
-                    </div>
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            {error && (
-              <p className="text-sm font-medium text-destructive">{error}</p>
-            )}
-
-            <Button
-              type="submit"
-              variant="default"
-              className="w-full h-[45px] bg-[#5E84EC]  font-regular text-white py-4 rounded-md hover:bg-purple-700 transition-colors"
-              disabled={isLoading}
+    <div className="flex items-center justify-center min-h-screen">
+      <Card className="w-[360px] relative shadow-none  ">
+        <div className="p-6 flex flex-col gap-6">
+          <button className="absolute top-4 right-4">
+            <svg
+              width="16"
+              height="16"
+              viewBox="0 0 16 16"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
             >
-              {isLoading ? (
-                <div className="flex justify-center items-center">
-                  <ImSpinner2 className="w-6 h-6 animate-spin text-center text-gray-50" />
-                </div>
-              ) : (
-                "Log In"
-              )}
-            </Button>
-          </form>
-        </Form>
-      </div>
-    </Card>
+              <path
+                d="M12 4L4 12"
+                stroke="#000"
+                strokeWidth="1.5"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+              <path
+                d="M4 4L12 12"
+                stroke="#000"
+                strokeWidth="1.5"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+            </svg>
+          </button>
+          <div>
+            <h2 className="text-2xl font-sans mb-1">Log in</h2>
+            <p className="text-sm dark:text-gray-100 ">
+              Create an account?{" "}
+              <Link href="/signup" className="text-[#5E84EC] text-sm">
+                Sign up
+              </Link>
+            </p>
+          </div>
+          <div className=" ">
+            <div className="border hover:bg-gray-50 p-2 w-full flex justify-center rounded-md">
+              <Image
+                src="/Google.png"
+                alt="Google Logo"
+                width={24}
+                height={20}
+                className="inline mr-2"
+              />
+              Continue with Google
+            </div>
+          </div>
+          <div>
+            <Form {...form}>
+              <form
+                onSubmit={form.handleSubmit(onSubmit)}
+                className="flex flex-col gap-4"
+              >
+                <FormField
+                  control={form.control}
+                  name="email"
+                  render={({ field }) => (
+                    <FormItem className="flex flex-col gap-1">
+                      <FormLabel className="font-normal text-sm">
+                        Email address
+                      </FormLabel>
+                      <FormControl>
+                        <input
+                          placeholder="example@gmail.com"
+                          type="email"
+                          {...field}
+                          className="w-full p-2.5 border font-normal text-sm rounded-md focus:outline-none focus:ring-1 focus:ring-[#000000]"
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                <FormField
+                  control={form.control}
+                  name="password"
+                  render={({ field }) => (
+                    <FormItem className="flex flex-col gap-1">
+                      <FormLabel className="font-normal text-sm">
+                        Password
+                      </FormLabel>
+                      <FormControl>
+                        <div className="relative">
+                          <input
+                            type={showPassword ? "text" : "password"}
+                            placeholder="••••••"
+                            {...field}
+                            className="w-full p-2.5 border rounded-md focus:outline-none focus:ring-1 focus:ring-[#000000] pr-10 font-normal text-sm"
+                          />
+                          <button
+                            type="button"
+                            onClick={togglePasswordVisibility}
+                            className="absolute inset-y-0 right-0 flex items-center pr-3 text-gray-500 cursor-pointer"
+                            tabIndex={-1}
+                          >
+                            {showPassword ? (
+                              <EyeOff size={18} />
+                            ) : (
+                              <Eye size={18} />
+                            )}
+                          </button>
+                        </div>
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                {error && (
+                  <p className="text-sm font-medium text-destructive">
+                    {error}
+                  </p>
+                )}
+
+                <Button
+                  type="submit"
+                  variant="default"
+                  className="w-full h-10 bg-[#5E84EC] font-regular text-white rounded-md hover:bg-[#7292e9] transition-colors mt-1"
+                  disabled={isLoading}
+                >
+                  {isLoading ? (
+                    <div className="flex justify-center items-center">
+                      <ImSpinner2 className="w-6 h-6 animate-spin text-center text-gray-50" />
+                    </div>
+                  ) : (
+                    "Log In"
+                  )}
+                </Button>
+              </form>
+            </Form>
+          </div>
+        </div>
+      </Card>
+    </div>
   );
 }
