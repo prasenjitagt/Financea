@@ -128,7 +128,7 @@ export function NavMain() {
                         className="dark:invert"
                         src={item.icon}
                         alt={`${item.title} icon`}
-                        width={22}
+                        width={20}
                       />
                     )}
                     <span>{item.title}</span>
