@@ -15,6 +15,8 @@ const ProfileCard = ({ name, email, phone }: ProfileCardProps) => {
     .join("")
     .toUpperCase();
 
+  const isPhoneAvailable = phone === "NA" ? false : true;
+
   return (
     <div className="flex items-center gap-4 bg-transparent p-4 rounded-md w-fit border-0">
       {/* Profile Circle with Initials */}
@@ -27,8 +29,8 @@ const ProfileCard = ({ name, email, phone }: ProfileCardProps) => {
 
       <section className="text-[17px]">
         <h1 className="font-semibold text-[24px] text-gray-900">{name}</h1>
-        <ProfileHoverCardDemo infoName="Email:" val={email} />
-        <ProfileHoverCardDemo infoName="Phone:" val={phone} />
+        <ProfileHoverCardDemo infoType="email" infoName="Email:" val={email} />
+        {isPhoneAvailable && (<ProfileHoverCardDemo infoType="phone" infoName="Phone:" val={phone} />)}
       </section>
 
 

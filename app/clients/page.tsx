@@ -7,7 +7,7 @@ import ClientsPageTotalClientsCards from "@/components/clients/clients_page_tota
 import { IndividualClientFromDataBaseType, ClientType } from "@/lib/types";
 import connectDB from "@/lib/database/db_connection";
 
-function sanitizeClient(client: IndividualClientFromDataBaseType): ClientType {
+export function sanitizeClient(client: IndividualClientFromDataBaseType): ClientType {
   return {
     _id: client._id.toString(),
     clientName: client.clientName,

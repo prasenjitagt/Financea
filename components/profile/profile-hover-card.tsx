@@ -1,35 +1,37 @@
 "use client";
 
-
-
-import { TbCopy } from "react-icons/tb";
-import { useState } from "react";
+import Image from "next/image";
+import CopyIcon from "@/assets/icons/copy_clients_table_icon.svg";
+import { showToast } from "@/lib/helpers/clients_table/copied_to_clipboard_toast";
 
 interface PropTypes {
+    infoType: "email" | "phone";
     infoName: string;
     val: string;
 }
 
-export default function ProfileHoverCardDemo({ infoName, val }: PropTypes) {
-    const [copied, setCopied] = useState(false);
+export default function ProfileHoverCardDemo({ infoType, infoName, val }: PropTypes) {
 
-    const handleCopy = () => {
-        navigator.clipboard.writeText(val).then(() => {
-            setCopied(true);
-            setTimeout(() => setCopied(false), 1500); // Reset after 1.5 seconds
-        });
-    };
+    const toastText = infoType === "email" ? "Email ID Copied!" : "Phone Number Copied!";
+
 
     return (
 
         <div className="flex justify-start items-center cursor-default">
             <p>{infoName}</p>
-            <p className="text-[17px] ml-1" title={val}>{val}</p>
-            <TbCopy
-                className="ml-1 cursor-pointer hover:text-blue-500"
-                onClick={handleCopy}
-                title={copied ? "Copied!" : "Copy to clipboard"}
-            />
+            <section className="flex space-x-2">
+                <p className="text-[17px] ml-1" title={val}>{val}</p>
+                <Image
+                    className="cursor-pointer"
+                    src={CopyIcon}
+                    alt="Copy-Icon"
+                    width={16}
+                    onClick={() => {
+                        showToast(toastText);
+                        navigator.clipboard.writeText(val);
+                    }}
+                />
+            </section>
         </div>
 
     );

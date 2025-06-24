@@ -1,7 +1,7 @@
-"use client";
+"use client"
+
 
 import { ColumnDef } from "@tanstack/react-table";
-import Image from "next/image";
 import CopyIcon from "@/assets/icons/copy_clients_table_icon.svg";
 import { MoreHorizontal } from "lucide-react";
 import { ArrowUpDown } from "lucide-react";
@@ -15,15 +15,21 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Checkbox } from "@/components/ui/checkbox";
+import Image from "next/image";
 import { showToast } from "@/lib/helpers/clients_table/copied_to_clipboard_toast";
 import { useRouter } from "next/navigation";
 import Swal from "sweetalert2";
 import axios from "axios";
-import { clients_route } from "@/lib/helpers/api-endpoints";
-import { ClientType } from "@/lib/types";
-import NotesShowToolTip from "@/components/clients/notes_show_tooltip";
+import { invoices_route } from "@/lib/helpers/api-endpoints";
+import { formatAmountToCurrency } from "@/lib/helpers/invoices/format_amount_to_currency";
+import { InvoiceType } from "@/lib/types";
 
-export const columns: ColumnDef<ClientType>[] = [
+
+
+
+
+export const columns: ColumnDef<InvoiceType>[] = [
+
   //select
   {
     id: "select",
@@ -36,6 +42,7 @@ export const columns: ColumnDef<ClientType>[] = [
         onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
         aria-label="Select all"
       />
+
     ),
     cell: ({ row }) => (
       <Checkbox
@@ -46,6 +53,21 @@ export const columns: ColumnDef<ClientType>[] = [
     ),
     enableSorting: false,
     enableHiding: false,
+  },
+
+  //amount
+  {
+    accessorKey: "totalAmount",
+    header: () => <p>Amount</p>,
+    cell: ({ row }) => {
+
+      const currency = row.original.currency;
+      const amount = parseFloat(row.getValue("totalAmount"));
+      const formattedCurrencyString = formatAmountToCurrency(amount, currency);
+
+      return <div >{formattedCurrencyString}</div>;
+    },
+
   },
 
   //name
@@ -63,26 +85,25 @@ export const columns: ColumnDef<ClientType>[] = [
       );
     },
     cell: ({ row }) => (
-      <p className="text-[14px] p-3">{row.getValue("clientName")}</p>
-    ),
+      <p className="text-[14px]">{row.getValue("clientName")}</p>
+    )
   },
 
-  //client status
+  //payment status
   {
-    accessorKey: "isClientActive",
+    accessorKey: "isPaid",
     header: "Status",
     cell: ({ row }) => {
-      const isActive = row.getValue("isClientActive");
+      const isPaid = row.getValue("isPaid");
 
       return (
         <span
           className={`px-2 py-1 text-xs rounded-full font-medium
-                ${isActive
+                ${isPaid
               ? "bg-green-100 text-green-700"
-              : "bg-red-100 text-red-700"
-            }`}
+              : "bg-red-100 text-red-700"}`}
         >
-          {isActive ? "Active" : "Inactive"}
+          {isPaid ? "Paid" : "Due"}
         </span>
       );
     },
@@ -90,30 +111,16 @@ export const columns: ColumnDef<ClientType>[] = [
 
   //contact
   {
-    id: "contact",
-    header: "Contact",
+    id: "customerInfo",
+    header: "Customer Information",
     cell: ({ row }) => {
-      const client = row.original;
+      const invoice = row.original;
       return (
         <div className="flex flex-col text-[14px]">
-          {client.mobile != "NA" && (
-            <section className="flex space-x-2 text-[14px]">
-              <p>{client.mobile}</p>
-              <Image
-                className="cursor-pointer"
-                src={CopyIcon}
-                alt="Copy-Icon"
-                width={16}
-                onClick={() => {
-                  showToast("Phone Number Copied");
-                  navigator.clipboard.writeText(client.mobile!);
-                }}
-              />
-            </section>
-          )}
+          <p className="">{invoice.clientName}</p>
 
           <section className="flex space-x-2">
-            <p className="">{client.email}</p>
+            <p className="">{invoice.clientEmail}</p>
             <Image
               className="cursor-pointer"
               src={CopyIcon}
@@ -121,45 +128,48 @@ export const columns: ColumnDef<ClientType>[] = [
               width={16}
               onClick={() => {
                 showToast("Email Copied");
-                navigator.clipboard.writeText(client.email);
+                navigator.clipboard.writeText(invoice.clientEmail);
               }}
             />
           </section>
+        </div >
+      );
+    },
+  },
+
+
+  //invoiceNo.
+  {
+    accessorKey: "invoiceNumber",
+    header: "Invoice No.",
+    cell: ({ row }) => {
+      const invoiceNumber = row.original.invoiceNumber;
+
+      return (
+        <div className="flex space-x-2">
+          <p>{`#${invoiceNumber}`}</p>
+
+          <Image
+            className="cursor-pointer"
+            src={CopyIcon}
+            alt="Copy-Icon"
+            width={16}
+            onClick={() => {
+              showToast("Invoice Number Copied");
+              navigator.clipboard.writeText(invoiceNumber);
+            }}
+          />
         </div>
       );
     },
   },
 
-  //website
+  //Issue Date
   {
-    accessorKey: "website",
-    header: "Website",
-  },
-
-
-
-  //Note
-  {
-    accessorKey: "note",
-    header: () => <p>Note</p>,
+    accessorKey: "issueDate",
+    header: "Issue Date",
     cell: ({ row }) => {
-      const originalNote = row.original.note || "NA";
-      const slicedNote = originalNote.slice(0, 30) + (originalNote.length > 30 ? '...' : '');
-      return (
-        <NotesShowToolTip
-          originalNote={originalNote}
-          slicedNote={slicedNote}
-        />
-      )
-    },
-  },
-
-  //Date
-  {
-    accessorKey: "createdAt",
-    header: "Joining Date",
-    cell: ({ row }) => {
-      const date = new Date(row.getValue("createdAt"));
+      const date = new Date(row.getValue("issueDate"));
       const formattedDate = date.toLocaleDateString("en-GB", {
         day: "2-digit",
         month: "short",
@@ -170,24 +180,43 @@ export const columns: ColumnDef<ClientType>[] = [
     },
   },
 
-  //actions
+  //Issue Date
+  {
+    accessorKey: "dueDate",
+    header: "Due Date",
+    cell: ({ row }) => {
+      const date = new Date(row.getValue("dueDate"));
+      const formattedDate = date.toLocaleDateString("en-GB", {
+        day: "2-digit",
+        month: "short",
+        year: "numeric",
+      });
+
+      return <p>{formattedDate}</p>;
+    },
+  },
+
+  // actions
   {
     id: "actions",
     header: "Actions",
     cell: ({ row }) => {
-      const client = row.original;
-      return <ClientActions client={client} />;
+      const invoice = row.original;
+      return <InvoiceActions invoice={invoice} />
     },
   },
-];
 
-function ClientActions({ client }: { client: ClientType }) {
+
+]
+
+
+function InvoiceActions({ invoice }: { invoice: InvoiceType }) {
   const router = useRouter();
 
-  const handleDelete = async () => {
+  const handleDeleteInvoice = async () => {
     const confirmResult = await Swal.fire({
       title: "Are you sure?",
-      text: "You want to delete the client?",
+      text: "You want to delete the Invoice?",
       icon: "warning",
       showCancelButton: true,
       confirmButtonColor: "#d33",
@@ -196,51 +225,45 @@ function ClientActions({ client }: { client: ClientType }) {
 
     if (confirmResult.isConfirmed) {
       try {
-        // Send the clientId in the URL as a query parameter
-        const res = await axios.delete(
-          `${clients_route}?clientId=${client._id}`
-        );
+        // Send the invoiceId in the URL as a query parameter
+        const res = await axios.delete(`${invoices_route}?invoiceId=${invoice._id}`);
 
         if (res.status === 200) {
-          showToast("Client deleted successfully");
+          showToast("Invoice deleted successfully");
 
           router.refresh();
         }
       } catch (error) {
-        console.error("Error deleting client:", error);
-        showToast("Error deleting client");
+        console.error("Error deleting Invoice:", error);
+        showToast("Error deleting Invoice");
       }
     }
   };
 
 
-  const handleClientStatus = async () => {
+  const handleMarkAsPaid = async () => {
     const confirmResult = await Swal.fire({
       title: "Are you sure?",
-      text: "You want to change client status?",
+      text: "You want to Mark the Invoice as Paid?",
       icon: "warning",
       showCancelButton: true,
       confirmButtonColor: "#d33",
-      confirmButtonText: "Yes, Change!",
+      confirmButtonText: "Yes, Mark as Paid!",
     });
 
     if (confirmResult.isConfirmed) {
       try {
+        // Send the invoiceId in the URL as a query parameter
+        const res = await axios.put(`${invoices_route}?invoiceId=${invoice._id}`);
 
-        const updatedClientStatus = client.isClientActive ? false : true;
-
-        const res = await axios.put(
-          `${clients_route}?clientId=${client._id}&isClientActive=${updatedClientStatus}`
-        );
-
-        if (res.status === 201) {
-          showToast("Status Updated successfully");
+        if (res.status === 200) {
+          showToast("Invoice Marked as Paid successfully");
 
           router.refresh();
         }
       } catch (error) {
-        console.error("Error Updating Client Status:", error);
-        showToast("Error Updating Client Status");
+        console.error("Error Marking as Paid:", error);
+        showToast("Error Marking as Paid");
       }
     }
   };
@@ -256,36 +279,34 @@ function ClientActions({ client }: { client: ClientType }) {
       <DropdownMenuContent align="end">
         <DropdownMenuLabel>Actions</DropdownMenuLabel>
         <DropdownMenuSeparator />
+
         <DropdownMenuItem
           className="cursor-pointer"
           onClick={() => {
-            showToast("Client ID Copied");
+            navigator.clipboard.writeText(invoice.invoiceNumber);
 
-            navigator.clipboard.writeText(client._id);
+            showToast("Invoice ID Copied");
           }}
         >
-          Copy Client ID
+          Copy Invoice No.
         </DropdownMenuItem>
-        <DropdownMenuItem
+
+        {!invoice.isPaid && (<DropdownMenuItem
           className="cursor-pointer"
-          onClick={() => router.push(`/clients/profile/${client._id}`)}
+          onClick={handleMarkAsPaid}
         >
-          View Client
-        </DropdownMenuItem>
-        <DropdownMenuItem
-          className="cursor-pointer"
-          onClick={handleClientStatus}
-        >
-          {`Set Client ${client.isClientActive ? "Inactive" : "Active"}`}
-        </DropdownMenuItem>
+          Mark As Paid
+        </DropdownMenuItem>)}
+
         <DropdownMenuItem
           variant="destructive"
           className="cursor-pointer"
-          onClick={handleDelete}
+          onClick={handleDeleteInvoice}
         >
-          Delete Client
+          Delete Invoice
         </DropdownMenuItem>
+
       </DropdownMenuContent>
     </DropdownMenu>
-  );
+  )
 }

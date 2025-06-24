@@ -59,6 +59,7 @@ export default function CreateClient() {
       currency: "INR",
       isClientActive: true,
       mobile: ""
+      // company name, postal , address, country => look for uncontrolled undefined to defined
     }
   });
 

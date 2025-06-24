@@ -1,15 +1,19 @@
-//app/invoices/page.tsx
 
-import { columns } from "./columns";
-import { InvoiceDataTable } from "@/app/invoices/data-table";
-import { getServerSession } from "next-auth";
-import { FinanceaAuthOptions } from "../api/auth/[...nextauth]/options";
 
 import InvoiceModel from "@/lib/models/Invoice.model";
-import { getInvoiceStats } from "@/lib/helpers/invoices/getInvoiceStats";
 import { IndividualInvoiceFromDataBaseType, InvoiceType } from "@/lib/types";
 import connectDB from "@/lib/database/db_connection";
-import InvoicesTopCardsSection from "@/components/invoices/invoices_top_card_section";
+import { getServerSession } from "next-auth";
+import { FinanceaAuthOptions } from "@/app/api/auth/[...nextauth]/options";
+import { ProfileDataTable } from "@/app/clients/profile/[client_id]/data-table";
+import { columns } from "@/app/clients/profile/[client_id]/columns";
+import ClientProfileTopSection from "@/components/clients/profile/client_profile_top_section";
+
+interface PropType {
+  params: {
+    client_id: string;
+  };
+}
 
 export function sanitizeInvoice(
   invoice: IndividualInvoiceFromDataBaseType
@@ -69,8 +73,9 @@ export function sanitizeInvoice(
   };
 }
 
-async function getData(): Promise<InvoiceType[]> {
+async function getData(clientId: string): Promise<InvoiceType[]> {
   try {
+
     await connectDB("app/invoices/page.tsx");
 
     const session = await getServerSession(FinanceaAuthOptions);
@@ -80,7 +85,7 @@ async function getData(): Promise<InvoiceType[]> {
     }
 
     const userId = session.user._id;
-    const invoices = await InvoiceModel.find({ user: userId })
+    const invoices = await InvoiceModel.find({ user: userId, client: clientId })
       .sort({ createdAt: -1 })
       .lean<IndividualInvoiceFromDataBaseType[]>();
 
@@ -91,6 +96,8 @@ async function getData(): Promise<InvoiceType[]> {
       return [];
     }
 
+    console.log(invoices);
+
     return invoices.map(sanitizeInvoice);
 
     return [];
@@ -100,32 +107,22 @@ async function getData(): Promise<InvoiceType[]> {
   }
 }
 
-function filterInvoicesForLast30Days(invoices: InvoiceType[]): InvoiceType[] {
-  const thirtyDaysAgo = new Date();
-  thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30); // Get the date 30 days ago
 
-  return invoices.filter((invoice) => {
-    const createdAtDate = new Date(invoice.createdAt); // Convert ISO string to Date
-    return createdAtDate >= thirtyDaysAgo;
-  });
-}
-
-export default async function InvoicesDesktopView() {
-  const invoiceData = await getData();
-
-  const last30DaysInvoiceData = filterInvoicesForLast30Days(invoiceData);
-
-  const invoiceStats = getInvoiceStats(last30DaysInvoiceData);
-
+export default async function ClientProfile({ params }: PropType) {
+  const clientId = params.client_id;
+  const invoiceData = await getData(clientId);
   return (
     <div className="h-full flex flex-col bg-white dark:bg-black p-5 rounded-lg container mx-auto">
       {/* Top Cards Section */}
-      <InvoicesTopCardsSection invoiceStats={invoiceStats} />
+      <section className=" flex space-x-[12px] mb-[38px]">
+        <ClientProfileTopSection client_id={clientId} />
+
+      </section>
 
       {/* Desktop and Tablet View Table Section */}
       <section className="hidden md:block w-full flex-1 overflow-visible">
-        <InvoiceDataTable columns={columns} data={invoiceData} />
+        <ProfileDataTable columns={columns} data={invoiceData} />
       </section>
     </div>
-  );
+  )
 }

@@ -1,5 +1,5 @@
 "use client";
-
+// Fix Client Profile
 import { useState, useEffect } from "react";
 import { FaDownload } from "react-icons/fa";
 import { Button } from "@/components/ui/button";
@@ -196,7 +196,6 @@ const ClientPage = () => {
         email: client.email,
         mobile: client.mobile,
         companyName: client.companyName,
-        serviceCharge: client.serviceCharge,
         status: "Paid",
         createdAt: new Date(client.createdAt).toLocaleString(),
         dueDate: new Date(client.createdAt).toLocaleDateString(),
@@ -369,7 +368,6 @@ const ClientPage = () => {
                 <td className="p-3">
                   <input type="checkbox" checked={selectedClients.includes(client._id)} onChange={() => toggleSelectClient(client._id)} className="accent-purple-600" />
                 </td>
-                <td className="p-3 font-bold text-black">${client.serviceCharge}</td>
                 <td className="p-3">
                   <span className="bg-green-100 text-green-800 px-2 py-1 text-xs rounded-full">Paid</span>
                 </td>
@@ -393,7 +391,6 @@ const ClientPage = () => {
           <div key={i} className="border rounded-lg p-4 shadow-sm relative cursor-pointer" onClick={() => router.push(`/clients/profile?id=${client._id}`)}>
             <input type="checkbox" checked={selectedClients.includes(client._id)} onChange={() => toggleSelectClient(client._id)} className="absolute bottom-2 right-2 h-4 w-4 accent-purple-600" />
             <div className="flex justify-between items-center mb-2 pr-6">
-              <div className="font-bold text-lg">${client.serviceCharge}</div>
               <span className="bg-green-100 text-green-800 px-2 py-1 text-xs rounded-full">Paid</span>
             </div>
             <div className="text-sm font-medium">{client.clientName}</div>
