@@ -65,7 +65,7 @@ export default function SignupPage() {
 
   return (
     <div className="flex justify-center items-center min-h-screen font-['Archivo'] ">
-      <div className="bg-white rounded-lg shadow-none w-[358px] p-6 relative border">
+      <div className="bg-white rounded-lg shadow-none w-[400px] p-6  relative border">
         <button className="absolute top-4 right-4">
           <svg
             width="16"
@@ -90,17 +90,17 @@ export default function SignupPage() {
             />
           </svg>
         </button>
+        <div className="mt-6">
+          <h2 className="text-2xl font-sans mb-1">Sign up</h2>
+          <p className="text-sm text-gray-600 mb-6">
+            Already have an account?{" "}
+            <Link href="/login" className="text-[#5E84EC] font-normal">
+              Log in
+            </Link>
+          </p>
 
-        <h2 className="text-2xl font-sans mb-1">Sign up</h2>
-        <p className="text-sm text-gray-600 mb-6">
-          Already have an account?{" "}
-          <Link href="/login" className="text-[#5E84EC] font-normal">
-            Log in
-          </Link>
-        </p>
-
-        {error && <p className="text-red-500 text-center mb-4">{error}</p>}
-
+          {error && <p className="text-red-500 text-center mb-4">{error}</p>}
+        </div>
         <form onSubmit={handleSubmit} className="flex flex-col gap-4">
           <div>
             <label
@@ -177,7 +177,7 @@ export default function SignupPage() {
             {loading ? "Signing Up..." : "Sign Up"}
           </button>
         </form>
-        <div className="gap-6 flex flex-col mt-6">
+        <div className="gap-6 flex flex-col mt-6 mb-6">
           <div className=" flex items-center gap-2">
             {" "}
             <div className=" flex-1 h-px bg-gray-300"></div>{" "}

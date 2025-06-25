@@ -72,8 +72,8 @@ export default function LoginForm() {
 
   return (
     <div className="flex items-center justify-center min-h-screen">
-      <Card className="w-[360px] relative shadow-none  ">
-        <div className="p-6 flex flex-col gap-6">
+      <Card className="w-[400px] relative shadow-none ">
+        <div className="p-6  flex flex-col gap-6">
           <button className="absolute top-4 right-4">
             <svg
               width="16"
