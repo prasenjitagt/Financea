@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
 import type React from "react";
@@ -37,7 +36,6 @@ export default function SignupPage() {
     setError("");
 
     try {
-      // Make the signup request with Axios
       const response = await axios.post("/api/auth/signup", {
         username: fullName,
         email: email,
@@ -45,14 +43,11 @@ export default function SignupPage() {
       });
 
       if (response.data.user) {
-        console.log(response.data.user);
-
-        // Sign in the user using NextAuth after successful signup
         const signInResult = await signIn("credentials", {
           email: email,
           password: password,
           redirect: true,
-          callbackUrl: "/", // Do not redirect automatically
+          callbackUrl: "/",
         });
 
         if (signInResult?.error) {
@@ -69,9 +64,9 @@ export default function SignupPage() {
   };
 
   return (
-    <div className="flex justify-center items-center md:mt-[3rem] font-['Archivo']">
-      <div className="bg-white rounded-lg shadow-lg w-full max-w-md p-6 relative">
-        <button className="absolute top-5 right-4">
+    <div className="flex justify-center items-center min-h-screen font-['Archivo'] ">
+      <div className="bg-white rounded-lg shadow-none w-[358px] p-6 relative border">
+        <button className="absolute top-4 right-4">
           <svg
             width="16"
             height="16"
@@ -96,28 +91,22 @@ export default function SignupPage() {
           </svg>
         </button>
 
-        <div className="flex justify-center mb-6 py-2">
-          <Image
-            src="/FinanceaLogo.png"
-            alt="Financea Logo"
-            width={170}
-            height={60}
-          />
-        </div>
-
-        <h2 className="text-2xl font-semibold mb-1">Sign up</h2>
-        <p className="text-lg text-gray-600 mb-4">
+        <h2 className="text-2xl font-sans mb-1">Sign up</h2>
+        <p className="text-sm text-gray-600 mb-6">
           Already have an account?{" "}
-          <Link href="/login" className="text-[#5C2FA8] font-medium text-lg">
+          <Link href="/login" className="text-[#5E84EC] font-normal">
             Log in
           </Link>
         </p>
 
-        {error && <p className="text-red-500 text-center">{error}</p>}
+        {error && <p className="text-red-500 text-center mb-4">{error}</p>}
 
-        <form onSubmit={handleSubmit}>
-          <div className="mb-5">
-            <label htmlFor="full-name" className="block text-xl mb-1">
+        <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+          <div>
+            <label
+              htmlFor="full-name"
+              className="block text-sm font-medium mb-1"
+            >
               Full Name
             </label>
             <input
@@ -125,14 +114,14 @@ export default function SignupPage() {
               id="full-name"
               value={fullName}
               onChange={(e) => setFullName(e.target.value)}
-              className="w-full p-2.5 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-[#5C2FA8]"
+              className="w-full p-2.5 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-[#5C2FA8] font-normal text-sm"
               placeholder="John Doe"
               required
             />
           </div>
 
-          <div className="mb-5">
-            <label htmlFor="email" className="block text-xl mb-1">
+          <div>
+            <label htmlFor="email" className="block text-sm font-medium mb-1">
               Email address
             </label>
             <input
@@ -140,53 +129,74 @@ export default function SignupPage() {
               id="email"
               value={email}
               onChange={handleEmailChange}
-              className={`w-full p-2.5 border rounded-md focus:outline-none focus:ring-1 focus:ring-[#5C2FA8] ${
-                emailError ? "border-red-500" : "border-gray-300"
-              }`}
+              className={` font-normal text-sm w-full p-2.5 border rounded-md focus:outline-none focus:ring-1 focus:ring-[#000000] ${emailError ? "border-red-700" : "border-gray-300"}`}
               placeholder="example@gmail.com"
               required
             />
             {emailError && (
-              <p className="text-red-500 text-xs mt-1">{emailError}</p>
+              <p className="text-red-700 text-xs mt-1">{emailError}</p>
             )}
           </div>
-
-          <div className="mb-2">
-            <label htmlFor="password" className="block text-xl mb-1">
-              Password
-            </label>
-            <div className="relative">
-              <input
-                type={showPassword ? "text" : "password"}
-                id="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                className="w-full p-2.5 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-[#5C2FA8] pr-10"
-                placeholder="••••••••"
-                required
-              />
-              <button
-                type="button"
-                onClick={togglePasswordVisibility}
-                className="absolute inset-y-0 right-0 flex items-center pr-3"
+          <div className="flex flex-col gap-1">
+            <div>
+              <label
+                htmlFor="password"
+                className="block text-sm font-medium mb-1"
               >
-                {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
-              </button>
+                Password
+              </label>
+              <div className="relative">
+                <input
+                  type={showPassword ? "text" : "password"}
+                  id="password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  className=" font-normal text-sm w-full p-2.5 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-[#000000] pr-10"
+                  placeholder="••••••••"
+                  required
+                />
+                <button
+                  type="button"
+                  onClick={togglePasswordVisibility}
+                  className="absolute inset-y-0 right-0 flex items-center pr-3"
+                >
+                  {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                </button>
+              </div>
             </div>
+
+            <p className="text-xs text-gray-500 ">
+              Use 8 or more characters with a mix of letters, numbers & symbols
+            </p>
           </div>
-
-          <p className="text-sm text-gray-500 mb-4 mt-4">
-            Use 8 or more characters with a mix of letters, numbers & symbols
-          </p>
-
           <button
             type="submit"
-            className="w-full bg-[#5C2FA8] text-xl font-semibold text-white py-4 rounded-md hover:bg-purple-700 transition-colors"
+            className="w-full h-10 bg-[#5E84EC] text-white text-sm font-normal rounded-md hover:bg-[#7292e9] transition-colors"
             disabled={loading}
           >
             {loading ? "Signing Up..." : "Sign Up"}
           </button>
         </form>
+        <div className="gap-6 flex flex-col mt-6">
+          <div className=" flex items-center gap-2">
+            {" "}
+            <div className=" flex-1 h-px bg-gray-300"></div>{" "}
+            <p className="text-xs text-gray-400 text-center">
+              Or log in with your email
+            </p>
+            <div className=" flex-1 h-px bg-gray-300"></div>
+          </div>
+          <div className="border hover:bg-gray-50 p-2 w-full flex justify-center rounded-md">
+            <Image
+              src="/Google.png"
+              alt="Google Logo"
+              width={24}
+              height={20}
+              className="inline mr-2"
+            />
+            Continue with Google
+          </div>
+        </div>
       </div>
     </div>
   );

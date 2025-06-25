@@ -20,7 +20,6 @@ import { useState } from "react";
 import { loginSchema, LoginSchemaType } from "@/lib/helpers/validations";
 import Link from "next/link";
 import { Card } from "../ui/card";
-import { Separator } from "@radix-ui/react-separator";
 
 export default function LoginForm() {
   const router = useRouter();
