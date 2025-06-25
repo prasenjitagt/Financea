@@ -20,6 +20,7 @@ import { useState } from "react";
 import { loginSchema, LoginSchemaType } from "@/lib/helpers/validations";
 import Link from "next/link";
 import { Card } from "../ui/card";
+import { Separator } from "@radix-ui/react-separator";
 
 export default function LoginForm() {
   const router = useRouter();
@@ -107,18 +108,7 @@ export default function LoginForm() {
               </Link>
             </p>
           </div>
-          <div className=" ">
-            <div className="border hover:bg-gray-50 p-2 w-full flex justify-center rounded-md">
-              <Image
-                src="/Google.png"
-                alt="Google Logo"
-                width={24}
-                height={20}
-                className="inline mr-2"
-              />
-              Continue with Google
-            </div>
-          </div>
+
           <div>
             <Form {...form}>
               <form
@@ -203,6 +193,26 @@ export default function LoginForm() {
                 </Button>
               </form>
             </Form>
+          </div>
+          <div className="gap-6 flex flex-col">
+            <div className=" flex items-center gap-2">
+              {" "}
+              <div className=" flex-1 h-px bg-gray-300"></div>{" "}
+              <p className="text-xs text-gray-400 text-center">
+                Or log in with your email
+              </p>
+              <div className=" flex-1 h-px bg-gray-300"></div>
+            </div>
+            <div className="border hover:bg-gray-50 p-2 w-full flex justify-center rounded-md">
+              <Image
+                src="/Google.png"
+                alt="Google Logo"
+                width={24}
+                height={20}
+                className="inline mr-2"
+              />
+              Continue with Google
+            </div>
           </div>
         </div>
       </Card>
