@@ -54,6 +54,7 @@ import {
   check_invoice_number_route,
   create_new_invoice_route,
 } from "@/lib/helpers/api-endpoints";
+import { ClientType } from "@/lib/types";
 
 //RecurringFrequency Should Match With Zod
 export enum RecurringFrequency {
@@ -66,22 +67,7 @@ export enum CurrencyEnum {
   INR = "INR",
   USD = "USD",
 }
-export interface Client {
-  _id: string;
-  clientName: string;
-  companyName: string;
-  email: string;
-  mobile: string;
-  address: string;
-  postal: string;
-  state: string;
-  country: string;
-  website: string;
-  serviceCharge: number;
-  user: string;
-  createdAt: string;
-  updatedAt: string;
-}
+
 export type DuplicateCheckResponse = {
   exists: boolean;
 };
@@ -98,8 +84,8 @@ const CreateInvoiceForm = ({
     useState(false);
   const [recurringIssueDatePopoverOpen, setRecurringIssueDatePopoverOpen] =
     useState(false);
-  const [clients, setClients] = useState<Client[]>([]);
-  const [selectedClient, setSelectedClient] = useState<Client | null>(null);
+  const [clients, setClients] = useState<ClientType[]>([]);
+  const [selectedClient, setSelectedClient] = useState<ClientType | null>(null);
 
   const { fields, append, remove } = useFieldArray({
     control: form.control,
@@ -169,9 +155,11 @@ const CreateInvoiceForm = ({
   }
 
   async function onSubmit(formValues: createInvoiceFormType) {
+    console.log("create invoice details missing error");
     try {
-      if (!formValues || !formValues.items || formValues.items.length === 0) {
-        console.error("Items are missing or not an array!");
+
+      if (!formValues || !formValues.items || formValues.items.length === 0 || formValues.dueDate === undefined) {
+        console.log("Items are missing or not an array!");
 
         Swal.fire({
           title: "Error!",
@@ -180,7 +168,26 @@ const CreateInvoiceForm = ({
           confirmButtonText: "OK",
         });
 
+        console.log("create invoice details missing error");
+
         return; // important to stop further execution
+      }
+
+
+      if (formValues.recurringIssueDate != undefined) {
+        if (formValues.recurringDueDate === undefined) {
+
+          Swal.fire({
+            title: "Error!",
+            text: "Recurring Due Date is missing",
+            icon: "error",
+            confirmButtonText: "OK",
+          });
+
+          console.log("create invoice details missing error");
+
+          return; // important to stop further execution
+        }
       }
 
       const invoiceNumber = formValues.invoiceNumber;
@@ -212,7 +219,7 @@ const CreateInvoiceForm = ({
         form.reset();
       }
     } catch (error) {
-      console.error("Error submitting invoice:", error);
+      console.log("Error submitting invoice:", error);
 
       let errorMessage = "Failed to create invoice";
 
@@ -246,7 +253,7 @@ const CreateInvoiceForm = ({
               <FormItem>
                 <FormLabel>Invoice Number</FormLabel>
                 <FormControl>
-                  <Input className="w-[240px]" {...field} />
+                  <Input placeholder="eg. 1234" className="w-[240px]" {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -358,7 +365,7 @@ const CreateInvoiceForm = ({
                                   form.setValue("clientEmail", client.email);
                                   form.setValue(
                                     "clientMobile",
-                                    parseInt(client.mobile)
+                                    client.mobile
                                   );
                                   setIsClientSelectOpen(false);
                                 }}

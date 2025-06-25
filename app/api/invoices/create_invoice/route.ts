@@ -33,7 +33,7 @@ export async function POST(req: NextRequest) {
 
         if (!parsedInvoiceData.success) {
 
-            console.log("Zod Error", parsedInvoiceData.error.errors);
+            console.log("Zod Error in create invoice api", parsedInvoiceData.error.errors);
 
             return NextResponse.json(
                 { message: "Invoice Schema Mismatch", error: parsedInvoiceData.error.errors },
@@ -69,14 +69,20 @@ export async function POST(req: NextRequest) {
 
         const amountInPaise = Math.trunc(totalAmount! * 100);
 
+        let formattedClientMobile;
 
+        if (clientMobile === "NA" || clientMobile === undefined) {
+            formattedClientMobile = "0";
+        } else {
+            formattedClientMobile = clientMobile;
+        }
 
         const razorpayPayload: CreatePaymentLinkInput = {
             amount: amountInPaise,
             currency: "INR",
             customerName: clientName,
             customerEmail: clientEmail,
-            customerContact: clientMobile,
+            customerContact: formattedClientMobile,
             keyId: rzpCreds.keyId!,
             keySecret: rzpCreds.keySecret!,
         }

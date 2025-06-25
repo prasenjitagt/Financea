@@ -7,7 +7,7 @@ export interface CreatePaymentLinkInput {
     currency: "INR" | "USD";
     customerName: string;
     customerEmail: string;
-    customerContact: number;
+    customerContact: string;
     keyId: string;
     keySecret: string;
 }
@@ -23,7 +23,6 @@ export async function createRazorpayPaymentLink({
 }: CreatePaymentLinkInput) {
     const expireBy = Math.floor(Date.now() / 1000) + 3 * 24 * 60 * 60;
 
-    const contactString = customerContact.toString();
 
     const rzpPaymentLinkPayload: RazorpayPaymentLinkPayloadType = {
         amount,
@@ -32,7 +31,6 @@ export async function createRazorpayPaymentLink({
         customer: {
             name: customerName,
             email: customerEmail,
-            contact: contactString,
         },
         notify: {
             sms: true,

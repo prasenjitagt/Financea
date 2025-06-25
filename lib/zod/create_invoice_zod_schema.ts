@@ -21,12 +21,7 @@ export const createInvoiceZodSchema = z.object({
     clientName: z
         .string({ required_error: "Client Name is required" }),
 
-    clientMobile: z
-        .coerce
-        .number({ required_error: "Mobile Number is required" })
-        .refine((val) => val.toString().length === 10, {
-            message: "Mobile number must be exactly 10 digits",
-        }),
+    clientMobile: z.string().optional(),
 
     isRecurring: z.boolean({ required_error: "Please specify if this is a recurring invoice" }),
 

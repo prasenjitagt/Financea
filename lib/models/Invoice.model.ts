@@ -49,7 +49,7 @@ const invoiceSchema = new Schema<InvoiceDocument>(
       required: true,
     },
     clientMobile: {
-      type: Number,
+      type: String,
       required: true,
     },
     isRecurring: {

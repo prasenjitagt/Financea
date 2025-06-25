@@ -50,7 +50,7 @@ export interface RazorpayPaymentLinkPayloadType {
     customer: {
         name: string;
         email: string;
-        contact: string;
+        // contact: string;
     };
     notify: {
         sms: boolean;

@@ -96,7 +96,6 @@ async function getData(clientId: string): Promise<InvoiceType[]> {
       return [];
     }
 
-    console.log(invoices);
 
     return invoices.map(sanitizeInvoice);
 
@@ -109,13 +108,13 @@ async function getData(clientId: string): Promise<InvoiceType[]> {
 
 
 export default async function ClientProfile({ params }: PropType) {
-  const clientId = params.client_id;
-  const invoiceData = await getData(clientId);
+  const paramsObj = await params;
+  const invoiceData = await getData(paramsObj.client_id);
   return (
     <div className="h-full flex flex-col bg-white dark:bg-black p-5 rounded-lg container mx-auto">
       {/* Top Cards Section */}
       <section className=" flex space-x-[12px] mb-[38px]">
-        <ClientProfileTopSection client_id={clientId} />
+        <ClientProfileTopSection client_id={paramsObj.client_id} />
 
       </section>
 

@@ -2,10 +2,10 @@
 
 import { getTelephoneCode } from "@/lib/helpers/create_invoice/getTelephoneCode";
 import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
-import { Client } from "./create_invoice_form";
+import { ClientType } from "@/lib/types";
 
 interface PropType {
-  selectedClientDetails: Client | null;
+  selectedClientDetails: ClientType | null;
 }
 
 export default function BilledToClientDetails({
@@ -37,8 +37,11 @@ export default function BilledToClientDetails({
     postal,
   } = selectedClientDetails;
 
-  const countryTelephoneCode = getTelephoneCode(country);
-
+  const isMobileAvailable = mobile === "NA" ? false : true;
+  const isAddressAvailable = address === "NA" ? false : true;
+  const isStateAvailable = state === "NA" ? false : true;
+  const isCountryAvailable = country === "NA" ? false : true;
+  const isPostalAvailable = postal === "NA" ? false : true;
   return (
     <Card className="w-full rounded-[16px] shadow-sm py-[10px] bg-[#FBFCFE]">
       <CardHeader className="flex justify-between">
@@ -59,8 +62,14 @@ export default function BilledToClientDetails({
           </h5>
         </div>
 
-        <blockquote className="mt-2 font-light text-[#363C45]">
-          {`${address},${state},${country}-${postal}`}
+        <blockquote className="mt-2 flex font-light text-[#363C45]">
+
+          {isAddressAvailable && <p>{address}</p>}
+          {isStateAvailable && <p>, {state}</p>}
+          {isCountryAvailable && <p>, {country}</p>}
+          {isPostalAvailable && <p>, {postal}</p>}
+
+
         </blockquote>
 
         <div className="flex text-base font-light leading-7 [&:not(:first-child)]:mt">
@@ -69,13 +78,10 @@ export default function BilledToClientDetails({
           <p>{email}</p>
         </div>
 
-        <div className="flex text-base font-light leading-7 ">
+        {isMobileAvailable && (<div className="flex text-base font-light leading-7 ">
           <p className="text-[#737982] mr-[10px]">Phone</p>
-
-          <p className="mr-[5px]">{countryTelephoneCode}</p>
-
           <p>{mobile}</p>
-        </div>
+        </div>)}
       </CardContent>
     </Card>
   );
