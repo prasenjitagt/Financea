@@ -16,8 +16,8 @@ export default function NotesShowToolTip({ originalNote, slicedNote }: UrlsShowT
         <TooltipProvider>
             <Tooltip>
                 <TooltipTrigger className="font-semibold">{slicedNote}</TooltipTrigger>
-                <TooltipContent>
-                    <p >{originalNote}</p>
+                <TooltipContent className="max-w-[300px]">
+                    <p className="whitespace-pre-wrap">{originalNote}</p>
                 </TooltipContent>
             </Tooltip>
         </TooltipProvider>
