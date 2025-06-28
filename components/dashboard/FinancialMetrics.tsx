@@ -126,7 +126,7 @@ const FinancialMetrics = ({ frequency }: FinancialAnalyticsProps) => {
   }, [frequency, selectedCurrency]);
 
   return (
-    <div className=" border px-[31px] py-[26px] rounded-[16px] shadow-sm  w-full h-full flex flex-col justify-between">
+    <div className=" border dark:bg-[#192231] px-[31px] py-[26px] rounded-[16px] shadow-sm  w-full h-full flex flex-col justify-between">
       <FinMetricCard
         title="Total Revenue"
         amount={financialMetrics?.totalRevenue ?? 0}
@@ -180,11 +180,11 @@ export const FinMetricCardExtra = ({
   text,
 }: FinMetricCardExtraProps) => {
   return (
-    <div className={`flex justify-between  rounded-lg`}>
+    <div className={`flex justify-between dark:text-[#c5c8cc] rounded-lg`}>
       {/* Left Section - Title and Amount */}
       <div className="flex flex-col justify-between items-start">
         {/* Title */}
-        <p className="text-base opacity-60 font-normal">{title}</p>
+        <p className="text-base font-normal">{title}</p>
 
         {/* Amount */}
         <p className="text-[26px] font-medium">${amount}</p>
@@ -193,7 +193,7 @@ export const FinMetricCardExtra = ({
       {/* Right Section - Percentage Change and Additional Text */}
       <div className="flex flex-col justify-center">
         {/* Additional Descriptive Text */}
-        <p className="text-base opacity-60 font-normal text-right">{text}</p>
+        <p className="text-base dark:text-[#c5c8cc] font-normal text-right">{text}</p>
       </div>
     </div>
   );

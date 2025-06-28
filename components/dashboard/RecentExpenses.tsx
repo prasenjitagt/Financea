@@ -30,8 +30,8 @@ const RecentExpenses = () => {
         const error = err as AxiosError<{ message?: string }>;
         setError(
           error.response?.data?.message ||
-            error.message ||
-            "Failed to fetch expenses"
+          error.message ||
+          "Failed to fetch expenses"
         );
       } finally {
         setLoading(false);
@@ -45,7 +45,7 @@ const RecentExpenses = () => {
   if (error) return <p className="text-center text-red-500">{error}</p>;
 
   return (
-    <div className="border p-5 rounded-xl shadow-sm mt-6 md:h-[34.3rem]">
+    <div className="border dark:text-[#c5c8cc] dark:bg-[#192231] p-5 rounded-xl shadow-sm mt-6 md:h-[34.3rem]">
       {/* Header Section */}
       <div className=" items-center mb-4">
         <h2 className="text-base font-medium">Recent Expenses</h2>
@@ -55,7 +55,7 @@ const RecentExpenses = () => {
       </div>
 
       {expenses.length === 0 ? (
-        <div className=" h-full flex flex-col items-center justify-center">
+        <div className=" h-full  flex flex-col items-center justify-center">
           <Image src={ReceiptIcon} alt="Receipt Icon" width={100} />
           <h2 className="text-base">No Expenses Yet!</h2>
           <p className="text-sm text-muted-foreground">

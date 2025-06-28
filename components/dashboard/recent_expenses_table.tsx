@@ -27,7 +27,7 @@ export default function RecentExpensesTable({
       <TableBody>
         {expenses.map((exp) => {
           return (
-            <TableRow key={exp._id} className="h-[50px]">
+            <TableRow key={exp._id} className="h-[50px] dark:text-[#c5c8cc]">
               <TableCell className="flex items-center space-x-2 ">
                 <span
                   className=" inline-block w-3 h-3 rounded-full"

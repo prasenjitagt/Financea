@@ -38,8 +38,8 @@ const FinMetricCard = ({
 
   return (
     <div className={`${archivo.className} flex justify-between rounded-lg`}>
-      <div className="flex flex-col justify-between items-start">
-        <p className="text-base opacity-60 font-normal">{title}</p>
+      <div className="flex flex-col dark:text-[#c5c8cc] justify-between items-start">
+        <p className="text-base  font-normal">{title}</p>
         <p className="text-[26px] font-medium">{`${currencySymbol}${amount}`}</p>
       </div>
 
@@ -55,7 +55,7 @@ const FinMetricCard = ({
           <p className="text-[14px] font-[500]">${incDecPercentage}</p>
         </div>
 
-        <p className="text-base opacity-60 font-normal text-right">{text}</p>
+        <p className="text-base dark:text-[#c5c8cc] font-normal text-right">{text}</p>
       </div>
     </div>
   );

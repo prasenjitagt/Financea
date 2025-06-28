@@ -13,7 +13,6 @@ import {
   SidebarHeader,
   SidebarRail,
 } from "@/components/ui/sidebar";
-import { DarkModeToggle } from "../theme/dark_mode_togggle";
 
 // This is sample data.
 // const projects = [{
@@ -36,7 +35,6 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       <SidebarContent>
         <NavMain />
         {/* <NavProjects projects={projects} /> */}
-        <DarkModeToggle />
       </SidebarContent>
       <SidebarFooter className="mb-5 ">
         <NavUser />

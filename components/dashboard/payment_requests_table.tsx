@@ -36,8 +36,8 @@ export default function PaymentRequestsTable({
           const PaymentStatus = invoice.isPaid === true ? "Paid" : "Due";
 
           return (
-            <TableRow key={invoice._id} className="h-[50px]">
-              <TableCell className="font-medium text-base">
+            <TableRow key={invoice._id} className="h-[50px] dark:text-[#c5c8cc]">
+              <TableCell className="font-medium  text-base">
                 {formattedCurrencyString}
               </TableCell>
               <TableCell>

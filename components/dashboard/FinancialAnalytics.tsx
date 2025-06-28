@@ -42,7 +42,7 @@ export default function FinancialAnalytics({
   frequency,
 }: FinancialAnalyticsProps) {
   return (
-    <div className="border py-6 px-[15px] mt-[-0.15rem] rounded-[16px] shadow-sm  h-[410px] md:h-[440px] flex flex-col justify-between">
+    <div className="border dark:bg-[#192231] py-6 px-[15px] mt-[-0.15rem] rounded-[16px] shadow-sm  h-[410px] md:h-[440px] flex flex-col justify-between">
       <div
         className={`${archivo.className} flex-grow flex items-center text-[14px]`}
       >
@@ -77,7 +77,7 @@ export default function FinancialAnalytics({
               axisLine={false}
               tickLine={false}
               tickCount={8}
-              // padding={{ bottom: 20 }}
+            // padding={{ bottom: 20 }}
             />
 
             <CartesianGrid

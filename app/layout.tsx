@@ -48,7 +48,7 @@ export default function RootLayout({
             <link rel="shortcut icon" href="/favicon.ico" />
           </Head>
           <AuthProvider>
-            <body className="h-full">
+            <body className="h-full dark:bg-[#1f2937]">
               <ThemeProvider
                 attribute="class"
                 defaultTheme="light"

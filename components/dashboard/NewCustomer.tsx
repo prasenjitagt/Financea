@@ -36,7 +36,7 @@ const NewCustomer = () => {
     fetchChartData();
   }, []);
   return (
-    <div className="border rounded-lg shadow-sm p-6 h-full">
+    <div className="border dark:text-[#c5c8cc] dark:bg-[#192231] rounded-lg shadow-sm p-6 h-full">
       <div className="flex flex-row items-center justify-between pb-2">
         <h3 className="text-base font-medium">New Customer</h3>
       </div>

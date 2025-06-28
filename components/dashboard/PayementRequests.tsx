@@ -34,7 +34,7 @@ const PaymentRequests = () => {
   if (error) return <p className="text-center text-red-500">{error}</p>;
 
   return (
-    <div className="border p-5 rounded-xl shadow-sm mt-6 md:h-[34.3rem]">
+    <div className="border dark:text-[#c5c8cc] dark:bg-[#192231] p-5 rounded-xl shadow-sm mt-6 md:h-[34.3rem]">
       {/* Header Section */}
       <div className=" items-center mb-4">
         <h2 className="text-base font-medium">Payment Requests</h2>
