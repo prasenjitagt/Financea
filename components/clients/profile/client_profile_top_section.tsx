@@ -24,7 +24,6 @@ async function getClientData(clientId: string): Promise<ClientType | null> {
             throw new Error("Unauthorized");
         }
 
-        const userId = session.user._id;
         const client = await Client.findById(clientId)
             .lean<IndividualClientFromDataBaseType>();
 
@@ -40,6 +39,31 @@ async function getClientData(clientId: string): Promise<ClientType | null> {
     }
 }
 
+async function getClientSpecificInvoices(client_id: string) {
+    try {
+        await connectDB("app/clients/page.tsx");
+
+        const session = await getServerSession(FinanceaAuthOptions);
+        if (!session) {
+            console.log("Unauthorized");
+            throw new Error("Unauthorized");
+        }
+
+
+        const now = new Date();
+        const currentMonthStartDate = new Date(now.getFullYear(), now.getMonth(), 1);
+        const currentMonthEndDate = new Date(now.getFullYear(), now.getMonth() + 1, 0, 23, 59, 59, 999);
+
+        // Previous month
+        const prevMonth = new Date(now.getFullYear(), now.getMonth() - 1, 1);
+        const prevMonthstartDate = new Date(prevMonth.getFullYear(), prevMonth.getMonth(), 1);
+        const prevMonthEndDate = new Date(prevMonth.getFullYear(), prevMonth.getMonth() + 1, 0, 23, 59, 59, 999);
+
+
+    } catch (error) {
+
+    }
+}
 
 export default async function ClientProfileTopSection({ client_id }: PropType) {
 
@@ -47,6 +71,7 @@ export default async function ClientProfileTopSection({ client_id }: PropType) {
     const clientName = clientDetails?.clientName != null ? clientDetails.clientName : "Loading...";
     const clientEmail = clientDetails?.email != null ? clientDetails.email : "Loading...";
     const clientPhone = clientDetails?.mobile != null ? clientDetails.mobile : "Loading...";
+
 
 
     return (
