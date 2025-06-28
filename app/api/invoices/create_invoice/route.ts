@@ -2,7 +2,7 @@ import { createInvoiceFormType, createInvoiceZodSchema } from "@/lib/zod/create_
 import { NextRequest, NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import { FinanceaAuthOptions } from "@/app/api/auth/[...nextauth]/options";
-import { CreatePaymentLinkInput, createRazorpayPaymentLink } from "@/lib/helpers/payments/createRazorpayPaymentLink";
+import { CreatePaymentLinkInput, createRazorpayPaymentLink } from "@/lib/payments/createRazorpayPaymentLink";
 import { getRzpCreds } from "../../payments/link-gen/rzp/getRzpCreds";
 import connectDB from "@/lib/database/db_connection";
 import InvoiceModel from "@/lib/models/Invoice.model";
