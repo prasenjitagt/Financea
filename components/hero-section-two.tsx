@@ -15,6 +15,7 @@ export default function HeroSection() {
   return (
     <>
       <HeroHeader />
+
       <main>
         <section
           className="before:bg-gradient-to-t before:from-blue-300 before:via-blue-50 before:to-blue-200
@@ -44,7 +45,7 @@ export default function HeroSection() {
                 >
                   Accounting Made Effortless & Simple
                 </h1>
-                <p className="text-muted-foreground mx-auto my-6 max-w-2xl text-balance text-[16px]">
+                <p className="text-muted-foreground mx-auto my-6 max-w-2xl text-balance text-[14px] md:text-base">
                   Say goodbye to complex spreadsheets and outdated tools —
                   manage your invoices, track expenses, monitor cash flow, and
                   get paid on time, all from one intuitive platform built for
@@ -55,10 +56,10 @@ export default function HeroSection() {
                   <Button
                     asChild
                     size="lg"
-                    className="bg-[#5E84EC] hover:bg-[#4A6BCF] "
+                    className="bg-[#5E84EC] h-10 w-70 md:h-12 md:w-44 rounded-full hover:bg-[#4A6BCF] "
                   >
                     <Link href="#link">
-                      <span className="text-nowrap">Start For Free</span>
+                      <span className="text-nowrap ">Get Started For Free</span>
                     </Link>
                   </Button>
                   {/* <Button asChild size="lg" variant="outline">
