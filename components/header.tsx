@@ -86,7 +86,7 @@ export const HeroHeader = () => {
                                     variant="ghost"
                                     size="sm"
                                     className={cn(isScrolled && 'lg:hidden')}>
-                                    <Link href="/login">
+                                    <Link href="#">
                                         <span>Login</span>
                                     </Link>
                                 </Button>
