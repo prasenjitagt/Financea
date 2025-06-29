@@ -37,7 +37,7 @@ export default function TestimonialSection() {
       <div className="bg-gray-950 py-24">
         <div className="@container mx-auto w-full max-w-7xl px-6">
           <div className="mb-12">
-            <h2 className=" text-4xl text-white font-semibold">
+            <h2 className=" text-5xl text-white font-medium">
               What Our Clients Say
             </h2>
             <p className="text-muted-foreground my-4 text-balance text-[16px] max-w-160">

@@ -59,10 +59,8 @@ const Gallery4 = ({
   return (
     <section className="py-32 mx-auto max-w-7xl px-4">
       <div className="mb-16">
-        <h2 className="text-3xl font-medium md:text-4xl lg:text-5xl ">
-          {title}
-        </h2>
-        <p className="max-w-180 mt-4 text-muted-foreground ">{description}</p>
+        <h2 className="text-3xl font-medium  lg:text-5xl max-w-lg">{title}</h2>
+        <p className=" mt-4 text-muted-foreground max-w-120">{description}</p>
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">

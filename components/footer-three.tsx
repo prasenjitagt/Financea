@@ -41,7 +41,7 @@ const links = [
 export default function FooterSection() {
   return (
     <footer className=" bg-gradient-to-b from-blue-10 via-blue-50 to-blue-200 border-b py-8 sm:py-20">
-      <div className="mx-auto max-w-5xl px-6">
+      <div className="mx-auto max-w-7xl px-6">
         <div className="grid gap-12 md:grid-cols-5">
           <div className="space-y-6 md:col-span-2">
             <Link href="/" aria-label="go home" className="block size-fit">
